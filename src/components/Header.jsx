@@ -7,18 +7,10 @@ const Header = () => {
   return (
     <header className="bg-white shadow-md">
       {/* Top Bar */}
-      <div className="flex justify-between items-center py-2 px-4 md:px-8">
-        <div className="flex items-center">
-          <span className="mr-4">☎️ +254 700 000000</span>
+      <div className="flex justify-center items-center py-2 px-4 md:px-8">
+        <div className="flex items-center space-x-4">
+          <span>☎️ +254 700 000000</span>
           <span>📧 info@edgesystems.co.ke</span>
-        </div>
-        <div>
-          <Link to="/login" className="text-gray-600 hover:text-gray-800 mr-4">
-            👤 Login
-          </Link>
-          <Link to="/cart" className="text-gray-600 hover:text-gray-800">
-            🛒 Cart (0)
-          </Link>
         </div>
       </div>
 
