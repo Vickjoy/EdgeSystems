@@ -1,14 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styles from './ProductCard.module.css';
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="border border-gray-300 rounded overflow-hidden shadow-md">
-      <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
-      <div className="px-6 py-4">
-        <h3 className="font-bold text-xl mb-2">{product.name}</h3>
-        <p className="text-gray-700 text-base mb-2">${product.price}</p>
-        <Link to={`/product/${product.id}`} className="inline-block bg-edge-blue hover:bg-edge-green text-white font-bold py-2 px-4 rounded">
+    <div className={styles.card}>
+      <img src={product.image} alt={product.name} className={styles.image} />
+      <div className={styles.content}>
+        <h3 className={styles.title}>{product.name}</h3>
+        <p className={styles.price}>${product.price}</p>
+        <Link to={`/product/${product.id}`} className={styles.button}>
           View Details
         </Link>
       </div>

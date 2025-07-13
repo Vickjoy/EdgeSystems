@@ -1,60 +1,57 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import Breadcrumbs from '../components/Breadcrumbs';
+import styles from './Checkout.module.css';
 
 const Checkout = () => {
   return (
     <div>
-      <Header />
       <Breadcrumbs crumbs={[{ label: 'Home', path: '/' }, { label: 'Checkout', path: '/checkout' }]} />
-      <section className="py-12 bg-dark-blue text-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Checkout</h2>
-          <form className="max-w-lg mx-auto">
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
-              <input type="text" id="name" className="border border-gray-300 rounded px-4 py-2 w-full" />
+      <section className={styles.section}>
+        <div className={styles.container}>
+          <h2 className={styles.title}>Checkout</h2>
+          <form className={styles.form}>
+            <div className={styles.formGroup}>
+              <label htmlFor="name" className={styles.label}>Full Name</label>
+              <input type="text" id="name" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-              <input type="email" id="email" className="border border-gray-300 rounded px-4 py-2 w-full" />
+            <div className={styles.formGroup}>
+              <label htmlFor="email" className={styles.label}>Email Address</label>
+              <input type="email" id="email" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
-              <input type="text" id="address" className="border border-gray-300 rounded px-4 py-2 w-full" />
+            <div className={styles.formGroup}>
+              <label htmlFor="address" className={styles.label}>Address</label>
+              <input type="text" id="address" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
-              <input type="text" id="city" className="border border-gray-300 rounded px-4 py-2 w-full" />
+            <div className={styles.formGroup}>
+              <label htmlFor="city" className={styles.label}>City</label>
+              <input type="text" id="city" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
-              <input type="text" id="state" className="border border-gray-300 rounded px-4 py-2 w-full" />
+            <div className={styles.formGroup}>
+              <label htmlFor="state" className={styles.label}>State</label>
+              <input type="text" id="state" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="zip" className="block text-sm font-medium text-gray-700">ZIP Code</label>
-              <input type="text" id="zip" className="border border-gray-300 rounded px-4 py-2 w-full" />
+            <div className={styles.formGroup}>
+              <label htmlFor="zip" className={styles.label}>ZIP Code</label>
+              <input type="text" id="zip" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="card" className="block text-sm font-medium text-gray-700">Credit Card Number</label>
-              <input type="text" id="card" className="border border-gray-300 rounded px-4 py-2 w-full" />
+            <div className={styles.formGroup}>
+              <label htmlFor="card" className={styles.label}>Credit Card Number</label>
+              <input type="text" id="card" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="expiry" className="block text-sm font-medium text-gray-700">Expiry Date</label>
-              <input type="text" id="expiry" placeholder="MM/YY" className="border border-gray-300 rounded px-4 py-2 w-full" />
+            <div className={styles.formGroup}>
+              <label htmlFor="expiry" className={styles.label}>Expiry Date</label>
+              <input type="text" id="expiry" placeholder="MM/YY" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="cvv" className="block text-sm font-medium text-gray-700">CVV</label>
-              <input type="text" id="cvv" className="border border-gray-300 rounded px-4 py-2 w-full" />
+            <div className={styles.formGroup}>
+              <label htmlFor="cvv" className={styles.label}>CVV</label>
+              <input type="text" id="cvv" className={styles.input} />
             </div>
-            <button type="submit" className="bg-mid-blue hover:bg-dark-blue text-white font-bold py-2 px-4 rounded">
+            <button type="submit" className={styles.button}>
               Place Order
             </button>
           </form>
         </div>
       </section>
-      <Footer />
     </div>
   );
 };

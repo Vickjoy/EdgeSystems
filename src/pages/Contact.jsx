@@ -1,36 +1,33 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import Breadcrumbs from '../components/Breadcrumbs';
+import styles from './Contact.module.css';
 
 const Contact = () => {
   return (
     <div>
-      <Header />
       <Breadcrumbs crumbs={[{ label: 'Home', path: '/' }, { label: 'Contact Us', path: '/contact' }]} />
-      <section className="py-12 bg-dark-blue text-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Contact Us</h2>
-          <form className="max-w-lg mx-auto">
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
-              <input type="text" id="name" className="border border-gray-300 rounded px-4 py-2 w-full" />
+      <section className={styles.section}>
+        <div className={styles.container}>
+          <h2 className={styles.title}>Contact Us</h2>
+          <form className={styles.form}>
+            <div className={styles.formGroup}>
+              <label htmlFor="name" className={styles.label}>Full Name</label>
+              <input type="text" id="name" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-              <input type="email" id="email" className="border border-gray-300 rounded px-4 py-2 w-full" />
+            <div className={styles.formGroup}>
+              <label htmlFor="email" className={styles.label}>Email Address</label>
+              <input type="email" id="email" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-              <textarea id="message" rows="4" className="border border-gray-300 rounded px-4 py-2 w-full"></textarea>
+            <div className={styles.formGroup}>
+              <label htmlFor="message" className={styles.label}>Message</label>
+              <textarea id="message" rows="4" className={styles.textarea}></textarea>
             </div>
-            <button type="submit" className="bg-mid-blue hover:bg-dark-blue text-white font-bold py-2 px-4 rounded">
+            <button type="submit" className={styles.button}>
               Send Message
             </button>
           </form>
         </div>
       </section>
-      <Footer />
     </div>
   );
 };

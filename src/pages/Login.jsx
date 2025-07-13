@@ -1,32 +1,29 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import Breadcrumbs from '../components/Breadcrumbs';
+import styles from './Login.module.css';
 
 const Login = () => {
   return (
     <div>
-      <Header />
       <Breadcrumbs crumbs={[{ label: 'Home', path: '/' }, { label: 'Login', path: '/login' }]} />
-      <section className="py-12 bg-dark-blue text-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Login</h2>
-          <form className="max-w-lg mx-auto">
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-              <input type="email" id="email" className="border border-gray-300 rounded px-4 py-2 w-full" />
+      <section className={styles.section}>
+        <div className={styles.container}>
+          <h2 className={styles.title}>Login</h2>
+          <form className={styles.form}>
+            <div className={styles.formGroup}>
+              <label htmlFor="email" className={styles.label}>Email Address</label>
+              <input type="email" id="email" className={styles.input} />
             </div>
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-              <input type="password" id="password" className="border border-gray-300 rounded px-4 py-2 w-full" />
+            <div className={styles.formGroup}>
+              <label htmlFor="password" className={styles.label}>Password</label>
+              <input type="password" id="password" className={styles.input} />
             </div>
-            <button type="submit" className="bg-mid-blue hover:bg-dark-blue text-white font-bold py-2 px-4 rounded">
+            <button type="submit" className={styles.button}>
               Login
             </button>
           </form>
         </div>
       </section>
-      <Footer />
     </div>
   );
 };

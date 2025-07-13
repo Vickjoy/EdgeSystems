@@ -1,8 +1,9 @@
 import React from 'react';
+import styles from './CategoryMenu.module.css';
 
 const CategoryMenu = () => {
   return (
-    <select className="border border-gray-300 rounded px-2 py-1 mr-4">
+    <select className={styles.select}>
       <option>All Categories</option>
       <option>Fire Alarm & Detection</option>
       <option>Fire Suppression</option>

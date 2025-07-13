@@ -1,0 +1,65 @@
+.section {
+  padding: 3rem 0;
+  background-color: #3D0000;
+  color: white;
+}
+
+.container {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.form {
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.input {
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+
+.textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  resize: vertical;
+}
+
+.button {
+  background-color: #950101;
+  color: white;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #3D0000;
+} 

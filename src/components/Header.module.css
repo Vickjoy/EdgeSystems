@@ -1,0 +1,139 @@
+.header {
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.topBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .topBar {
+    padding: 0.5rem 2rem;
+  }
+}
+
+.topBarContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mainHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .mainHeader {
+    padding: 1rem 2rem;
+  }
+}
+
+.logo {
+  width: 8rem;
+  height: auto;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+}
+
+.loginLink {
+  color: #4b5563;
+  margin-right: 1rem;
+  text-decoration: none;
+}
+
+.loginLink:hover {
+  color: #1f2937;
+}
+
+.cartLink {
+  color: #4b5563;
+  text-decoration: none;
+}
+
+.cartLink:hover {
+  color: #1f2937;
+}
+
+.navigation {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 0.5rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .navigation {
+    padding: 0.5rem 2rem;
+  }
+}
+
+.navList {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.navLink {
+  color: #4b5563;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: #1f2937;
+}
+
+.dropdownButton {
+  color: #4b5563;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.dropdownButton:hover {
+  color: #1f2937;
+}
+
+.dropdownMenu {
+  position: absolute;
+  display: none;
+  width: 100%;
+  left: 0;
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  list-style: none;
+}
+
+.dropdownItem {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #4b5563;
+  text-decoration: none;
+}
+
+.dropdownItem:hover {
+  background-color: #f3f4f6;
+}
+
+.dropdownContainer {
+  position: relative;
+}
+
+.dropdownContainer:hover .dropdownMenu {
+  display: block;
+} 

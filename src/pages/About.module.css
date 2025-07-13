@@ -1,0 +1,28 @@
+.section {
+  padding: 3rem 0;
+  background-color: #3D0000;
+  color: white;
+}
+
+.container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.content {
+  max-width: 64rem;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.paragraph {
+  margin-bottom: 1.5rem;
+} 

@@ -1,0 +1,253 @@
+.heroSection {
+  position: relative;
+  height: 80vh;
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .heroTitle {
+    font-size: 3.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: 3.75rem;
+  }
+}
+
+.heroButton {
+  background-color: #dc2626;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.heroButton:hover {
+  background-color: #b91c1c;
+}
+
+.servicesSection {
+  padding: 4rem 0;
+  background-color: #f3f4f6;
+}
+
+.servicesContainer {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.servicesTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .servicesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .servicesGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.serviceCard {
+  background-color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.serviceIcon {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto;
+  color: #dc2626;
+  margin-bottom: 1rem;
+}
+
+.serviceTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.serviceDescription {
+  color: #6b7280;
+}
+
+.whyChooseSection {
+  padding: 4rem 0;
+  background-color: white;
+}
+
+.whyChooseContainer {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.whyChooseTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.whyChooseGrid {
+  display: grid;
+  gap: 2rem;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .whyChooseGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .whyChooseGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.whyChooseCard {
+  background-color: #f9fafb;
+  padding: 1.5rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.whyChooseTitle {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.whyChooseDescription {
+  color: #6b7280;
+}
+
+.partnersSection {
+  padding: 4rem 0;
+  background-color: #f3f4f6;
+}
+
+.partnersContainer {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.partnersTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.partnersGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .partnersGrid {
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.partnerLogo {
+  height: 4rem;
+  width: auto;
+}
+
+.newsletterSection {
+  padding: 4rem 0;
+  background-color: white;
+}
+
+.newsletterContainer {
+  max-width: 36rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.newsletterTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.newsletterForm {
+  display: flex;
+}
+
+.newsletterInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+  outline: none;
+}
+
+.newsletterButton {
+  background-color: #dc2626;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.newsletterButton:hover {
+  background-color: #b91c1c;
+} 

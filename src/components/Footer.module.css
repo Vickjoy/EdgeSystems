@@ -1,0 +1,68 @@
+.footer {
+  background-color: #000000;
+  color: white;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 2rem;
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .footer {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.logo {
+  width: 8rem;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialLink {
+  color: white;
+  text-decoration: none;
+}
+
+.socialLink:hover {
+  color: #d1d5db;
+}
+
+.socialIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.quickLinks {
+  list-style: none;
+}
+
+.quickLink {
+  color: white;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.quickLink:hover {
+  color: #d1d5db;
+}
+
+.contactInfo {
+  list-style: none;
+}
+
+.contactItem {
+  margin-bottom: 0.5rem;
+} 

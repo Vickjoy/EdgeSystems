@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import ProductCard from '../components/ProductCard';
 import Breadcrumbs from '../components/Breadcrumbs';
+import styles from './ProductList.module.css';
 
 const ProductList = ({ match }) => {
   const [products, setProducts] = useState([]);
@@ -22,17 +21,16 @@ const ProductList = ({ match }) => {
 
   return (
     <div>
-      <Header />
       <Breadcrumbs crumbs={[
         { label: 'Home', path: '/' },
         { label: 'Fire Safety', path: '/fire-safety' },
         { label: category.charAt(0).toUpperCase() + category.slice(1), path: `/fire-safety/${category}` }
       ]} />
-      <section className="py-12 bg-dark-blue text-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8">Fire Safety Products</h2>
+      <section className={styles.section}>
+        <div className={styles.container}>
+          <h2 className={styles.title}>Fire Safety Products</h2>
           {/* Category Filter Section */}
-          <select className="border border-gray-300 rounded px-2 py-1 mb-4">
+          <select className={styles.filter}>
             <option>All Categories</option>
             <option>Fire Alarm & Detection</option>
             <option>Fire Suppression</option>
@@ -43,7 +41,7 @@ const ProductList = ({ match }) => {
             <option>Communication</option>
           </select>
           {/* Product Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className={styles.productsGrid}>
             {loading ? (
               <p>Loading...</p>
             ) : (
@@ -54,7 +52,6 @@ const ProductList = ({ match }) => {
           </div>
         </div>
       </section>
-      <Footer />
     </div>
   );
 };

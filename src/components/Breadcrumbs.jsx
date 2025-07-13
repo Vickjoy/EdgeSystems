@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styles from './Breadcrumbs.module.css';
 
 const Breadcrumbs = ({ crumbs }) => {
   return (
     <nav className="container mx-auto px-4 py-2">
-      <ol className="list-reset flex text-gray-700">
+      <ol className={styles.container}>
         {crumbs.map((crumb, index) => (
           <li key={index}>
-            {index !== 0 && <span className="mx-2">/</span>}
+            {index !== 0 && <span className={styles.separator}>/</span>}
             {crumb.path ? (
-              <Link to={crumb.path} className="text-edge-light-green hover:text-edge-green">
+              <Link to={crumb.path} className={styles.link}>
                 {crumb.label}
               </Link>
             ) : (
