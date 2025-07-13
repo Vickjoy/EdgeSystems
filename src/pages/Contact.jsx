@@ -7,13 +7,8 @@ const Contact = () => {
   return (
     <div>
       <Header />
-
-      <Breadcrumbs crumbs={[
-        { label: 'Home', path: '/' },
-        { label: 'Contact Us', path: '/contact' }
-      ]} />
-
-      <section className="py-12">
+      <Breadcrumbs crumbs={[{ label: 'Home', path: '/' }, { label: 'Contact Us', path: '/contact' }]} />
+      <section className="py-12 bg-dark-blue text-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8 text-center">Contact Us</h2>
           <form className="max-w-lg mx-auto">
@@ -29,13 +24,12 @@ const Contact = () => {
               <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
               <textarea id="message" rows="4" className="border border-gray-300 rounded px-4 py-2 w-full"></textarea>
             </div>
-            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button type="submit" className="bg-mid-blue hover:bg-dark-blue text-white font-bold py-2 px-4 rounded">
               Send Message
             </button>
           </form>
         </div>
       </section>
-
       <Footer />
     </div>
   );

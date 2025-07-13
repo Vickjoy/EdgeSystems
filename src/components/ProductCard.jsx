@@ -8,7 +8,7 @@ const ProductCard = ({ product }) => {
       <div className="px-6 py-4">
         <h3 className="font-bold text-xl mb-2">{product.name}</h3>
         <p className="text-gray-700 text-base mb-2">${product.price}</p>
-        <Link to={`/product/${product.id}`} className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <Link to={`/product/${product.id}`} className="inline-block bg-edge-blue hover:bg-edge-green text-white font-bold py-2 px-4 rounded">
           View Details
         </Link>
       </div>

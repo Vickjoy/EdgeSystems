@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import CategoryMenu from './CategoryMenu';
+import CompanyLogo from '../assets/Company_logo.webp';
 
 const Header = () => {
   return (
@@ -13,11 +14,10 @@ const Header = () => {
           <span>📧 info@edgesystems.co.ke</span>
         </div>
       </div>
-
       {/* Middle Bar */}
       <div className="flex justify-between items-center py-4 px-4 md:px-8">
         <div>
-          <img src="/path/to/logo.png" alt="Edge Systems Logo" className="w-32 h-auto" />
+          <img src={CompanyLogo} alt="Edge Systems Logo" className="w-32 h-auto" />
         </div>
         <div className="flex items-center">
           <CategoryMenu />
@@ -32,7 +32,6 @@ const Header = () => {
           </Link>
         </div>
       </div>
-
       {/* Bottom Bar */}
       <nav className="z-50 sticky top-0 bg-white shadow-md py-2 px-4 md:px-8">
         <ul className="flex justify-center space-x-8">

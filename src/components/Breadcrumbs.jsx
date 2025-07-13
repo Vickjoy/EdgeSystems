@@ -9,7 +9,7 @@ const Breadcrumbs = ({ crumbs }) => {
           <li key={index}>
             {index !== 0 && <span className="mx-2">/</span>}
             {crumb.path ? (
-              <Link to={crumb.path} className="text-blue-500 hover:text-blue-700">
+              <Link to={crumb.path} className="text-edge-light-green hover:text-edge-green">
                 {crumb.label}
               </Link>
             ) : (

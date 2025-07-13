@@ -23,17 +23,14 @@ const ProductList = ({ match }) => {
   return (
     <div>
       <Header />
-
       <Breadcrumbs crumbs={[
         { label: 'Home', path: '/' },
         { label: 'Fire Safety', path: '/fire-safety' },
         { label: category.charAt(0).toUpperCase() + category.slice(1), path: `/fire-safety/${category}` }
       ]} />
-
-      <section className="py-12">
+      <section className="py-12 bg-dark-blue text-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8">Fire Safety Products</h2>
-
           {/* Category Filter Section */}
           <select className="border border-gray-300 rounded px-2 py-1 mb-4">
             <option>All Categories</option>
@@ -41,8 +38,10 @@ const ProductList = ({ match }) => {
             <option>Fire Suppression</option>
             <option>Fire Prevention</option>
             <option>Accessories</option>
+            <option>Networking</option>
+            <option>Cabling</option>
+            <option>Communication</option>
           </select>
-
           {/* Product Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {loading ? (
@@ -55,7 +54,6 @@ const ProductList = ({ match }) => {
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   );

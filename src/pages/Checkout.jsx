@@ -7,13 +7,8 @@ const Checkout = () => {
   return (
     <div>
       <Header />
-
-      <Breadcrumbs crumbs={[
-        { label: 'Home', path: '/' },
-        { label: 'Checkout', path: '/checkout' }
-      ]} />
-
-      <section className="py-12">
+      <Breadcrumbs crumbs={[{ label: 'Home', path: '/' }, { label: 'Checkout', path: '/checkout' }]} />
+      <section className="py-12 bg-dark-blue text-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8 text-center">Checkout</h2>
           <form className="max-w-lg mx-auto">
@@ -53,13 +48,12 @@ const Checkout = () => {
               <label htmlFor="cvv" className="block text-sm font-medium text-gray-700">CVV</label>
               <input type="text" id="cvv" className="border border-gray-300 rounded px-4 py-2 w-full" />
             </div>
-            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button type="submit" className="bg-mid-blue hover:bg-dark-blue text-white font-bold py-2 px-4 rounded">
               Place Order
             </button>
           </form>
         </div>
       </section>
-
       <Footer />
     </div>
   );

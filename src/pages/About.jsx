@@ -7,13 +7,8 @@ const About = () => {
   return (
     <div>
       <Header />
-
-      <Breadcrumbs crumbs={[
-        { label: 'Home', path: '/' },
-        { label: 'About Us', path: '/about' }
-      ]} />
-
-      <section className="py-12">
+      <Breadcrumbs crumbs={[{ label: 'Home', path: '/' }, { label: 'About Us', path: '/about' }]} />
+      <section className="py-12 bg-dark-blue text-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8 text-center">About Us</h2>
           <p className="mb-8">
@@ -35,7 +30,6 @@ const About = () => {
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
