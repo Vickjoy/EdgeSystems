@@ -1,6 +1,6 @@
 .section {
   padding: 3rem 0;
-  background-color: #3D0000;
+  background-color: #6096B4;
   color: white;
 }
 
@@ -14,13 +14,22 @@
   font-size: 1.875rem;
   font-weight: 700;
   margin-bottom: 2rem;
+  color: white;
 }
 
 .filter {
-  border: 1px solid #d1d5db;
+  border: 1px solid #BDCDD6;
   border-radius: 0.25rem;
   padding: 0.5rem;
   margin-bottom: 1rem;
+  background-color: white;
+  color: #6096B4;
+}
+
+.filter:focus {
+  outline: none;
+  border-color: #93BFCF;
+  box-shadow: 0 0 0 2px rgba(147, 191, 207, 0.2);
 }
 
 .productsGrid {

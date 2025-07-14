@@ -1,18 +1,22 @@
 .container {
   list-style: none;
   display: flex;
-  color: #374151;
+  color: #6096B4;
+  background-color: #EEE9DA;
+  padding: 0.5rem 1rem;
 }
 
 .link {
-  color: #10b981;
+  color: #93BFCF;
   text-decoration: none;
+  transition: color 0.2s ease-in-out;
 }
 
 .link:hover {
-  color: #059669;
+  color: #6096B4;
 }
 
 .separator {
   margin: 0 0.5rem;
+  color: #BDCDD6;
 } 

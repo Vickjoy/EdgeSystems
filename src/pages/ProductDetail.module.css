@@ -1,6 +1,6 @@
 .section {
   padding: 3rem 0;
-  background-color: #3D0000;
+  background-color: #6096B4;
   color: white;
 }
 
@@ -36,6 +36,7 @@
 .productImage {
   width: 100%;
   height: auto;
+  border-radius: 0.5rem;
 }
 
 .detailsContainer {
@@ -53,12 +54,14 @@
   font-size: 1.875rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  color: white;
 }
 
 .productPrice {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  color: #EEE9DA;
 }
 
 .formGroup {
@@ -69,19 +72,27 @@
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: #EEE9DA;
   margin-bottom: 0.5rem;
 }
 
 .quantityInput {
-  border: 1px solid #d1d5db;
+  border: 1px solid #BDCDD6;
   border-radius: 0.25rem;
   padding: 0.5rem;
   width: 4rem;
+  background-color: white;
+  color: #6096B4;
+}
+
+.quantityInput:focus {
+  outline: none;
+  border-color: #93BFCF;
+  box-shadow: 0 0 0 2px rgba(147, 191, 207, 0.2);
 }
 
 .addToCartButton {
-  background-color: #950101;
+  background-color: #93BFCF;
   color: white;
   font-weight: 700;
   padding: 0.5rem 1rem;
@@ -89,14 +100,15 @@
   border: none;
   cursor: pointer;
   margin-bottom: 1rem;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .addToCartButton:hover {
-  background-color: #3D0000;
+  background-color: #BDCDD6;
 }
 
 .tabs {
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #BDCDD6;
 }
 
 .tabsContainer {
@@ -107,13 +119,14 @@
 }
 
 .tabButton {
-  color: #6b7280;
+  color: #EEE9DA;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0.5rem 1rem;
+  transition: color 0.2s ease-in-out;
 }
 
 .tabButton:hover {
-  color: #1f2937;
+  color: white;
 } 

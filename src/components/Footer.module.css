@@ -1,68 +1,146 @@
 .footer {
-  background-color: #000000;
-  color: white;
+  background: var(--color-navy);
+  color: #fff;
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 2rem;
-  padding: 1.5rem;
+  padding: 3rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+  opacity: 0.3;
 }
 
 @media (min-width: 768px) {
   .footer {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 .logo {
-  width: 8rem;
+  width: 10rem;
   height: auto;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
 }
 
 .socialLinks {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
+  justify-content: center;
 }
 
 .socialLink {
-  color: white;
-  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(7,25,82,0.10);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 1.5rem;
 }
 
 .socialLink:hover {
-  color: #d1d5db;
+  transform: scale(1.12);
+  box-shadow: 0 4px 16px rgba(53,162,159,0.18);
 }
 
 .socialIcon {
   width: 1.5rem;
   height: 1.5rem;
+  display: block;
 }
 
 .sectionTitle {
-  font-size: 1.125rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  color: #97FEED;
+  text-align: center;
+}
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(135deg, #BDCDD6 0%, #EEE9DA 100%);
+  border-radius: 2px;
 }
 
 .quickLinks {
   list-style: none;
+  display: block;
+  padding: 0;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .quickLink {
-  color: white;
+  color: #97FEED;
   text-decoration: none;
-  margin-bottom: 0.5rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  padding: 0.5rem 0;
   display: block;
 }
 
 .quickLink:hover {
-  color: #d1d5db;
+  color: #fff;
+}
+
+.quickLink:hover::before {
+  opacity: 1;
+  left: 0;
 }
 
 .contactInfo {
   list-style: none;
+  text-align: center;
+  padding: 0;
 }
 
 .contactItem {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: #97FEED;
+  padding: 0.5rem 0;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.contactItem:hover {
+  color: #fff;
+}
+
+.partnerLogo {
+  height: 3rem;
+  width: auto;
+  background: none;
+  filter: none;
+  border-radius: 0.5rem;
+  margin: 0 1.5rem;
+  transition: transform 0.3s;
+}
+
+.partnerLogo:hover {
+  transform: scale(1.08);
 } 

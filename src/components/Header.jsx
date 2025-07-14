@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import CategoryMenu from './CategoryMenu';
@@ -6,6 +6,24 @@ import CompanyLogo from '../assets/Company_logo.webp';
 import styles from './Header.module.css';
 
 const Header = () => {
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const fireRef = useRef();
+  const ictRef = useRef();
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (
+        fireRef.current && !fireRef.current.contains(e.target) &&
+        ictRef.current && !ictRef.current.contains(e.target)
+      ) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
   return (
     <header className={styles.header}>
       {/* Top Bar */}
@@ -37,26 +55,30 @@ const Header = () => {
       <nav className={styles.navigation}>
         <ul className={styles.navList}>
           <li><Link to="/" className={styles.navLink}>Home</Link></li>
-          <li className={styles.dropdownContainer}>
-            <button className={styles.dropdownButton}>
-              Fire Safety Products & Services
-            </button>
-            <ul className={styles.dropdownMenu}>
-              <li><Link to="/fire-safety/alarm-detection" className={styles.dropdownItem}>Fire Alarm & Detection</Link></li>
-              <li><Link to="/fire-safety/suppression" className={styles.dropdownItem}>Fire Suppression</Link></li>
-              <li><Link to="/fire-safety/prevention" className={styles.dropdownItem}>Fire Prevention</Link></li>
-              <li><Link to="/fire-safety/accessories" className={styles.dropdownItem}>Accessories</Link></li>
-            </ul>
+          <li>
+            <select
+              className={styles.categoryDropdown}
+              onChange={e => { if (e.target.value) window.location.href = e.target.value; }}
+              defaultValue=""
+            >
+              <option value="" disabled>Fire Safety Products & Services</option>
+              <option value="/fire-safety/alarm-detection">Fire Alarm & Detection</option>
+              <option value="/fire-safety/suppression">Fire Suppression</option>
+              <option value="/fire-safety/prevention">Fire Prevention</option>
+              <option value="/fire-safety/accessories">Accessories</option>
+            </select>
           </li>
-          <li className={styles.dropdownContainer}>
-            <button className={styles.dropdownButton}>
-              ICT & Telecommunication Products & Services
-            </button>
-            <ul className={styles.dropdownMenu}>
-              <li><Link to="/ict/networking" className={styles.dropdownItem}>Networking</Link></li>
-              <li><Link to="/ict/cabling" className={styles.dropdownItem}>Cabling</Link></li>
-              <li><Link to="/ict/communication" className={styles.dropdownItem}>Communication</Link></li>
-            </ul>
+          <li>
+            <select
+              className={styles.categoryDropdown}
+              onChange={e => { if (e.target.value) window.location.href = e.target.value; }}
+              defaultValue=""
+            >
+              <option value="" disabled>ICT & Telecommunication Products & Services</option>
+              <option value="/ict/networking">Networking</option>
+              <option value="/ict/cabling">Cabling</option>
+              <option value="/ict/communication">Communication</option>
+            </select>
           </li>
           <li><Link to="/about" className={styles.navLink}>About Us</Link></li>
           <li><Link to="/contact" className={styles.navLink}>Contact Us</Link></li>

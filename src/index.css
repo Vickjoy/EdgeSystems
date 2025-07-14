@@ -1,3 +1,12 @@
+:root {
+  --color-navy: #071952;
+  --color-teal-dark: #0B666A;
+  --color-teal: #35A29F;
+  --color-aqua: #97FEED;
+  --color-white: #fff;
+  --color-gray: #f8f9fa;
+}
+
 /* CSS Reset and Global Styles */
 * {
   margin: 0;
@@ -6,8 +15,11 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
+  background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-teal-dark) 100%);
+  color: var(--color-white);
+  min-height: 100vh;
 }
 
 /* Utility Classes */
@@ -207,25 +219,25 @@ body {
   font-weight: 800;
 }
 
-/* Colors */
+/* Colors - Enhanced Visual Appeal */
 .text-white {
-  color: white;
+  color: var(--color-white);
 }
 
 .text-gray-600 {
-  color: #4b5563;
+  color: #4a5568;
 }
 
 .text-gray-700 {
-  color: #374151;
+  color: #2d3748;
 }
 
 .text-gray-800 {
-  color: #1f2937;
+  color: #1a202c;
 }
 
 .bg-white {
-  background-color: white;
+  background-color: var(--color-white);
 }
 
 .bg-gray-50 {
@@ -240,40 +252,42 @@ body {
   background-color: #d1d5db;
 }
 
-.bg-red-600 {
-  background-color: #dc2626;
-}
-
-.bg-red-700 {
-  background-color: #b91c1c;
-}
-
+/* Enhanced Color Hunt Palette Colors */
 .bg-custom-black {
-  background-color: #000000;
+  background: linear-gradient(135deg, #6096B4 0%, #4a7c9a 100%);
 }
 
 .bg-dark-blue {
-  background-color: #3D0000;
+  background: linear-gradient(135deg, #6096B4 0%, #4a7c9a 100%);
 }
 
 .bg-mid-blue {
-  background-color: #950101;
+  background: linear-gradient(135deg, #93BFCF 0%, #7ba8b8 100%);
 }
 
 .bg-edge-blue {
-  background-color: #1e40af;
+  background: linear-gradient(135deg, #93BFCF 0%, #7ba8b8 100%);
 }
 
 .bg-edge-green {
-  background-color: #059669;
+  background: linear-gradient(135deg, #BDCDD6 0%, #a8b8c2 100%);
 }
 
 .text-edge-light-green {
-  color: #10b981;
+  color: #BDCDD6;
 }
 
 .text-edge-green {
-  color: #059669;
+  color: #93BFCF;
+}
+
+/* Enhanced accent colors with gradients */
+.bg-red-600 {
+  background: linear-gradient(135deg, #93BFCF 0%, #7ba8b8 100%);
+}
+
+.bg-red-700 {
+  background: linear-gradient(135deg, #6096B4 0%, #4a7c9a 100%);
 }
 
 /* Borders */
@@ -316,17 +330,21 @@ body {
   border-bottom-right-radius: 0.5rem;
 }
 
-/* Shadows */
+/* Enhanced Shadows */
 .shadow {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-}
-
-.shadow-md {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+.shadow-md {
+  box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
 .shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
 /* Width and Height */
@@ -448,7 +466,7 @@ input, textarea, select {
   outline: none;
 }
 
-/* Hover States */
+/* Enhanced Hover States */
 .hover\:bg-gray-100:hover {
   background-color: #f3f4f6;
 }
@@ -458,15 +476,15 @@ input, textarea, select {
 }
 
 .hover\:bg-red-700:hover {
-  background-color: #b91c1c;
+  background: linear-gradient(135deg, #4a7c9a 0%, #3d6b8a 100%);
 }
 
 .hover\:bg-dark-blue:hover {
-  background-color: #3D0000;
+  background: linear-gradient(135deg, #4a7c9a 0%, #3d6b8a 100%);
 }
 
 .hover\:bg-edge-green:hover {
-  background-color: #059669;
+  background: linear-gradient(135deg, #a8b8c2 0%, #95a5b0 100%);
 }
 
 .hover\:text-gray-300:hover {
@@ -474,11 +492,16 @@ input, textarea, select {
 }
 
 .hover\:text-gray-800:hover {
-  color: #1f2937;
+  color: #1a202c;
 }
 
 .hover\:text-edge-green:hover {
-  color: #059669;
+  color: #a8b8c2;
+}
+
+/* Enhanced Background Opacity */
+.bg-opacity-50 {
+  background: linear-gradient(135deg, rgba(96, 150, 180, 0.8) 0%, rgba(74, 124, 154, 0.8) 100%);
 }
 
 /* Responsive Design */
@@ -570,12 +593,36 @@ input, textarea, select {
   display: block;
 }
 
-/* Background Opacity */
-.bg-opacity-50 {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
 /* Overflow */
 .overflow-hidden {
   overflow: hidden;
+}
+
+/* Enhanced Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

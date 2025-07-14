@@ -3,11 +3,18 @@
 }
 
 .input {
-  border: 1px solid #d1d5db;
+  border: 1px solid #BDCDD6;
   border-radius: 0.25rem;
   padding: 0.5rem;
   padding-right: 2rem;
   width: 16rem;
+  background-color: white;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #93BFCF;
+  box-shadow: 0 0 0 2px rgba(147, 191, 207, 0.2);
 }
 
 .button {
@@ -16,9 +23,15 @@
   top: 0;
   bottom: 0;
   padding: 0.5rem;
-  background-color: #d1d5db;
+  background-color: #93BFCF;
   border: none;
   border-top-right-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
   cursor: pointer;
+  color: white;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: #6096B4;
 } 

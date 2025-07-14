@@ -3,10 +3,10 @@ import { FaFireExtinguisher, FaNetworkWired, FaVideo } from 'react-icons/fa';
 import { MdPhone } from 'react-icons/md';
 import styles from './Home.module.css';
 
+import EatonLogo from '../assets/Eatonn.webp';
 import AlcatelLogo from '../assets/Alcatel.webp';
 import AvayaLogo from '../assets/Avaya.webp';
 import CiscoLogo from '../assets/Cisco.webp';
-import EatonLogo from '../assets/Eatonn.webp';
 import SiemonLogo from '../assets/Siemon.webp';
 import UbiquitiLogo from '../assets/Ubiquiti.webp';
 
@@ -102,7 +102,7 @@ const Home = () => {
       {/* Partner Brands */}
       <section className={styles.partnersSection}>
         <div className={styles.partnersContainer}>
-          <h2 className={styles.partnersTitle}>Partner Brands</h2>
+          <h2 className={styles.partnersHeader}>Partner Brands:</h2>
           <div className={styles.partnersGrid}>
             <img src={AlcatelLogo} alt="Alcatel" className={styles.partnerLogo} />
             <img src={AvayaLogo} alt="Avaya" className={styles.partnerLogo} />

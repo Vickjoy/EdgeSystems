@@ -1,6 +1,11 @@
 .heroSection {
   position: relative;
-  height: 80vh;
+  height: 90vh;
+  background: linear-gradient(135deg, #071952 0%, #35A29F 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .heroImage {
@@ -9,245 +14,250 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 1;
+  opacity: 0.85;
+  filter: brightness(0.85) contrast(1.1);
 }
 
 .heroOverlay {
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
+  position: relative;
+  z-index: 2;
+  color: #fff;
   text-align: center;
-  padding: 1rem;
+  padding: 2rem;
 }
 
 .heroTitle {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
+  font-size: 4rem;
+  font-weight: 900;
+  margin-bottom: 2rem;
+  color: #97FEED;
+  text-shadow: 0 4px 16px #071952, 0 1px 2px #0B666A;
+  letter-spacing: -2px;
 }
 
-@media (min-width: 640px) {
-  .heroTitle {
-    font-size: 3.75rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .heroTitle {
-    font-size: 3.75rem;
-  }
+.heroSubtitle {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 2px 8px #0B666A;
 }
 
 .heroButton {
-  background-color: #dc2626;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.25rem;
-  text-decoration: none;
-  font-weight: 600;
+  background: linear-gradient(90deg, #35A29F 0%, #97FEED 100%);
+  color: #071952;
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 8px 25px rgba(53,162,159,0.2);
+  transition: all 0.3s;
+  cursor: pointer;
 }
-
 .heroButton:hover {
-  background-color: #b91c1c;
+  background: linear-gradient(90deg, #0B666A 0%, #35A29F 100%);
+  color: #fff;
+  transform: translateY(-4px) scale(1.05);
 }
 
 .servicesSection {
-  padding: 4rem 0;
-  background-color: #f3f4f6;
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #0B666A 0%, #35A29F 100%);
 }
-
-.servicesContainer {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
 .servicesTitle {
-  font-size: 1.875rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #97FEED;
   text-align: center;
   margin-bottom: 3rem;
+  letter-spacing: -1px;
 }
-
 .servicesGrid {
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2.5rem;
+  justify-content: center;
 }
-
-@media (min-width: 768px) {
-  .servicesGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .servicesGrid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
 .serviceCard {
-  background-color: white;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border-radius: 0.5rem;
-  padding: 1.5rem;
+  background: #fff;
+  color: #071952;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(7,25,82,0.10);
+  padding: 2rem 1.5rem;
   text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
 }
-
+.serviceCard:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 16px 40px rgba(53,162,159,0.18);
+}
 .serviceIcon {
-  width: 3rem;
-  height: 3rem;
-  margin: 0 auto;
-  color: #dc2626;
+  font-size: 2.5rem;
   margin-bottom: 1rem;
-}
-
-.serviceTitle {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.serviceDescription {
-  color: #6b7280;
+  color: #35A29F;
 }
 
 .whyChooseSection {
-  padding: 4rem 0;
-  background-color: white;
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #0B666A 0%, #35A29F 100%);
 }
-
-.whyChooseContainer {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
 .whyChooseTitle {
-  font-size: 1.875rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #97FEED;
   text-align: center;
   margin-bottom: 3rem;
+  letter-spacing: -1px;
 }
-
 .whyChooseGrid {
   display: grid;
-  gap: 2rem;
-  text-align: center;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2.5rem;
+  justify-content: center;
 }
-
-@media (min-width: 768px) {
-  .whyChooseGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .whyChooseGrid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
 .whyChooseCard {
-  background-color: #f9fafb;
-  padding: 1.5rem;
-  border-radius: 0.25rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  background: #fff;
+  color: #071952;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(7,25,82,0.10);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
 }
-
-.whyChooseTitle {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+.whyChooseCard:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 16px 40px rgba(53,162,159,0.18);
 }
-
-.whyChooseDescription {
-  color: #6b7280;
+.whyChooseIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #0B666A;
 }
 
 .partnersSection {
+  background: #f8f9fa;
   padding: 4rem 0;
-  background-color: #f3f4f6;
 }
-
-.partnersContainer {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.partnersTitle {
-  font-size: 1.875rem;
+.partnersHeader {
+  font-size: 2rem;
   font-weight: 700;
+  color: #071952;
   text-align: center;
-  margin-bottom: 3rem;
-}
-
-.partnersGrid {
-  display: flex;
-  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  letter-spacing: -1px;
   justify-content: center;
   align-items: center;
-  gap: 2.5rem;
+  display: flex;
 }
-
-@media (min-width: 768px) {
-  .partnersGrid {
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-  }
-}
-
 .partnerLogo {
-  height: 4rem;
+  height: 5rem;
   width: auto;
+  background: none;
+  filter: none;
+  border-radius: 0.5rem;
+  margin: 0 1.5rem;
+  transition: transform 0.3s;
+}
+.partnerLogo:hover {
+  transform: scale(1.08);
 }
 
 .newsletterSection {
-  padding: 4rem 0;
-  background-color: white;
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #6096B4 0%, #4a7c9a 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.newsletterSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
 }
 
 .newsletterContainer {
   max-width: 36rem;
   margin: 0 auto;
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 .newsletterTitle {
-  font-size: 1.875rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .newsletterForm {
   display: flex;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .newsletterInput {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 25px;
   outline: none;
+  background: white;
+  color: #6096B4;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.newsletterInput:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .newsletterButton {
-  background-color: #dc2626;
+  background: linear-gradient(135deg, #93BFCF 0%, #7ba8b8 100%);
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   border: none;
-  border-top-right-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
+  border-radius: 25px;
   cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
 }
 
 .newsletterButton:hover {
-  background-color: #b91c1c;
+  background: linear-gradient(135deg, #BDCDD6 0%, #a8b8c2 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.heroDropdown {
+  border: 1px solid #35A29F;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  color: #071952;
+  background: #fff;
+  margin: 0 0.25rem;
+  min-width: 220px;
+  box-shadow: 0 2px 8px rgba(7,25,82,0.08);
+  transition: border-color 0.2s;
+}
+.heroDropdown:focus {
+  outline: none;
+  border-color: #0B666A;
+  box-shadow: 0 0 0 2px #97FEED;
 } 
