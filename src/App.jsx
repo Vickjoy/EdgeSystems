@@ -9,6 +9,7 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import ProductDetail from './pages/ProductDetail';
 import ProductList from './pages/ProductList';
+import AdminDashboard from './pages/AdminDashboard';
 
 const App = () => {
   return (
@@ -21,8 +22,10 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/product/edit/:id" element={<ProductDetail />} />
         <Route path="/fire-safety/:category" element={<ProductList />} />
         <Route path="/ict/:category" element={<ProductList />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
       <Footer />
     </div>

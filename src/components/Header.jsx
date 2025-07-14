@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import CategoryMenu from './CategoryMenu';
 import CompanyLogo from '../assets/Company_logo.webp';
@@ -9,6 +9,7 @@ const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const fireRef = useRef();
   const ictRef = useRef();
+  const navigate = useNavigate();
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -58,7 +59,7 @@ const Header = () => {
           <li>
             <select
               className={styles.categoryDropdown}
-              onChange={e => { if (e.target.value) window.location.href = e.target.value; }}
+              onChange={e => { if (e.target.value) navigate(e.target.value); }}
               defaultValue=""
             >
               <option value="" disabled>Fire Safety Products & Services</option>
@@ -71,7 +72,7 @@ const Header = () => {
           <li>
             <select
               className={styles.categoryDropdown}
-              onChange={e => { if (e.target.value) window.location.href = e.target.value; }}
+              onChange={e => { if (e.target.value) navigate(e.target.value); }}
               defaultValue=""
             >
               <option value="" disabled>ICT & Telecommunication Products & Services</option>
