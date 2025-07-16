@@ -36,6 +36,11 @@
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 2rem;
+  padding: 2rem 0;
+  justify-items: center;
+  align-items: start;
+  background: rgba(255,255,255,0.04);
+  border-radius: 1.5rem;
 }
 
 @media (min-width: 640px) {

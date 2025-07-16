@@ -9,7 +9,10 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import ProductDetail from './pages/ProductDetail';
 import ProductList from './pages/ProductList';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminProductManager from './pages/AdminProductManager';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminCategoryManager from './pages/AdminCategoryManager';
 
 const App = () => {
   return (
@@ -25,7 +28,30 @@ const App = () => {
         <Route path="/product/edit/:id" element={<ProductDetail />} />
         <Route path="/fire-safety/:category" element={<ProductList />} />
         <Route path="/ict/:category" element={<ProductList />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-products"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <AdminProductManager />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-categories"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <AdminCategoryManager />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <Footer />
     </div>

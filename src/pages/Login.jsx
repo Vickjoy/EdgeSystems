@@ -3,6 +3,7 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import styles from './Login.module.css';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import CompanyLogo from '../assets/Company_logo.webp';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -21,11 +22,10 @@ const Login = () => {
         body: JSON.stringify({ username, password })
       });
       const data = await response.json();
-      if (response.ok && data.access) {
-        localStorage.setItem('access_token', data.access);
-        // Optionally: localStorage.setItem('refresh_token', data.refresh);
-        await login(data.access); // fetch user info and store in context
+      if (response.ok && data.access && data.refresh) {
+        await login(data.access, data.refresh); // stores both tokens and fetches user info
         const user = await fetchUserInfo(data.access);
+        // Redirect based on admin status
         if (user && (user.is_staff || user.is_superuser)) {
           navigate('/admin-dashboard');
         } else {
@@ -41,23 +41,39 @@ const Login = () => {
 
   return (
     <div>
-      <Breadcrumbs crumbs={[{ label: 'Home', path: '/' }, { label: 'Login', path: '/login' }]} />
       <section className={styles.section}>
         <div className={styles.container}>
-          <h2 className={styles.title}>Login</h2>
-          <form className={styles.form} onSubmit={handleSubmit}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
+            <img src={CompanyLogo} alt="Company Logo" style={{ width: 80, height: 80, borderRadius: '50%', marginBottom: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
+            <h2 className={styles.title}>Admin Login</h2>
+          </div>
+          <form className={styles.form} onSubmit={handleSubmit} autoComplete="off">
             <div className={styles.formGroup}>
-              <label htmlFor="username" className={styles.label}>Username</label>
-              <input type="text" id="username" className={styles.input} value={username} onChange={e => setUsername(e.target.value)} required />
+              <label className={styles.label} htmlFor="username">Username</label>
+              <input
+                id="username"
+                className={styles.input}
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                placeholder="Enter your username"
+                required
+                autoFocus
+              />
             </div>
             <div className={styles.formGroup}>
-              <label htmlFor="password" className={styles.label}>Password</label>
-              <input type="password" id="password" className={styles.input} value={password} onChange={e => setPassword(e.target.value)} required />
+              <label className={styles.label} htmlFor="password">Password</label>
+              <input
+                id="password"
+                className={styles.input}
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                required
+              />
             </div>
-            {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
-            <button type="submit" className={styles.button}>
-              Login
-            </button>
+            {error && <div style={{ color: '#e74c3c', marginBottom: 12, textAlign: 'center', fontWeight: 600 }}>{error}</div>}
+            <button className={styles.button} type="submit">Login</button>
           </form>
         </div>
       </section>

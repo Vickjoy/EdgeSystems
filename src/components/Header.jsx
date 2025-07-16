@@ -4,12 +4,26 @@ import SearchBar from './SearchBar';
 import CategoryMenu from './CategoryMenu';
 import CompanyLogo from '../assets/Company_logo.webp';
 import styles from './Header.module.css';
+import { fetchCategories } from '../utils/api';
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const fireRef = useRef();
   const ictRef = useRef();
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategories(Array.isArray(data) ? data : []);
+      } catch (e) {
+        setCategories([]);
+      }
+    };
+    loadCategories();
+  }, []);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -63,10 +77,9 @@ const Header = () => {
               defaultValue=""
             >
               <option value="" disabled>Fire Safety Products & Services</option>
-              <option value="/fire-safety/alarm-detection">Fire Alarm & Detection</option>
-              <option value="/fire-safety/suppression">Fire Suppression</option>
-              <option value="/fire-safety/prevention">Fire Prevention</option>
-              <option value="/fire-safety/accessories">Accessories</option>
+              {Array.isArray(categories) && categories.filter(cat => cat.type === 'fire').map(cat => (
+                <option key={cat.id} value={`/fire-safety/${cat.slug}`}>{cat.name}</option>
+              ))}
             </select>
           </li>
           <li>
@@ -76,13 +89,11 @@ const Header = () => {
               defaultValue=""
             >
               <option value="" disabled>ICT & Telecommunication Products & Services</option>
-              <option value="/ict/networking">Networking</option>
-              <option value="/ict/cabling">Cabling</option>
-              <option value="/ict/communication">Communication</option>
+              {Array.isArray(categories) && categories.filter(cat => cat.type === 'ict').map(cat => (
+                <option key={cat.id} value={`/ict/${cat.slug}`}>{cat.name}</option>
+              ))}
             </select>
           </li>
-          <li><Link to="/about" className={styles.navLink}>About Us</Link></li>
-          <li><Link to="/contact" className={styles.navLink}>Contact Us</Link></li>
         </ul>
       </nav>
     </header>
