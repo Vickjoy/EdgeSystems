@@ -2,7 +2,8 @@
   background: #222222;
   box-shadow: 0 8px 25px -5px rgba(0,0,0,0.15);
   position: relative;
-  z-index: 1;
+  z-index: 10; /* Lower than dropdownMenu */
+  overflow: visible; /* Prevent clipping */
 }
 
 .topBar {
@@ -37,8 +38,8 @@
   background: #222222;
   color: #fff;
   position: relative;
-  z-index: 2;
-  /* overflow: visible; */
+  z-index: 11; /* Lower than dropdownMenu */
+  overflow: visible;
 }
 
 @media (min-width: 768px) {
@@ -82,12 +83,12 @@
 .navigation {
   position: relative;
   top: 0;
-  z-index: 10;
+  z-index: 12; /* Lower than dropdownMenu */
   background: #222222;
   box-shadow: 0 8px 25px -5px rgba(0,0,0,0.10);
   padding: 1rem 1rem;
   border-top: 3px solid #1DCD9F;
-  /* overflow: visible; */
+  overflow: visible;
 }
 @media (min-width: 768px) {
   .navigation {
@@ -122,21 +123,22 @@
 .dropdownMenu {
   position: absolute;
   display: none;
-  min-width: 220px;
+  min-width: 260px;
   left: 0;
-  background: #000000;
+  top: 100%;
+  background: rgba(24, 28, 32, 0.98); /* More solid, less transparent */
   color: #fff;
   font-size: 1.08rem;
   font-weight: 600;
-  box-shadow: 0 8px 25px -5px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10);
-  border-bottom-left-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
+  box-shadow: 0 16px 48px 0 rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.18);
+  border-radius: 1rem;
   list-style: none;
-  border-top: 3px solid #1DCD9F;
-  border: 1.5px solid #222222;
-  z-index: 9999;
+  border: 2.5px solid #1DCD9F; /* Brighter, thicker border */
+  z-index: 20000;
   animation: slideDown 0.3s ease-out;
-  padding: 0.5rem 0;
+  padding: 1rem 0;
+  backdrop-filter: blur(8px) saturate(1.3);
+  transition: box-shadow 0.2s, background 0.2s;
 }
 @keyframes slideDown {
   from {
@@ -150,13 +152,13 @@
 }
 .dropdownItem {
   display: block;
-  padding: 1rem 1.5rem;
+  padding: 1.2rem 2rem;
   color: #fff;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1.08rem;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid #222222;
+  font-weight: 700;
+  font-size: 1.12rem;
+  transition: all 0.2s;
+  border-bottom: 1px solid #222;
   background: transparent;
   letter-spacing: 0.01em;
 }
@@ -166,13 +168,16 @@
 .dropdownItem:hover {
   background: #1DCD9F;
   color: #000;
-  padding-left: 2rem;
+  padding-left: 2.5rem;
   box-shadow: inset 4px 0 0 #169976;
 }
 .dropdownContainer {
   position: relative;
+  z-index: 13; /* Lower than dropdownMenu */
 }
-.dropdownContainer:hover .dropdownMenu {
+/* Show dropdown on hover or open */
+.dropdownContainer:hover .dropdownMenu,
+.dropdownContainer:focus-within .dropdownMenu {
   display: block;
 }
 
@@ -193,4 +198,8 @@
   outline: none;
   border-color: #169976;
   box-shadow: 0 0 0 2px #1DCD9F;
+}
+.headerDropdownContainer {
+  position: relative;
+  z-index: 20001; /* Higher than navigation bar */
 } 

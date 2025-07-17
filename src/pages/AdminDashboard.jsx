@@ -56,7 +56,7 @@ const AdminDashboard = () => {
     const loadSubcategories = async () => {
       setLoading(true);
       try {
-        const data = await fetchSubcategories(selectedCategory.id, token);
+        const data = await fetchSubcategories(selectedCategory.slug, token);
         setSubcategories(Array.isArray(data) ? data : []);
       } catch (e) {
         setSubcategories([]);
@@ -102,6 +102,7 @@ const AdminDashboard = () => {
       }
       const data = await fetchCategories(token);
       setCategories(Array.isArray(data) ? data : []);
+      window.dispatchEvent(new Event('categoriesUpdated'));
     } catch (e) {
       setError('Failed to perform category action.');
     } finally {
@@ -116,14 +117,15 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       if (action === 'add') {
-        await createSubcategory(selectedCategory.id, value, token);
+        await createSubcategory(selectedCategory.slug, value, token);
       } else if (action === 'edit') {
         await updateSubcategory(selectedCategory.id, id, value, token);
       } else if (action === 'delete') {
         await deleteSubcategory(id, token);
       }
-      const data = await fetchSubcategories(selectedCategory.id, token);
+      const data = await fetchSubcategories(selectedCategory.slug, token);
       setSubcategories(Array.isArray(data) ? data : []);
+      window.dispatchEvent(new Event('subcategoriesUpdated'));
     } catch (e) {
       setError('Failed to perform subcategory action.');
     } finally {
@@ -148,6 +150,7 @@ const AdminDashboard = () => {
         const data = await fetchProductsBySubcategory(selectedSubcategory.id, 1, 100, token);
         setProducts(Array.isArray(data.results) ? data.results : (Array.isArray(data) ? data : []));
       }
+      window.dispatchEvent(new Event('productsUpdated'));
     } catch (e) {
       setError('Failed to perform product action.');
     } finally {

@@ -40,14 +40,15 @@ const ProductList = () => {
       setSubcategories([]);
       return;
     }
-    const selectedCategory = categories.find(cat => cat.slug === category || cat.name.toLowerCase().replace(/ /g, '-') === category);
+    const selectedCategory = categories.find(cat => cat.slug === category);
     if (!selectedCategory) {
       setSubcategories([]);
       return;
     }
     const getSubcategories = async () => {
       try {
-        const data = await fetchSubcategories(selectedCategory.id);
+        // Use slug in the endpoint if your backend supports it, otherwise keep using id
+        const data = await fetchSubcategories(selectedCategory.slug);
         setSubcategories(data);
       } catch (error) {
         setSubcategories([]);
@@ -59,8 +60,7 @@ const ProductList = () => {
   // Fetch products with pagination
   const fetchProducts = useCallback(async (reset = false) => {
     setLoading(true);
-    let url = `http://127.0.0.1:8000/api/products?category=${category}&page=${page}&page_size=12`;
-    if (subCategory && subCategory.id) url += `&subcategory=${subCategory.id}`;
+    let url = `http://127.0.0.1:8000/api/subcategories/${subCategory ? subCategory.slug : ''}/products/?page=${page}&page_size=12`;
     try {
       const response = await fetch(url);
       const data = await response.json();
@@ -87,6 +87,9 @@ const ProductList = () => {
   // Fetch products when page, category, or subCategory changes
   useEffect(() => {
     fetchProducts(page === 1);
+    const handleProductsUpdated = () => fetchProducts(true);
+    window.addEventListener('productsUpdated', handleProductsUpdated);
+    return () => window.removeEventListener('productsUpdated', handleProductsUpdated);
     // eslint-disable-next-line
   }, [category, subCategory, page]);
 

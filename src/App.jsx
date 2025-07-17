@@ -13,6 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminProductManager from './pages/AdminProductManager';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminCategoryManager from './pages/AdminCategoryManager';
+import CategoryPage from './pages/CategoryPage';
 
 const App = () => {
   return (
@@ -26,8 +27,9 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/product/edit/:id" element={<ProductDetail />} />
-        <Route path="/fire-safety/:category" element={<ProductList />} />
-        <Route path="/ict/:category" element={<ProductList />} />
+        <Route path="/fire-safety/:categorySlug" element={<ProductList />} />
+        <Route path="/ict/:categorySlug" element={<ProductList />} />
+        <Route path="/category/:slug" element={<CategoryPage />} />
         <Route
           path="/admin-dashboard"
           element={

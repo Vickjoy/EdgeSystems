@@ -38,7 +38,7 @@ const AdminCategories = () => {
     const loadSubcategories = async () => {
       setLoading(true);
       try {
-        const data = await fetchSubcategories(selectedCategory.id);
+        const data = await fetchSubcategories(selectedCategory.slug);
         setSubcategories(data);
       } catch (e) {
         setSubcategories([]);

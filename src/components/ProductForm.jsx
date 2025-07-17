@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const defaultValues = {
   name: '',
@@ -19,6 +20,7 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
   const [error, setError] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFileName, setImageFileName] = useState('');
+  const { token } = useAuth();
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -26,6 +28,14 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
       setForm(f => ({ ...f, image: files[0] }));
       setImageFileName(files[0].name);
       setImagePreview(URL.createObjectURL(files[0]));
+    } else if (name === 'subcategory') {
+      // Find the selected subcategory object
+      const selected = subcategories.find(sub => sub.slug === value);
+      setForm(f => ({
+        ...f,
+        subcategory: value, // slug
+        subcategoryId: selected ? selected.id : ''
+      }));
     } else {
       setForm(f => ({ ...f, [name]: value }));
     }
@@ -38,7 +48,8 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
       setError('Name, price, and subcategory are required.');
       return;
     }
-    onSubmit(form);
+    // Pass token to onSubmit
+    onSubmit(form, token);
   };
 
   return (
@@ -69,10 +80,18 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
         </select>
       </div>
       <div style={fieldStyle}>
-        <select name="subcategory" value={form.subcategory} onChange={handleChange} required style={{ width: '100%' }}>
-          <option value="" disabled>Select Subcategory</option>
-          {Array.isArray(subcategories) && subcategories.map(sub => (
-            <option key={sub.id} value={sub.id}>{sub.name}</option>
+        <select
+          name="subcategory"
+          value={form.subcategory}
+          onChange={handleChange}
+          required
+          style={{ width: '100%' }}
+        >
+          <option value="">Select Subcategory</option>
+          {subcategories.map(subcat => (
+            <option key={subcat.id} value={subcat.slug}>
+              {subcat.name}
+            </option>
           ))}
         </select>
       </div>

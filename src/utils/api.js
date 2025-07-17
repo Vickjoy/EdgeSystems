@@ -1,29 +1,47 @@
 // Helper to refresh token and retry request
-async function fetchWithAuthRetry(url, options, retry = true) {
+async function fetchWithAuthRetry(url, options = {}, retry = true) {
   let accessToken = localStorage.getItem('access_token');
+  options.headers = options.headers || {};
+  if (!options.headers['Authorization']) {
+    options.headers['Authorization'] = `Bearer ${accessToken}`;
+  }
+
   let response = await fetch(url, options);
-  if (response.status === 401 && retry) {
-    // Try to refresh token
-    const refreshToken = localStorage.getItem('refresh_token');
-    if (refreshToken) {
-      const refreshResp = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh: refreshToken })
-      });
-      const refreshData = await refreshResp.json();
-      if (refreshResp.ok && refreshData.access) {
-        accessToken = refreshData.access;
-        localStorage.setItem('access_token', accessToken);
-        // Retry original request with new token
-        const newOptions = { ...options, headers: { ...options.headers, Authorization: `Bearer ${accessToken}` } };
-        return fetch(url, newOptions);
-      } else {
-        // Refresh failed, log out user
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('user');
-        throw new Error('Session expired. Please log in again.');
+
+  // Check for 401 or 400 with token_not_valid
+  if ((response.status === 401 || response.status === 400) && retry) {
+    let errorData = {};
+    try {
+      errorData = await response.clone().json();
+    } catch {
+      errorData = {};
+    }
+    if (
+      errorData.code === 'token_not_valid' ||
+      errorData.detail === 'Given token not valid for any token type'
+    ) {
+      // Try to refresh token
+      const refreshToken = localStorage.getItem('refresh_token');
+      if (refreshToken) {
+        const refreshResp = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh: refreshToken })
+        });
+        const refreshData = await refreshResp.json();
+        if (refreshResp.ok && refreshData.access) {
+          accessToken = refreshData.access;
+          localStorage.setItem('access_token', accessToken);
+          // Retry original request with new token
+          options.headers['Authorization'] = `Bearer ${accessToken}`;
+          return fetch(url, options);
+        } else {
+          // Refresh failed, log out user
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+          localStorage.removeItem('user');
+          throw new Error('Session expired. Please log in again.');
+        }
       }
     }
   }
@@ -66,9 +84,9 @@ export const fetchCategories = async (token) => {
   }
 };
 
-export const fetchSubcategories = async (categoryId, token) => {
+export const fetchSubcategories = async (categorySlug, token) => {
   try {
-    const response = await fetchWithAuthRetry(`http://127.0.0.1:8000/api/categories/${categoryId}/subcategories/`, {
+    const response = await fetchWithAuthRetry(`http://127.0.0.1:8000/api/categories/${categorySlug}/subcategories/`, {
       headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     });
     const data = await response.json();
@@ -129,9 +147,9 @@ export const deleteCategory = async (id, token) => {
   }
 };
 
-export const createSubcategory = async (categoryId, name, token) => {
+export const createSubcategory = async (categorySlug, name, token) => {
   try {
-    const response = await fetchWithAuthRetry(`http://127.0.0.1:8000/api/categories/${categoryId}/subcategories/`, {
+    const response = await fetchWithAuthRetry(`http://127.0.0.1:8000/api/categories/${categorySlug}/subcategories/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -198,20 +216,34 @@ export const createProduct = async (form, token) => {
     formData.append('name', form.name);
     formData.append('price', form.price);
     formData.append('description', form.description);
-    formData.append('subcategory', form.subcategory);
     if (form.specifications) formData.append('specifications', form.specifications);
     if (form.features) formData.append('features', form.features);
-    if (form.link) formData.append('link', form.link);
+    if (form.documentation) formData.append('documentation', form.documentation);
+    if (form.status) formData.append('status', form.status);
+    // Only send image if it's a file (not a string)
     if (form.image && typeof form.image !== 'string') formData.append('image', form.image);
-    if (form.pdf && typeof form.pdf !== 'string') formData.append('pdf', form.pdf);
-    const response = await fetchWithAuthRetry('http://127.0.0.1:8000/api/products/', {
+    // Use subcategory slug in the endpoint, and subcategoryId in the form data
+    if (form.subcategoryId) formData.append('subcategory', form.subcategoryId);
+    const endpoint = `http://127.0.0.1:8000/api/subcategories/${form.subcategory}/products/`;
+    const response = await fetchWithAuthRetry(endpoint, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`
       },
       body: formData
     });
-    if (!response.ok) throw new Error('Failed to add product');
+    if (!response.ok) {
+      // Log backend error response
+      let errorMsg = 'Failed to add product';
+      try {
+        const errorData = await response.json();
+        console.error('Backend error:', errorData);
+        errorMsg += ': ' + (errorData.detail || JSON.stringify(errorData));
+      } catch (e) {
+        // Could not parse error response
+      }
+      throw new Error(errorMsg);
+    }
     return await response.json();
   } catch (error) {
     console.error('Error adding product:', error);
@@ -258,6 +290,17 @@ export const deleteProduct = async (id, token) => {
     return true;
   } catch (error) {
     console.error('Error deleting product:', error);
+    throw error;
+  }
+};
+
+export const fetchProductsForSubcategory = async (subcategorySlug) => {
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/api/subcategories/${subcategorySlug}/products/`);
+    if (!response.ok) throw new Error('Failed to fetch products for subcategory');
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching products for subcategory:', error);
     throw error;
   }
 };

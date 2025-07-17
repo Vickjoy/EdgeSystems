@@ -1,17 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
-import CategoryMenu from './CategoryMenu';
 import CompanyLogo from '../assets/Company_logo.webp';
 import styles from './Header.module.css';
 import { fetchCategories } from '../utils/api';
+import ReactDOM from 'react-dom';
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [dropdownPos, setDropdownPos] = useState({ left: 0, top: 0, width: 0 });
+  const navigate = useNavigate();
   const fireRef = useRef();
   const ictRef = useRef();
-  const navigate = useNavigate();
-  const [categories, setCategories] = useState([]);
+  const allCategoriesRef = useRef();
+  const allCategoriesBtnRef = useRef();
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -23,6 +26,9 @@ const Header = () => {
       }
     };
     loadCategories();
+    const handleCategoriesUpdated = () => loadCategories();
+    window.addEventListener('categoriesUpdated', handleCategoriesUpdated);
+    return () => window.removeEventListener('categoriesUpdated', handleCategoriesUpdated);
   }, []);
 
   // Close dropdowns when clicking outside
@@ -30,7 +36,8 @@ const Header = () => {
     const handleClick = (e) => {
       if (
         fireRef.current && !fireRef.current.contains(e.target) &&
-        ictRef.current && !ictRef.current.contains(e.target)
+        ictRef.current && !ictRef.current.contains(e.target) &&
+        allCategoriesRef.current && !allCategoriesRef.current.contains(e.target)
       ) {
         setOpenDropdown(null);
       }
@@ -38,6 +45,51 @@ const Header = () => {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
+
+  // Position All Categories dropdown
+  useEffect(() => {
+    if (openDropdown === 'all' && allCategoriesBtnRef.current) {
+      const rect = allCategoriesBtnRef.current.getBoundingClientRect();
+      setDropdownPos({
+        left: rect.left,
+        top: rect.bottom,
+        width: rect.width
+      });
+    }
+  }, [openDropdown]);
+
+  const fireCategories = categories.filter(cat => cat.type === 'fire');
+  const ictCategories = categories.filter(cat => cat.type === 'ict');
+
+  // All Categories dropdown rendered in a portal
+  const allCategoriesDropdown = openDropdown === 'all' && ReactDOM.createPortal(
+    <ul
+      className={styles.dropdownMenu}
+      ref={allCategoriesRef}
+      style={{
+        position: 'fixed',
+        left: dropdownPos.left,
+        top: dropdownPos.top,
+        minWidth: dropdownPos.width,
+        zIndex: 30000
+      }}
+    >
+      {categories.map(cat => (
+        <li key={cat.id}>
+          <button
+            className={styles.dropdownItem}
+            onClick={() => {
+              setOpenDropdown(null);
+              navigate(`/category/${cat.slug}`);
+            }}
+          >
+            {cat.name}
+          </button>
+        </li>
+      ))}
+    </ul>,
+    document.body
+  );
 
   return (
     <header className={styles.header}>
@@ -54,7 +106,18 @@ const Header = () => {
           <img src={CompanyLogo} alt="Edge Systems Logo" className={styles.logo} />
         </div>
         <div className={styles.headerActions}>
-          <CategoryMenu />
+          {/* All Categories Dropdown */}
+          <div className={`${styles.dropdownContainer} ${styles.headerDropdownContainer}`}>
+            <button
+              ref={allCategoriesBtnRef}
+              className={styles.dropdownButton}
+              onClick={() => setOpenDropdown(openDropdown === 'all' ? null : 'all')}
+              style={{ minWidth: 160 }}
+            >
+              All Categories
+            </button>
+            {/* Dropdown is rendered in a portal */}
+          </div>
           <SearchBar />
         </div>
         <div>
@@ -70,32 +133,62 @@ const Header = () => {
       <nav className={styles.navigation}>
         <ul className={styles.navList}>
           <li><Link to="/" className={styles.navLink}>Home</Link></li>
-          <li>
-            <select
-              className={styles.categoryDropdown}
-              onChange={e => { if (e.target.value) navigate(e.target.value); }}
-              defaultValue=""
+          <li ref={fireRef} className={styles.dropdownContainer}>
+            <button
+              className={styles.dropdownButton}
+              onClick={() => setOpenDropdown(openDropdown === 'fire' ? null : 'fire')}
             >
-              <option value="" disabled>Fire Safety Products & Services</option>
-              {Array.isArray(categories) && categories.filter(cat => cat.type === 'fire').map(cat => (
-                <option key={cat.id} value={`/fire-safety/${cat.slug}`}>{cat.name}</option>
-              ))}
-            </select>
+              Fire Safety Products & Services
+            </button>
+            {openDropdown === 'fire' && (
+              <ul className={styles.dropdownMenu} style={{ left: 0, top: '100%' }}>
+                {fireCategories.map(cat => (
+                  <li key={cat.id}>
+                    <button
+                      className={styles.dropdownItem}
+                      onClick={() => {
+                        setOpenDropdown(null);
+                        navigate(`/category/${cat.slug}`);
+                      }}
+                    >
+                      {cat.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
-          <li>
-            <select
-              className={styles.categoryDropdown}
-              onChange={e => { if (e.target.value) navigate(e.target.value); }}
-              defaultValue=""
+          <li ref={ictRef} className={styles.dropdownContainer}>
+            <button
+              className={styles.dropdownButton}
+              onClick={() => setOpenDropdown(openDropdown === 'ict' ? null : 'ict')}
             >
-              <option value="" disabled>ICT & Telecommunication Products & Services</option>
-              {Array.isArray(categories) && categories.filter(cat => cat.type === 'ict').map(cat => (
-                <option key={cat.id} value={`/ict/${cat.slug}`}>{cat.name}</option>
-              ))}
-            </select>
+              ICT/Telecommunication Products & Services
+            </button>
+            {openDropdown === 'ict' && (
+              <ul className={styles.dropdownMenu} style={{ left: 0, top: '100%' }}>
+                {ictCategories.map(cat => (
+                  <li key={cat.id}>
+                    <button
+                      className={styles.dropdownItem}
+                      onClick={() => {
+                        setOpenDropdown(null);
+                        navigate(`/category/${cat.slug}`);
+                      }}
+                    >
+                      {cat.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
+          <li><Link to="/about" className={styles.navLink}>About Us</Link></li>
+          <li><Link to="/contact" className={styles.navLink}>Contact Us</Link></li>
         </ul>
       </nav>
+      {/* Render All Categories dropdown in a portal */}
+      {allCategoriesDropdown}
     </header>
   );
 };

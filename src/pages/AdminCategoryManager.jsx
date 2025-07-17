@@ -36,7 +36,7 @@ const AdminCategoryManager = () => {
     const loadSubcategories = async () => {
       setLoading(true);
       try {
-        const data = await fetchSubcategories(selectedCategory.id, token);
+        const data = await fetchSubcategories(selectedCategory.slug, token);
         setSubcategories(Array.isArray(data) ? data : []);
       } catch (e) {
         setSubcategories([]);
@@ -80,7 +80,7 @@ const AdminCategoryManager = () => {
       } else if (action === 'delete') {
         await deleteSubcategory(id, token);
       }
-      const data = await fetchSubcategories(selectedCategory.id, token);
+      const data = await fetchSubcategories(selectedCategory.slug, token);
       setSubcategories(Array.isArray(data) ? data : []);
     } catch (e) {
       setError('Failed to perform subcategory action.');
