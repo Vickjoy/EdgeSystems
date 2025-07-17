@@ -114,7 +114,7 @@ const CategoryPage = () => {
                 {products.map(product => (
                   <div key={product.id} style={{ background: 'white', borderRadius: 12, boxShadow: '0 4px 32px rgba(96,150,180,0.08)', padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
                     <img
-                      src={product.image ? (product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000${product.image}`) : '/placeholder.png'}
+                      src={product.image ? product.image : '/placeholder.png'}
                       alt={product.name}
                       style={{ width: 180, height: 180, objectFit: 'cover', borderRadius: 8, marginBottom: 8, background: '#f4f4f4' }}
                       onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
