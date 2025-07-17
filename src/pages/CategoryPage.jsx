@@ -1,27 +1,29 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import ProductCard from '../components/ProductCard';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { fetchCategories, fetchSubcategories, fetchProductsForSubcategory } from '../utils/api';
 import styles from './ProductList.module.css';
 
 const CategoryPage = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [category, setCategory] = useState(null);
   const [subcategories, setSubcategories] = useState([]);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
-  const observer = useRef();
+  const [error, setError] = useState('');
 
   // Fetch category by slug
   useEffect(() => {
     const getCategory = async () => {
-      const cats = await fetchCategories();
-      const found = cats.find(cat => cat.slug === slug);
-      setCategory(found || null);
+      try {
+        const cats = await fetchCategories();
+        const found = cats.find(cat => cat.slug === slug);
+        setCategory(found || null);
+      } catch {
+        setCategory(null);
+      }
     };
     getCategory();
   }, [slug]);
@@ -30,9 +32,14 @@ const CategoryPage = () => {
   useEffect(() => {
     if (!category) return;
     const getSubs = async () => {
-      const subs = await fetchSubcategories(category.slug);
-      setSubcategories(subs);
-      setSelectedSubcategory(subs[0] || null);
+      try {
+        const subs = await fetchSubcategories(category.slug);
+        setSubcategories(subs);
+        setSelectedSubcategory(subs[0] || null);
+      } catch {
+        setSubcategories([]);
+        setSelectedSubcategory(null);
+      }
     };
     getSubs();
     const handleSubcategoriesUpdated = () => getSubs();
@@ -41,39 +48,21 @@ const CategoryPage = () => {
   }, [category]);
 
   // Fetch products for selected subcategory
-  const fetchProducts = useCallback(async () => {
+  useEffect(() => {
     if (!selectedSubcategory) return;
     setLoading(true);
-    try {
-      const data = await fetchProductsForSubcategory(selectedSubcategory.slug);
-      setProducts(Array.isArray(data) ? data : []);
-      setHasMore(false); // No pagination for now
-    } catch (error) {
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
+    setError('');
+    fetchProductsForSubcategory(selectedSubcategory.slug)
+      .then(data => {
+        setProducts(Array.isArray(data) ? data : []);
+        setError('');
+      })
+      .catch(() => {
+        setProducts([]);
+        setError('Could not load products for this subcategory.');
+      })
+      .finally(() => setLoading(false));
   }, [selectedSubcategory]);
-
-  // Reset products and page when subcategory changes
-  useEffect(() => {
-    fetchProducts();
-    const handleProductsUpdated = () => fetchProducts();
-    window.addEventListener('productsUpdated', handleProductsUpdated);
-    return () => window.removeEventListener('productsUpdated', handleProductsUpdated);
-  }, [selectedSubcategory, fetchProducts]);
-
-  // Infinite scroll observer
-  const lastProductRef = useCallback(node => {
-    if (loading) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new window.IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) {
-        setPage(prev => prev + 1);
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, [loading, hasMore]);
 
   // Breadcrumbs
   const crumbs = [
@@ -117,24 +106,43 @@ const CategoryPage = () => {
           {/* Main content: Product Grid */}
           <div style={{ flex: 1 }}>
             <h2 className={styles.title}>{category ? category.name : slug} Products</h2>
-            {products.length > 0 ? (
+            {error && <div style={{ color: 'red', textAlign: 'center', marginBottom: 16 }}>{error}</div>}
+            {loading ? (
+              <p style={{ color: 'white', textAlign: 'center', marginTop: 32, fontSize: 18 }}>Loading...</p>
+            ) : products.length > 0 ? (
               <div className={styles.productsGrid}>
-                {products.map((product, idx) => {
-                  if (products.length === idx + 1) {
-                    return (
-                      <div ref={lastProductRef} key={product.id}>
-                        <ProductCard product={product} />
-                      </div>
-                    );
-                  } else {
-                    return <ProductCard key={product.id} product={product} />;
-                  }
-                })}
-                {loading && <p>Loading...</p>}
-                {!hasMore && !loading && products.length > 0 && <p style={{ color: 'white', textAlign: 'center', marginTop: 16 }}>No more products.</p>}
+                {products.map(product => (
+                  <div key={product.id} style={{ background: 'white', borderRadius: 12, boxShadow: '0 4px 32px rgba(96,150,180,0.08)', padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                    <img
+                      src={product.image ? (product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000${product.image}`) : '/placeholder.png'}
+                      alt={product.name}
+                      style={{ width: 180, height: 180, objectFit: 'cover', borderRadius: 8, marginBottom: 8, background: '#f4f4f4' }}
+                      onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
+                    />
+                    <h3 style={{ fontWeight: 700, fontSize: 18, color: '#6096B4', margin: 0 }}>{product.name}</h3>
+                    <div style={{ color: '#1DCD9F', fontWeight: 600, fontSize: 13, marginBottom: 0 }}>inclusive +16% VAT</div>
+                    <div style={{ fontSize: 20, fontWeight: 700, color: '#1DCD9F', marginBottom: 8 }}>
+                      KES {(product.price * 1.16).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
+                    </div>
+                    <div style={{ display: 'flex', gap: 8, width: '100%' }}>
+                      <button
+                        style={{ flex: 1, background: '#1DCD9F', color: 'white', fontWeight: 700, padding: '0.5rem 1rem', borderRadius: 4, border: 'none', cursor: 'pointer' }}
+                        onClick={() => navigate(`/product/${product.id}`)}
+                      >
+                        View Product
+                      </button>
+                      <button
+                        style={{ flex: 1, background: '#93BFCF', color: 'white', fontWeight: 700, padding: '0.5rem 1rem', borderRadius: 4, border: 'none', cursor: 'pointer' }}
+                        onClick={() => navigate(`/checkout?product=${product.id}`)}
+                      >
+                        Buy Now
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
-              !loading && <p style={{ color: 'white', textAlign: 'center', marginTop: 32, fontSize: 18 }}>No products in this subcategory yet.</p>
+              <p style={{ color: 'white', textAlign: 'center', marginTop: 32, fontSize: 18 }}>No products in this subcategory yet.</p>
             )}
           </div>
         </div>
