@@ -5,6 +5,7 @@ import styles from './ProductDetail.module.css';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ProductForm from '../components/ProductForm';
+import { fetchCategories, fetchSubcategories } from '../utils/api';
 
 const ProductDetail = (props) => {
   const params = useParams();
@@ -15,13 +16,38 @@ const ProductDetail = (props) => {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(location.pathname.startsWith('/product/edit/'));
   const productId = params.id;
+  const [categoryName, setCategoryName] = useState('');
+  const [categorySlug, setCategorySlug] = useState('');
+  const [subcategoryName, setSubcategoryName] = useState('');
+  const [subcategorySlug, setSubcategorySlug] = useState('');
 
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/api/products/${productId}`)
       .then(response => response.json())
-      .then(data => {
+      .then(async data => {
         setProduct(data);
         setLoading(false);
+        // Try to fetch subcategory and category names if possible
+        if (data.subcategory) {
+          // Fetch subcategory details
+          try {
+            const subcategoryResp = await fetch(`http://127.0.0.1:8000/api/subcategories/${data.subcategory}/`);
+            if (subcategoryResp.ok) {
+              const subcat = await subcategoryResp.json();
+              setSubcategoryName(subcat.name);
+              setSubcategorySlug(subcat.slug);
+              // Fetch category name
+              if (subcat.category) {
+                const categories = await fetchCategories();
+                const cat = categories.find(c => c.id === subcat.category || c.slug === subcat.category);
+                if (cat) {
+                  setCategoryName(cat.name);
+                  setCategorySlug(cat.slug);
+                }
+              }
+            }
+          } catch {}
+        }
       })
       .catch(error => console.error('Error fetching product details:', error));
   }, [productId]);
@@ -69,34 +95,52 @@ const ProductDetail = (props) => {
     <div>
       <Breadcrumbs crumbs={[
         { label: 'Home', path: '/' },
-        { label: 'Fire Safety', path: '/fire-safety' },
-        { label: 'Fire Extinguishers', path: '/fire-safety/extinguishers' },
+        ...(categoryName && categorySlug ? [{ label: categoryName, path: `/category/${categorySlug}` }] : []),
+        ...(subcategoryName && subcategorySlug ? [{ label: subcategoryName, path: `/subcategory/${subcategorySlug}` }] : []),
         { label: product.name, path: `/product/${product.id}` }
       ]} />
       <section className={styles.section}>
         <div className={styles.container}>
-          <div style={{ maxWidth: 600, margin: '0 auto', background: 'white', color: '#333', borderRadius: 12, padding: 32, boxShadow: '0 4px 32px rgba(96,150,180,0.08)', display: 'flex', flexDirection: 'column', gap: 24 }}>
-            <div style={{ width: '100%', textAlign: 'center' }}>
-              <img src={`http://127.0.0.1:8000${product.image}`} alt={product.name} style={{ width: '100%', maxWidth: 320, height: 'auto', borderRadius: 8, margin: '0 auto' }} />
+          <div className={styles.productLayout}>
+            {/* Image on the left */}
+            <div className={styles.imageContainer}>
+              <img
+                src={product.image ? product.image : '/placeholder.png'}
+                alt={product.name}
+                className={styles.productImage}
+                style={{ maxWidth: 400, width: '100%', background: '#f4f4f4', borderRadius: 8 }}
+                onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
+              />
+              {product.documentation && (
+                <div style={{ marginTop: 16, textAlign: 'center', wordBreak: 'break-all' }}>
+                  <b>Documentation:</b> <a href={product.documentation} target="_blank" rel="noopener noreferrer">{product.documentation}</a>
+                </div>
+              )}
             </div>
-            <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8, color: '#6096B4', textAlign: 'center' }}>{product.name}</h2>
-            <div style={{ color: '#1DCD9F', fontWeight: 600, fontSize: 15, marginBottom: 0, textAlign: 'center' }}>inclusive +30% VAT</div>
-            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 2, color: '#1DCD9F', textAlign: 'center' }}>KES {(product.price * 1.3).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</div>
-            <div style={{ margin: '12px 0', fontWeight: 600 }}>Status: <span style={{ color: product.status === 'in_stock' ? '#1DCD9F' : '#e74c3c' }}>{product.status === 'in_stock' ? 'In Stock' : 'Out of Stock'}</span></div>
-            <div style={{ marginBottom: 8 }}><b>Description:</b> {product.description}</div>
-            <div style={{ marginBottom: 8 }}><b>Features:</b> {product.features}</div>
-            <div style={{ marginBottom: 8 }}><b>Specifications:</b> {product.specifications}</div>
-            {product.documentation && (
-              <div style={{ marginBottom: 8 }}><b>Documentation:</b> <a href={product.documentation} target="_blank" rel="noopener noreferrer">{product.documentation}</a></div>
+            {/* Details on the right */}
+            <div className={styles.detailsContainer}>
+              <h2 className={styles.productTitle}>{product.name}</h2>
+              <div style={{ color: '#1DCD9F', fontWeight: 600, fontSize: 15, marginBottom: 0 }}>inclusive +16% VAT</div>
+              <div className={styles.productPrice}>
+                KES {(product.price * 1.16).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '16px 0' }}>
+                <label htmlFor="quantity" className={styles.label}>Quantity</label>
+                <input type="number" id="quantity" defaultValue="1" min="1" className={styles.quantityInput} />
+              </div>
+              <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+                <button className={styles.addToCartButton} style={{ flex: 1 }}>Add to Cart</button>
+                <button className={styles.addToCartButton} style={{ flex: 1, background: '#1DCD9F' }}>Buy Now</button>
+              </div>
+            </div>
+          </div>
+          {/* Below image and details: description, specifications, benefits/features */}
+          <div style={{ background: 'white', color: '#333', borderRadius: 12, marginTop: 32, padding: 32, boxShadow: '0 4px 32px rgba(96,150,180,0.08)' }}>
+            <div style={{ marginBottom: 16 }}><b>Description:</b> {product.description}</div>
+            <div style={{ marginBottom: 16 }}><b>Specifications:</b> {product.specifications}</div>
+            {product.features && (
+              <div style={{ marginBottom: 16 }}><b>Benefits:</b> {product.features}</div>
             )}
-            <div style={{ marginBottom: 8 }}><b>Subcategory:</b> {product.subcategory_name || product.subcategory}</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '16px 0' }}>
-              <label htmlFor="quantity" style={{ fontWeight: 600 }}>Quantity</label>
-              <input type="number" id="quantity" defaultValue="1" min="1" style={{ border: '1px solid #BDCDD6', borderRadius: 4, padding: '0.5rem', width: 80, fontSize: 16 }} />
-              <button style={{ background: '#1DCD9F', color: 'white', fontWeight: 700, padding: '0.5rem 1.5rem', borderRadius: 4, border: 'none', cursor: 'pointer', fontSize: 16 }}>
-                Add to Cart
-              </button>
-            </div>
           </div>
         </div>
       </section>
