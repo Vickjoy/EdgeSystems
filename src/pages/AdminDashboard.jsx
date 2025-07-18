@@ -119,9 +119,9 @@ const AdminDashboard = () => {
       if (action === 'add') {
         await createSubcategory(selectedCategory.slug, value, token);
       } else if (action === 'edit') {
-        await updateSubcategory(selectedCategory.id, id, value, token);
+        await updateSubcategory(selectedCategory.slug, id, value, token);
       } else if (action === 'delete') {
-        await deleteSubcategory(id, token);
+        await deleteSubcategory(selectedCategory.slug, id, token);
       }
       const data = await fetchSubcategories(selectedCategory.slug, token);
       setSubcategories(Array.isArray(data) ? data : []);
@@ -177,28 +177,31 @@ const AdminDashboard = () => {
           <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.5rem', fontWeight: 700, cursor: 'pointer', marginBottom: 16 }} onClick={() => setCategoryModal({ type: 'add-category', value: '', id: null })}>+ Add Category</button>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {categories.map(cat => (
-              <li key={cat.id} style={{ marginBottom: 10, background: selectedCategory?.id === cat.id ? '#eaf6fa' : 'transparent', borderRadius: 4, padding: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontWeight: 700, color: selectedCategory?.id === cat.id ? '#1DCD9F' : '#6096B4', cursor: 'pointer' }} onClick={() => { setSelectedCategory(cat); setSelectedSubcategory(null); }}>{cat.name}</span>
-                <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setCategoryModal({ type: 'edit-category', value: cat.name, id: cat.id })}>Edit</button>
-                <button style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setCategoryModal({ type: 'delete-category', value: cat.name, id: cat.id })}>Delete</button>
+              <li key={cat.id} style={{ marginBottom: 10, background: selectedCategory?.id === cat.id ? '#eaf6fa' : 'transparent', borderRadius: 4, padding: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontWeight: 700, color: selectedCategory?.id === cat.id ? '#1DCD9F' : '#6096B4', cursor: 'pointer' }} onClick={() => { setSelectedCategory(cat); setSelectedSubcategory(null); }}>{cat.name}</span>
+                  <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setCategoryModal({ type: 'edit-category', value: cat.name, id: cat.id })}>Edit</button>
+                  <button style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setCategoryModal({ type: 'delete-category', value: cat.name, id: cat.id })}>Delete</button>
+                </div>
+                {/* Subcategories for this category */}
+                {selectedCategory?.id === cat.id && (
+                  <div style={{ marginTop: 16 }}>
+                    <h4 style={{ color: '#1DCD9F', marginBottom: 8 }}>Subcategories</h4>
+                    <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer', marginBottom: 8 }} onClick={() => setSubcategoryModal({ type: 'add-subcategory', value: '', id: null })}>+ Add Subcategory</button>
+                    <ul style={{ listStyle: 'none', padding: 0 }}>
+                      {subcategories.map(sub => (
+                        <li key={sub.id} style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span style={{ color: selectedSubcategory?.id === sub.id ? '#1DCD9F' : '#6096B4', fontWeight: 600, cursor: 'pointer' }} onClick={() => setSelectedSubcategory(sub)}>{sub.name}</span>
+                          <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setSubcategoryModal({ type: 'edit-subcategory', value: sub.name, id: sub.id })}>Edit</button>
+                          <button style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setSubcategoryModal({ type: 'delete-subcategory', value: sub.name, id: sub.id })}>Delete</button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
-          {selectedCategory && (
-            <div style={{ marginTop: 32 }}>
-              <h4 style={{ color: '#1DCD9F', marginBottom: 8 }}>Subcategories</h4>
-              <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer', marginBottom: 8 }} onClick={() => setSubcategoryModal({ type: 'add-subcategory', value: '', id: null })}>+ Add Subcategory</button>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                {subcategories.map(sub => (
-                  <li key={sub.id} style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ color: selectedSubcategory?.id === sub.id ? '#1DCD9F' : '#6096B4', fontWeight: 600, cursor: 'pointer' }} onClick={() => setSelectedSubcategory(sub)}>{sub.name}</span>
-                    <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setSubcategoryModal({ type: 'edit-subcategory', value: sub.name, id: sub.id })}>Edit</button>
-                    <button style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setSubcategoryModal({ type: 'delete-subcategory', value: sub.name, id: sub.id })}>Delete</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </aside>
         {/* Main Content: Products */}
         <main style={{ flex: 1 }}>

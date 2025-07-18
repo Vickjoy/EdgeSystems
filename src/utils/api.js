@@ -155,7 +155,7 @@ export const createSubcategory = async (categorySlug, name, token) => {
         'Content-Type': 'application/json',
         ...(token ? { 'Authorization': `Bearer ${token}` } : {})
       },
-      body: JSON.stringify({ name })
+      body: JSON.stringify({ name }) // Only send name
     });
     if (!response.ok) throw new Error('Failed to create subcategory');
     return await response.json();
@@ -165,9 +165,9 @@ export const createSubcategory = async (categorySlug, name, token) => {
   }
 };
 
-export const updateSubcategory = async (categoryId, subcategoryId, name, token) => {
+export const updateSubcategory = async (categorySlug, subcategoryId, name, token) => {
   try {
-    const response = await fetchWithAuthRetry(`http://127.0.0.1:8000/api/categories/${categoryId}/subcategories/${subcategoryId}/`, {
+    const response = await fetchWithAuthRetry(`http://127.0.0.1:8000/api/categories/${categorySlug}/subcategories/${subcategoryId}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -183,9 +183,9 @@ export const updateSubcategory = async (categoryId, subcategoryId, name, token) 
   }
 };
 
-export const deleteSubcategory = async (subcategoryId, token) => {
+export const deleteSubcategory = async (categorySlug, subcategoryId, token) => {
   try {
-    const response = await fetchWithAuthRetry(`http://127.0.0.1:8000/api/subcategories/${subcategoryId}/`, {
+    const response = await fetchWithAuthRetry(`http://127.0.0.1:8000/api/categories/${categorySlug}/subcategories/${subcategoryId}/`, {
       method: 'DELETE',
       headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     });

@@ -21,8 +21,12 @@ const CategoryPage = () => {
         const cats = await fetchCategories();
         const found = cats.find(cat => cat.slug === slug);
         setCategory(found || null);
+        setSubcategories([]); // Clear subcategories when category changes
+        setSelectedSubcategory(null); // Clear selected subcategory
       } catch {
         setCategory(null);
+        setSubcategories([]);
+        setSelectedSubcategory(null);
       }
     };
     getCategory();
@@ -34,8 +38,10 @@ const CategoryPage = () => {
     const getSubs = async () => {
       try {
         const subs = await fetchSubcategories(category.slug);
-        setSubcategories(subs);
-        setSelectedSubcategory(subs[0] || null);
+        // Safety net: filter subcategories by category id or slug if present
+        const filtered = subs.filter(sub => sub.category === category.id || sub.category === category.slug || !sub.category || sub.category === category);
+        setSubcategories(filtered);
+        setSelectedSubcategory(filtered[0] || null);
       } catch {
         setSubcategories([]);
         setSelectedSubcategory(null);
