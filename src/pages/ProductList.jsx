@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import ProductForm from '../components/ProductForm';
 import { fetchCategories, fetchSubcategories } from '../utils/api';
 
+
 const ProductList = () => {
   const { category } = useParams();
   const location = useLocation();

@@ -6,6 +6,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ProductForm from '../components/ProductForm';
 import { fetchCategories, fetchSubcategories } from '../utils/api';
+import { useCart } from '../context/CartContext';
 
 const ProductDetail = (props) => {
   const params = useParams();
@@ -20,6 +21,8 @@ const ProductDetail = (props) => {
   const [categorySlug, setCategorySlug] = useState('');
   const [subcategoryName, setSubcategoryName] = useState('');
   const [subcategorySlug, setSubcategorySlug] = useState('');
+  const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/api/products/${productId}`)
@@ -126,11 +129,36 @@ const ProductDetail = (props) => {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '16px 0' }}>
                 <label htmlFor="quantity" className={styles.label}>Quantity</label>
-                <input type="number" id="quantity" defaultValue="1" min="1" className={styles.quantityInput} />
+                <input type="number" id="quantity" value={quantity} min="1" className={styles.quantityInput} onChange={e => setQuantity(Math.max(1, parseInt(e.target.value) || 1))} />
               </div>
               <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-                <button className={styles.addToCartButton} style={{ flex: 1 }}>Add to Cart</button>
-                <button className={styles.addToCartButton} style={{ flex: 1, background: '#1DCD9F' }}>Buy Now</button>
+                <button
+                  className={styles.addToCartButton}
+                  style={{ flex: 1 }}
+                  onClick={() => addToCart({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity,
+                  })}
+                >
+                  Add to Cart
+                </button>
+                <button
+                  className={styles.addToCartButton}
+                  style={{ flex: 1, background: '#1DCD9F' }}
+                  onClick={() => {
+                    addToCart({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      quantity,
+                    });
+                    navigate('/checkout');
+                  }}
+                >
+                  Buy Now
+                </button>
               </div>
             </div>
           </div>

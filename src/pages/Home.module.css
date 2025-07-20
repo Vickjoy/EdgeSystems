@@ -1,6 +1,6 @@
 .heroSection {
   position: relative;
-  height: 90vh;
+  height: 65vh; /* reduced from 90vh */
   background: linear-gradient(135deg, #071952 0%, #35A29F 100%);
   display: flex;
   align-items: center;
@@ -24,13 +24,13 @@
   z-index: 2;
   color: #fff;
   text-align: center;
-  padding: 2rem;
+  padding: 1.2rem; /* reduced from 2rem */
 }
 
 .heroTitle {
-  font-size: 4rem;
+  font-size: 2.5rem; /* reduced from 4rem */
   font-weight: 900;
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem; /* reduced from 2rem */
   color: #97FEED;
   text-shadow: 0 4px 16px #071952, 0 1px 2px #0B666A;
   letter-spacing: -2px;
@@ -47,8 +47,8 @@
   background: linear-gradient(90deg, #35A29F 0%, #97FEED 100%);
   color: #071952;
   font-weight: 700;
-  font-size: 1.2rem;
-  padding: 1rem 2.5rem;
+  font-size: 1rem; /* reduced from 1.2rem */
+  padding: 0.7rem 1.5rem; /* reduced */
   border-radius: 50px;
   border: none;
   box-shadow: 0 8px 25px rgba(53,162,159,0.2);
@@ -62,21 +62,21 @@
 }
 
 .servicesSection {
-  padding: 5rem 0;
+  padding: 2.5rem 0; /* reduced from 5rem 0 */
   background: linear-gradient(135deg, #0B666A 0%, #35A29F 100%);
 }
 .servicesTitle {
-  font-size: 2.5rem;
+  font-size: 1.5rem; /* reduced from 2.5rem */
   font-weight: 800;
   color: #97FEED;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem; /* reduced from 3rem */
   letter-spacing: -1px;
 }
 .servicesGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2.5rem;
+  gap: 1.2rem; /* reduced from 2.5rem */
   justify-content: center;
 }
 .serviceCard {
@@ -84,7 +84,7 @@
   color: #071952;
   border-radius: 1.5rem;
   box-shadow: 0 8px 32px rgba(7,25,82,0.10);
-  padding: 2rem 1.5rem;
+  padding: 1.2rem 1rem; /* reduced */
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
   position: relative;
@@ -94,27 +94,27 @@
   box-shadow: 0 16px 40px rgba(53,162,159,0.18);
 }
 .serviceIcon {
-  font-size: 2.5rem;
+  font-size: 2rem; /* reduced from 2.5rem */
   margin-bottom: 1rem;
   color: #35A29F;
 }
 
 .whyChooseSection {
-  padding: 5rem 0;
+  padding: 2.5rem 0; /* reduced from 5rem 0 */
   background: linear-gradient(135deg, #0B666A 0%, #35A29F 100%);
 }
 .whyChooseTitle {
-  font-size: 2.5rem;
+  font-size: 1.5rem; /* reduced from 2.5rem */
   font-weight: 800;
   color: #97FEED;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem; /* reduced from 3rem */
   letter-spacing: -1px;
 }
 .whyChooseGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2.5rem;
+  gap: 1.2rem; /* reduced from 2.5rem */
   justify-content: center;
 }
 .whyChooseCard {
@@ -122,7 +122,7 @@
   color: #071952;
   border-radius: 1.5rem;
   box-shadow: 0 8px 32px rgba(7,25,82,0.10);
-  padding: 2rem 1.5rem;
+  padding: 1.2rem 1rem; /* reduced */
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
   position: relative;
@@ -132,33 +132,33 @@
   box-shadow: 0 16px 40px rgba(53,162,159,0.18);
 }
 .whyChooseIcon {
-  font-size: 2.5rem;
+  font-size: 2rem; /* reduced from 2.5rem */
   margin-bottom: 1rem;
   color: #0B666A;
 }
 
 .partnersSection {
   background: #f8f9fa;
-  padding: 4rem 0;
+  padding: 2rem 0; /* reduced from 4rem 0 */
 }
 .partnersHeader {
-  font-size: 2rem;
+  font-size: 1.2rem; /* reduced from 2rem */
   font-weight: 700;
   color: #071952;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem; /* reduced from 2rem */
   letter-spacing: -1px;
   justify-content: center;
   align-items: center;
   display: flex;
 }
 .partnerLogo {
-  height: 5rem;
+  height: 2.2rem; /* reduced from 5rem */
   width: auto;
   background: none;
   filter: none;
   border-radius: 0.5rem;
-  margin: 0 1.5rem;
+  margin: 0 0.7rem; /* reduced from 1.5rem */
   transition: transform 0.3s;
 }
 .partnerLogo:hover {
@@ -166,7 +166,7 @@
 }
 
 .newsletterSection {
-  padding: 6rem 0;
+  padding: 2.5rem 0; /* reduced from 6rem 0 */
   background: linear-gradient(135deg, #6096B4 0%, #4a7c9a 100%);
   color: white;
   position: relative;
@@ -192,18 +192,18 @@
 }
 
 .newsletterTitle {
-  font-size: 2.5rem;
+  font-size: 1.5rem; /* reduced from 2.5rem */
   font-weight: 800;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem; /* reduced from 2rem */
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .newsletterForm {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.3rem; /* reduced from 0.5rem */
   background: rgba(255, 255, 255, 0.1);
-  padding: 0.5rem;
+  padding: 0.3rem; /* reduced from 0.5rem */
   border-radius: 50px;
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.2);
@@ -211,7 +211,7 @@
 
 .newsletterInput {
   width: 100%;
-  padding: 1rem 1.5rem;
+  padding: 0.7rem 1rem; /* reduced from 1rem 1.5rem */
   border: none;
   border-radius: 25px;
   outline: none;
@@ -228,7 +228,7 @@
 .newsletterButton {
   background: linear-gradient(135deg, #93BFCF 0%, #7ba8b8 100%);
   color: white;
-  padding: 1rem 2rem;
+  padding: 0.7rem 1.2rem; /* reduced from 1rem 2rem */
   border: none;
   border-radius: 25px;
   cursor: pointer;
@@ -236,6 +236,7 @@
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   white-space: nowrap;
+  font-size: 1rem; /* reduced */
 }
 
 .newsletterButton:hover {

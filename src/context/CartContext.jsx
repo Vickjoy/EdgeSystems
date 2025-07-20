@@ -8,15 +8,26 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (item) => {
-    setCartItems([...cartItems, item]);
+    setCartItems(prev => {
+      const existing = prev.find(i => i.id === item.id);
+      if (existing) {
+        return prev.map(i => i.id === item.id ? { ...i, quantity: i.quantity + (item.quantity || 1) } : i);
+      } else {
+        return [...prev, { ...item, quantity: item.quantity || 1 }];
+      }
+    });
   };
 
   const removeFromCart = (itemId) => {
     setCartItems(cartItems.filter(item => item.id !== itemId));
   };
 
+  const getTotal = () => {
+    return cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, getTotal }}>
       {children}
     </CartContext.Provider>
   );

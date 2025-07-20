@@ -5,6 +5,8 @@ import CompanyLogo from '../assets/Company_logo.webp';
 import styles from './Header.module.css';
 import { fetchCategories } from '../utils/api';
 import ReactDOM from 'react-dom';
+import { useCart } from '../context/CartContext';
+import CartModal from './CartModal';
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -15,6 +17,8 @@ const Header = () => {
   const ictRef = useRef();
   const allCategoriesRef = useRef();
   const allCategoriesBtnRef = useRef();
+  const { cartItems } = useCart();
+  const [cartOpen, setCartOpen] = useState(false);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -96,7 +100,7 @@ const Header = () => {
       {/* Top Bar */}
       <div className={styles.topBar}>
         <div className={styles.topBarContent}>
-          <span>☎️ +254 700 000000</span>
+          <span>☎️ +254 0202400280/0721247356</span>
           <span>📧 info@edgesystems.co.ke</span>
         </div>
       </div>
@@ -119,13 +123,16 @@ const Header = () => {
             {/* Dropdown is rendered in a portal */}
           </div>
           <SearchBar />
+          <button onClick={() => setCartOpen(true)} style={{ background: 'none', border: 'none', color: '#97FEED', fontSize: 22, cursor: 'pointer', position: 'relative' }}>
+            🛒
+            {cartItems.length > 0 && (
+              <span style={{ position: 'absolute', top: -6, right: -8, background: '#e74c3c', color: 'white', borderRadius: '50%', fontSize: 13, padding: '0 6px', fontWeight: 700 }}>{cartItems.length}</span>
+            )}
+          </button>
         </div>
         <div>
           <Link to="/login" className={styles.loginLink}>
             👤 Login
-          </Link>
-          <Link to="/cart" className={styles.cartLink}>
-            🛒 Cart (0)
           </Link>
         </div>
       </div>
@@ -189,6 +196,7 @@ const Header = () => {
       </nav>
       {/* Render All Categories dropdown in a portal */}
       {allCategoriesDropdown}
+      {cartOpen && <CartModal onClose={() => setCartOpen(false)} />}
     </header>
   );
 };

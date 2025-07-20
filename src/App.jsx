@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -14,11 +14,24 @@ import AdminProductManager from './pages/AdminProductManager';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminCategoryManager from './pages/AdminCategoryManager';
 import CategoryPage from './pages/CategoryPage';
+import AdminLayout from './components/AdminLayout';
+import AdminSubcategoryManager from './pages/AdminSubcategoryManager';
 
 const App = () => {
+  const location = useLocation();
+  // List of admin routes where Header/Footer should be hidden
+  const adminRoutes = [
+    '/admin-dashboard',
+    '/admin-products',
+    '/admin-categories',
+    '/admin-subcategories'
+  ];
+  // Check if current path starts with any admin route
+  const isAdminRoute = adminRoutes.some(route => location.pathname.startsWith(route));
+
   return (
     <div>
-      <Header />
+      {!isAdminRoute && <Header />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -34,7 +47,9 @@ const App = () => {
           path="/admin-dashboard"
           element={
             <ProtectedRoute adminOnly={true}>
-              <AdminDashboard />
+              <AdminLayout>
+                <AdminDashboard />
+              </AdminLayout>
             </ProtectedRoute>
           }
         />
@@ -42,7 +57,9 @@ const App = () => {
           path="/admin-products"
           element={
             <ProtectedRoute adminOnly={true}>
-              <AdminProductManager />
+              <AdminLayout>
+                <AdminProductManager />
+              </AdminLayout>
             </ProtectedRoute>
           }
         />
@@ -50,12 +67,24 @@ const App = () => {
           path="/admin-categories"
           element={
             <ProtectedRoute adminOnly={true}>
-              <AdminCategoryManager />
+              <AdminLayout>
+                <AdminCategoryManager />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-subcategories"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <AdminLayout>
+                <AdminSubcategoryManager />
+              </AdminLayout>
             </ProtectedRoute>
           }
         />
       </Routes>
-      <Footer />
+      {!isAdminRoute && <Footer />}
     </div>
   );
 };

@@ -22,15 +22,33 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
   const [imageFileName, setImageFileName] = useState('');
   const { token } = useAuth();
 
+  // Build a list of unique categories from subcategories
+  const categories = Array.from(
+    new Map(
+      (subcategories || [])
+        .filter(sub => sub && sub.category)
+        .map(sub => [sub.category.id || sub.category, sub.category])
+    ).values()
+  );
+
+  // Determine selected category
+  const selectedCategoryId = form.category || (initialValues.category ? (initialValues.category.id || initialValues.category) : '');
+
+  // Filter subcategories for the selected category
+  const filteredSubcategories = subcategories.filter(
+    sub => sub && (sub.category.id === selectedCategoryId || sub.category === selectedCategoryId)
+  );
+
   const handleChange = e => {
     const { name, value, files } = e.target;
     if (name === 'image' && files.length > 0) {
       setForm(f => ({ ...f, image: files[0] }));
       setImageFileName(files[0].name);
       setImagePreview(URL.createObjectURL(files[0]));
+    } else if (name === 'category') {
+      setForm(f => ({ ...f, category: value, subcategory: '', subcategoryId: '' }));
     } else if (name === 'subcategory') {
-      // Find the selected subcategory object
-      const selected = subcategories.find(sub => sub.slug === value);
+      const selected = filteredSubcategories.find(sub => sub.slug === value);
       setForm(f => ({
         ...f,
         subcategory: value, // slug
@@ -48,35 +66,48 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
       setError('Name, price, and subcategory are required.');
       return;
     }
-    // Pass token to onSubmit
     onSubmit(form, token);
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ background: '#fff', padding: 24, borderRadius: 8, maxWidth: 420, margin: '0 auto' }}>
-      <h3 style={{ marginBottom: 16, textAlign: 'center' }}>{initialValues.id ? 'Edit Product' : 'Add Product'}</h3>
+    <form onSubmit={handleSubmit} style={{ background: '#fff', padding: 24, borderRadius: 8, maxWidth: 420, margin: '0 auto', color: '#111' }}>
+      <h3 style={{ marginBottom: 16, textAlign: 'center', color: '#111' }}>{initialValues.id ? 'Edit Product' : 'Add Product'}</h3>
       <div style={fieldStyle}>
-        <input name="name" value={form.name} onChange={handleChange} required style={{ width: '100%' }} placeholder="Product Name" />
+        <input name="name" value={form.name} onChange={handleChange} required style={{ width: '100%', color: '#111' }} placeholder="Product Name" />
       </div>
       <div style={fieldStyle}>
-        <input name="price" type="number" value={form.price} onChange={handleChange} required style={{ width: '100%' }} placeholder="Price (KES)" />
+        <input name="price" type="number" value={form.price} onChange={handleChange} required style={{ width: '100%', color: '#111' }} placeholder="Price (KES)" />
       </div>
       <div style={fieldStyle}>
-        <textarea name="description" value={form.description} onChange={handleChange} style={{ width: '100%' }} rows={2} placeholder="Description" />
+        <textarea name="description" value={form.description} onChange={handleChange} style={{ width: '100%', color: '#111' }} rows={2} placeholder="Description" />
       </div>
       <div style={fieldStyle}>
-        <textarea name="features" value={form.features} onChange={handleChange} style={{ width: '100%' }} rows={2} placeholder="Features" />
+        <textarea name="features" value={form.features} onChange={handleChange} style={{ width: '100%', color: '#111' }} rows={2} placeholder="Features" />
       </div>
       <div style={fieldStyle}>
-        <textarea name="specifications" value={form.specifications} onChange={handleChange} style={{ width: '100%' }} rows={2} placeholder="Specifications" />
+        <textarea name="specifications" value={form.specifications} onChange={handleChange} style={{ width: '100%', color: '#111' }} rows={2} placeholder="Specifications" />
       </div>
       <div style={fieldStyle}>
-        <input name="documentation" value={form.documentation} onChange={handleChange} style={{ width: '100%' }} placeholder="Documentation" />
+        <input name="documentation" value={form.documentation} onChange={handleChange} style={{ width: '100%', color: '#111' }} placeholder="Documentation" />
       </div>
       <div style={fieldStyle}>
-        <select name="status" value={form.status} onChange={handleChange} style={{ width: '100%' }}>
+        <select name="status" value={form.status} onChange={handleChange} style={{ width: '100%', color: '#111' }}>
           <option value="in_stock">In Stock</option>
           <option value="out_of_stock">Out of Stock</option>
+        </select>
+      </div>
+      <div style={fieldStyle}>
+        <select
+          name="category"
+          value={selectedCategoryId || ''}
+          onChange={handleChange}
+          required
+          style={{ width: '100%', color: '#111' }}
+        >
+          <option value="">Select Category</option>
+          {categories.map(cat => (
+            <option key={cat.id || cat} value={cat.id || cat}>{cat.name || cat}</option>
+          ))}
         </select>
       </div>
       <div style={fieldStyle}>
@@ -85,11 +116,12 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
           value={form.subcategory}
           onChange={handleChange}
           required
-          style={{ width: '100%' }}
+          style={{ width: '100%', color: '#111' }}
+          disabled={!selectedCategoryId}
         >
           <option value="">Select Subcategory</option>
-          {subcategories.map(subcat => (
-            <option key={subcat.id} value={subcat.slug}>
+          {filteredSubcategories.map(subcat => (
+            subcat && <option key={subcat.id} value={subcat.slug}>
               {subcat.name}
             </option>
           ))}
@@ -97,11 +129,8 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
       </div>
       <div style={fieldStyle}>
         <input name="image" type="file" accept="image/*" onChange={handleChange} style={{ width: '100%' }} />
-        {/* Show file name if a new file is selected */}
         {imageFileName && <div style={{ fontSize: 13, color: '#6096B4', marginTop: 4 }}>{imageFileName}</div>}
-        {/* Show preview for new upload */}
         {imagePreview && <img src={imagePreview} alt="preview" style={{ width: 80, marginTop: 8, borderRadius: 4 }} />}
-        {/* Show preview for existing image (edit mode) */}
         {!imagePreview && form.image && typeof form.image === 'string' && (
           <img src={`http://127.0.0.1:8000${form.image}`} alt="preview" style={{ width: 80, marginTop: 8, borderRadius: 4 }} />
         )}

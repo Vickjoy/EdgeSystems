@@ -64,4 +64,140 @@
 
 .button:hover {
   background-color: #BDCDD6;
+}
+
+.gridContainer {
+  display: flex;
+  gap: 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+.billingColumn {
+  flex: 1.2;
+  background: rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 16px rgba(96,150,180,0.08);
+}
+
+.orderColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.orderCard, .paymentCard {
+  background: #fff;
+  color: #333;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(96,150,180,0.08);
+  padding: 1.5rem 1.2rem;
+}
+
+.orderHeader, .paymentHeader {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #6096B4;
+}
+
+.orderList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.orderItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding: 0.5rem 0;
+  gap: 0.5rem;
+}
+
+.orderItemName {
+  font-weight: 600;
+  color: #6096B4;
+}
+
+.orderItemPrice {
+  color: #1DCD9F;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: color 0.2s;
+}
+.removeBtn:hover {
+  color: #b71c1c;
+}
+
+.orderTotal {
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: right;
+  color: #6096B4;
+  margin-top: 1rem;
+}
+
+.emptyOrder {
+  color: #888;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.paymentMpesa {
+  font-weight: 600;
+  color: #1DCD9F;
+  margin-bottom: 0.7rem;
+  font-size: 1.1rem;
+}
+
+.paymentImage {
+  margin-bottom: 1rem;
+}
+
+.placeOrderButton, .submitButton {
+  background-color: #1DCD9F;
+  color: white;
+  font-weight: 700;
+  padding: 0.7rem 0;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+.placeOrderButton:hover, .submitButton:hover {
+  background-color: #6096B4;
+}
+
+@media (max-width: 900px) {
+  .gridContainer {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .orderColumn {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
 } 

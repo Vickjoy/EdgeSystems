@@ -2,10 +2,11 @@
 async function fetchWithAuthRetry(url, options = {}, retry = true) {
   let accessToken = localStorage.getItem('access_token');
   options.headers = options.headers || {};
-  if (!options.headers['Authorization']) {
+  // Only add Authorization header if accessToken exists and method is not GET, or if explicitly provided
+  if (!options.headers['Authorization'] && accessToken && options.method && options.method !== 'GET') {
     options.headers['Authorization'] = `Bearer ${accessToken}`;
   }
-
+  // If Authorization header is explicitly provided (e.g., for admin actions), keep it
   let response = await fetch(url, options);
 
   // Check for 401 or 400 with token_not_valid
@@ -73,9 +74,9 @@ export const fetchProductById = async (id) => {
 
 export const fetchCategories = async (token) => {
   try {
-    const response = await fetchWithAuthRetry('http://127.0.0.1:8000/api/categories/', {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-    });
+    // Only send Authorization header if token is provided (admin actions)
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    const response = await fetch('http://127.0.0.1:8000/api/categories/', { headers });
     const data = await response.json();
     return data;
   } catch (error) {
@@ -86,9 +87,9 @@ export const fetchCategories = async (token) => {
 
 export const fetchSubcategories = async (categorySlug, token) => {
   try {
-    const response = await fetchWithAuthRetry(`http://127.0.0.1:8000/api/categories/${categorySlug}/subcategories/`, {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-    });
+    // Only send Authorization header if token is provided (admin actions)
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    const response = await fetch(`http://127.0.0.1:8000/api/categories/${categorySlug}/subcategories/`, { headers });
     const data = await response.json();
     return data;
   } catch (error) {
@@ -199,9 +200,9 @@ export const deleteSubcategory = async (categorySlug, subcategoryId, token) => {
 
 export const fetchProductsBySubcategory = async (subcategoryId, page = 1, pageSize = 10, token) => {
   try {
-    const response = await fetchWithAuthRetry(`http://127.0.0.1:8000/api/products/?subcategory=${subcategoryId}&page=${page}&page_size=${pageSize}`, {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-    });
+    // Only send Authorization header if token is provided (admin actions)
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    const response = await fetch(`http://127.0.0.1:8000/api/products/?subcategory=${subcategoryId}&page=${page}&page_size=${pageSize}`, { headers });
     const data = await response.json();
     return data;
   } catch (error) {

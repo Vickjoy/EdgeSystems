@@ -34,10 +34,10 @@ const Footer = () => {
       {/* Middle Column */}
       <div>
         <h3 className={styles.sectionTitle}>Quick Links</h3>
-        <ul className={styles.quickLinks}>
-          <li><Link to="/" className={styles.quickLink}>Home</Link></li>
-          <li><Link to="/about" className={styles.quickLink}>About Us</Link></li>
-          <li><Link to="/contact" className={styles.quickLink}>Contact Us</Link></li>
+        <ul className={styles.quickLinks} role="navigation" aria-label="Quick Links">
+          <li><Link to="/" className={styles.quickLink} tabIndex={0}>Home</Link></li>
+          <li><Link to="/about" className={styles.quickLink} tabIndex={0}>About Us</Link></li>
+          <li><Link to="/contact" className={styles.quickLink} tabIndex={0}>Contact Us</Link></li>
         </ul>
       </div>
       {/* Right Column */}

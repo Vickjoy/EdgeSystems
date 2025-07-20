@@ -1,0 +1,250 @@
+/* Admin Dashboard Layout */
+.adminDashboard {
+  max-width: 1200px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(96,150,180,0.10);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.adminHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.adminLogo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.adminTitle {
+  color: #6096B4;
+  font-weight: 900;
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.adminMain {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.adminSidebar {
+  min-width: 260px;
+  border-right: 1.5px solid #eee;
+  padding-right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.adminSectionTitle {
+  color: #1DCD9F;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.adminList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.adminListItem {
+  background: #f7fafc;
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: background 0.2s;
+}
+.adminListItem.selected {
+  background: #eaf6fa;
+}
+
+.adminListItemRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.adminListItemName {
+  font-weight: 700;
+  color: #6096B4;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.adminListItemName.selected {
+  color: #1DCD9F;
+}
+
+.adminButton {
+  background: #1DCD9F;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 0.2rem;
+}
+.adminButton.danger {
+  background: #e74c3c;
+}
+.adminButton:hover {
+  background: #6096B4;
+}
+
+.adminSubList {
+  list-style: none;
+  padding: 0 0 0 1rem;
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.adminMainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.adminProductsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.adminTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #f4f8fb;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(96,150,180,0.06);
+}
+.adminTable th, .adminTable td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #e0e6ed;
+  text-align: left;
+}
+.adminTable th {
+  background: #eaf6fa;
+  font-weight: 700;
+  color: #6096B4;
+}
+.adminTable tr:last-child td {
+  border-bottom: none;
+}
+
+.adminTableImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.adminForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  background: #f7fafc;
+  border-radius: 10px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(96,150,180,0.06);
+  margin-bottom: 2rem;
+}
+.adminFormGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.adminFormLabel {
+  font-weight: 600;
+  color: #6096B4;
+  margin-bottom: 0.2rem;
+}
+.adminFormInput, .adminFormSelect, .adminFormTextarea {
+  border: 1.5px solid #BDCDD6;
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  background: #fff;
+  color: #6096B4;
+  transition: border 0.2s;
+}
+.adminFormInput:focus, .adminFormSelect:focus, .adminFormTextarea:focus {
+  outline: none;
+  border-color: #1DCD9F;
+}
+
+.adminModal {
+  background: rgba(0,0,0,0.18);
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.adminModalContent {
+  background: #fff;
+  border-radius: 10px;
+  padding: 2rem 2.5rem;
+  min-width: 320px;
+  max-width: 95vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.adminProductNameCell {
+  color: #111;
+  font-weight: 800;
+  font-size: 1.08rem;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 900px) {
+  .adminDashboard, .adminMain {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.2rem 0.5rem;
+  }
+  .adminSidebar {
+    min-width: unset;
+    padding-right: 0;
+    border-right: none;
+  }
+  .adminMainContent {
+    padding: 0;
+  }
+  .adminTable th, .adminTable td {
+    padding: 0.5rem 0.5rem;
+  }
+  .adminForm {
+    padding: 1rem 0.5rem;
+  }
+  .adminModalContent {
+    padding: 1rem 0.5rem;
+  }
+} 

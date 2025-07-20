@@ -59,4 +59,32 @@
   .productsGrid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
+}
+
+.subcategoryList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.subcategoryListItem {
+  padding: 0.7rem 1.2rem;
+  margin-bottom: 0.3rem;
+  background: transparent;
+  color: #6096B4;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.subcategoryListItem.active,
+.subcategoryListItem:focus,
+.subcategoryListItem:hover {
+  background: #1DCD9F;
+  color: #fff;
+  outline: none;
 } 

@@ -8,6 +8,7 @@ import {
 } from '../utils/api';
 import ProductForm from '../components/ProductForm';
 import CompanyLogo from '../assets/Company_logo.webp';
+import styles from './AdminDashboard.module.css';
 
 const AdminDashboard = () => {
   const { token, user } = useAuth();
@@ -161,39 +162,39 @@ const AdminDashboard = () => {
   };
 
   if (!user?.is_staff && !user?.is_superuser) {
-    return <div style={{ textAlign: 'center', marginTop: 48, fontWeight: 700, color: '#e74c3c' }}>Unauthorized</div>;
+    return <div className={styles.unauthorized}>Unauthorized</div>;
   }
 
   return (
-    <div style={{ maxWidth: 1100, margin: '2rem auto', background: '#fff', borderRadius: 12, boxShadow: '0 4px 32px rgba(96,150,180,0.08)', padding: 32 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 32 }}>
-        <img src={CompanyLogo} alt="Company Logo" style={{ width: 56, height: 56, borderRadius: '50%' }} />
-        <h2 style={{ color: '#6096B4', fontWeight: 900, fontSize: 32, margin: 0 }}>Admin Dashboard</h2>
+    <div className={styles.adminDashboard}>
+      <div className={styles.adminHeader}>
+        <img src={CompanyLogo} alt="Company Logo" className={styles.adminLogo} />
+        <h2 className={styles.adminTitle}>Admin Dashboard</h2>
       </div>
-      <div style={{ display: 'flex', gap: 32 }}>
+      <div className={styles.adminMain}>
         {/* Sidebar: Categories & Subcategories */}
-        <aside style={{ minWidth: 260, borderRight: '1px solid #eee', paddingRight: 32 }}>
-          <h3 style={{ color: '#1DCD9F', marginBottom: 16 }}>Categories</h3>
-          <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.5rem', fontWeight: 700, cursor: 'pointer', marginBottom: 16 }} onClick={() => setCategoryModal({ type: 'add-category', value: '', id: null })}>+ Add Category</button>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
+        <aside className={styles.adminSidebar}>
+          <h3 className={styles.adminSectionTitle}>Categories</h3>
+          <button className={styles.adminButton} onClick={() => setCategoryModal({ type: 'add-category', value: '', id: null })}>+ Add Category</button>
+          <ul className={styles.adminList}>
             {categories.map(cat => (
-              <li key={cat.id} style={{ marginBottom: 10, background: selectedCategory?.id === cat.id ? '#eaf6fa' : 'transparent', borderRadius: 4, padding: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ fontWeight: 700, color: selectedCategory?.id === cat.id ? '#1DCD9F' : '#6096B4', cursor: 'pointer' }} onClick={() => { setSelectedCategory(cat); setSelectedSubcategory(null); }}>{cat.name}</span>
-                  <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setCategoryModal({ type: 'edit-category', value: cat.name, id: cat.id })}>Edit</button>
-                  <button style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setCategoryModal({ type: 'delete-category', value: cat.name, id: cat.id })}>Delete</button>
+              <li key={cat.id} className={styles.adminListItem + (selectedCategory?.id === cat.id ? ' ' + styles.selected : '')}>
+                <div className={styles.adminListItemRow}>
+                  <span className={styles.adminListItemName + (selectedCategory?.id === cat.id ? ' ' + styles.selected : '')} onClick={() => { setSelectedCategory(cat); setSelectedSubcategory(null); }}>{cat.name}</span>
+                  <button className={styles.adminButton} onClick={() => setCategoryModal({ type: 'edit-category', value: cat.name, id: cat.id })}>Edit</button>
+                  <button className={styles.adminButton + ' ' + styles.danger} onClick={() => setCategoryModal({ type: 'delete-category', value: cat.name, id: cat.id })}>Delete</button>
                 </div>
                 {/* Subcategories for this category */}
                 {selectedCategory?.id === cat.id && (
-                  <div style={{ marginTop: 16 }}>
-                    <h4 style={{ color: '#1DCD9F', marginBottom: 8 }}>Subcategories</h4>
-                    <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer', marginBottom: 8 }} onClick={() => setSubcategoryModal({ type: 'add-subcategory', value: '', id: null })}>+ Add Subcategory</button>
-                    <ul style={{ listStyle: 'none', padding: 0 }}>
+                  <div>
+                    <h4 className={styles.adminSectionTitle}>Subcategories</h4>
+                    <button className={styles.adminButton} onClick={() => setSubcategoryModal({ type: 'add-subcategory', value: '', id: null })}>+ Add Subcategory</button>
+                    <ul className={styles.adminSubList}>
                       {subcategories.map(sub => (
-                        <li key={sub.id} style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <span style={{ color: selectedSubcategory?.id === sub.id ? '#1DCD9F' : '#6096B4', fontWeight: 600, cursor: 'pointer' }} onClick={() => setSelectedSubcategory(sub)}>{sub.name}</span>
-                          <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setSubcategoryModal({ type: 'edit-subcategory', value: sub.name, id: sub.id })}>Edit</button>
-                          <button style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setSubcategoryModal({ type: 'delete-subcategory', value: sub.name, id: sub.id })}>Delete</button>
+                        <li key={sub.id} className={styles.adminListItemRow}>
+                          <span className={styles.adminListItemName + (selectedSubcategory?.id === sub.id ? ' ' + styles.selected : '')} onClick={() => setSelectedSubcategory(sub)}>{sub.name}</span>
+                          <button className={styles.adminButton} onClick={() => setSubcategoryModal({ type: 'edit-subcategory', value: sub.name, id: sub.id })}>Edit</button>
+                          <button className={styles.adminButton + ' ' + styles.danger} onClick={() => setSubcategoryModal({ type: 'delete-subcategory', value: sub.name, id: sub.id })}>Delete</button>
                         </li>
                       ))}
                     </ul>
@@ -204,50 +205,50 @@ const AdminDashboard = () => {
           </ul>
         </aside>
         {/* Main Content: Products */}
-        <main style={{ flex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-            <h3 style={{ color: '#6096B4', fontWeight: 800, fontSize: 24, margin: 0 }}>Products</h3>
+        <main className={styles.adminMainContent}>
+          <div className={styles.adminProductHeader}>
+            <h3 className={styles.adminProductTitle}>Products</h3>
             {selectedSubcategory && (
-              <button style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.5rem', fontWeight: 700, cursor: 'pointer' }} onClick={() => setProductModal({ type: 'add', initialValues: { subcategory: selectedSubcategory.id } })}>+ Add Product</button>
+              <button className={styles.adminButton} onClick={() => setProductModal({ type: 'add', initialValues: { subcategory: selectedSubcategory.id } })}>+ Add Product</button>
             )}
           </div>
           {loading ? (
             <div>Loading...</div>
           ) : error ? (
-            <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>
+            <div className={styles.errorMessage}>{error}</div>
           ) : selectedSubcategory ? (
-            <table style={{ width: '100%', borderCollapse: 'collapse', background: '#f4f8fb', borderRadius: 8, overflow: 'hidden' }}>
+            <table className={styles.adminProductTable}>
               <thead>
-                <tr style={{ background: '#eaf6fa' }}>
-                  <th style={{ padding: 8, borderBottom: '1px solid #e0e6ed' }}>Image</th>
-                  <th style={{ padding: 8, borderBottom: '1px solid #e0e6ed' }}>Name</th>
-                  <th style={{ padding: 8, borderBottom: '1px solid #e0e6ed' }}>Price</th>
-                  <th style={{ padding: 8, borderBottom: '1px solid #e0e6ed' }}>Status</th>
-                  <th style={{ padding: 8, borderBottom: '1px solid #e0e6ed' }}>Actions</th>
+                <tr className={styles.adminProductTableHeader}>
+                  <th className={styles.adminProductTableHeaderCell}>Image</th>
+                  <th className={styles.adminProductTableHeaderCell}>Name</th>
+                  <th className={styles.adminProductTableHeaderCell}>Price</th>
+                  <th className={styles.adminProductTableHeaderCell}>Status</th>
+                  <th className={styles.adminProductTableHeaderCell}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {products.map(product => (
-                  <tr key={product.id}>
-                    <td style={{ padding: 8, textAlign: 'center' }}>
+                  <tr key={product.id} className={styles.adminProductTableRow}>
+                    <td className={styles.adminProductTableCell}>
                       {product.image ? (
-                        <img src={`http://127.0.0.1:8000${product.image}`} alt={product.name} style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 8 }} />
+                        <img src={`http://127.0.0.1:8000${product.image}`} alt={product.name} className={styles.adminProductTableImage} />
                       ) : (
-                        <span style={{ color: '#ccc' }}>No image</span>
+                        <span className={styles.adminProductTableNoImage}>No image</span>
                       )}
                     </td>
-                    <td style={{ padding: 8 }}>{product.name}</td>
-                    <td style={{ padding: 8 }}>KES {(product.price * 1.3).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</td>
-                    <td style={{ padding: 8 }}>{product.status === 'in_stock' ? 'In Stock' : 'Out of Stock'}</td>
-                    <td style={{ padding: 8 }}>
+                    <td className={styles.adminProductTableCell + ' ' + styles.adminProductNameCell}>{product.name}</td>
+                    <td className={styles.adminProductTableCell}>KES {(product.price * 1.3).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</td>
+                    <td className={styles.adminProductTableCell}>{product.status === 'in_stock' ? 'In Stock' : 'Out of Stock'}</td>
+                    <td className={styles.adminProductTableCell}>
                       <button
-                        style={{ marginRight: 8, background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }}
+                        className={styles.adminButton}
                         onClick={() => setProductModal({ type: 'edit', initialValues: product })}
                       >
                         Edit
                       </button>
                       <button
-                        style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '0.25rem 1rem', fontWeight: 700, cursor: 'pointer' }}
+                        className={styles.adminButton + ' ' + styles.danger}
                         onClick={() => { if (window.confirm('Are you sure you want to delete this product?')) { setDeletingId(product.id); handleProductAction('delete', null, product.id); } }}
                         disabled={deletingId === product.id}
                       >
@@ -259,13 +260,13 @@ const AdminDashboard = () => {
               </tbody>
             </table>
           ) : (
-            <div style={{ color: '#6096B4', fontWeight: 600, fontSize: 18, marginTop: 32 }}>Select a subcategory to view products.</div>
+            <div className={styles.noProductsMessage}>Select a subcategory to view products.</div>
           )}
         </main>
       </div>
       {/* Category Modal */}
       {categoryModal.type && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.3)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className={styles.adminModal}>
           <form
             onSubmit={e => {
               e.preventDefault();
@@ -273,9 +274,9 @@ const AdminDashboard = () => {
               if (categoryModal.type === 'edit-category') handleCategoryAction('edit', categoryModal.id, categoryModal.value);
               if (categoryModal.type === 'delete-category') handleCategoryAction('delete', categoryModal.id);
             }}
-            style={{ background: 'white', padding: 32, borderRadius: 8, minWidth: 320, boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}
+            className={styles.adminModalContent}
           >
-            <h3 style={{ color: '#6096B4', marginBottom: 16 }}>
+            <h3 className={styles.adminSectionTitle}>
               {categoryModal.type === 'add-category' && 'Add Category'}
               {categoryModal.type === 'edit-category' && 'Edit Category'}
               {categoryModal.type === 'delete-category' && 'Delete Category'}
@@ -287,22 +288,22 @@ const AdminDashboard = () => {
                 onChange={e => setCategoryModal(m => ({ ...m, value: e.target.value }))}
                 placeholder="Name"
                 required
-                style={{ width: '100%', padding: 8, marginBottom: 16, borderRadius: 4, border: '1px solid #ccc' }}
+                className={styles.adminFormInput}
               />
             )}
             {categoryModal.type && categoryModal.type.startsWith('delete') && (
-              <div style={{ marginBottom: 16 }}>Are you sure you want to delete "{categoryModal.value}"?</div>
+              <div>Are you sure you want to delete "{categoryModal.value}"?</div>
             )}
-            <div style={{ display: 'flex', gap: 12 }}>
-              <button type="submit" style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.5rem', fontWeight: 700 }}>{categoryModal.type && categoryModal.type.startsWith('delete') ? 'Delete' : 'Save'}</button>
-              <button type="button" onClick={() => setCategoryModal({ type: null, value: '', id: null })} style={{ background: '#ccc', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.5rem', fontWeight: 700 }}>Cancel</button>
+            <div className={styles.adminModalButtons}>
+              <button type="submit" className={styles.adminButton}>{categoryModal.type && categoryModal.type.startsWith('delete') ? 'Delete' : 'Save'}</button>
+              <button type="button" onClick={() => setCategoryModal({ type: null, value: '', id: null })} className={styles.adminButton}>Cancel</button>
             </div>
           </form>
         </div>
       )}
       {/* Subcategory Modal */}
       {subcategoryModal.type && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.3)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className={styles.adminModal}>
           <form
             onSubmit={e => {
               e.preventDefault();
@@ -310,9 +311,9 @@ const AdminDashboard = () => {
               if (subcategoryModal.type === 'edit-subcategory') handleSubcategoryAction('edit', subcategoryModal.id, subcategoryModal.value);
               if (subcategoryModal.type === 'delete-subcategory') handleSubcategoryAction('delete', subcategoryModal.id);
             }}
-            style={{ background: 'white', padding: 32, borderRadius: 8, minWidth: 320, boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}
+            className={styles.adminModalContent}
           >
-            <h3 style={{ color: '#6096B4', marginBottom: 16 }}>
+            <h3 className={styles.adminSectionTitle}>
               {subcategoryModal.type === 'add-subcategory' && 'Add Subcategory'}
               {subcategoryModal.type === 'edit-subcategory' && 'Edit Subcategory'}
               {subcategoryModal.type === 'delete-subcategory' && 'Delete Subcategory'}
@@ -324,23 +325,23 @@ const AdminDashboard = () => {
                 onChange={e => setSubcategoryModal(m => ({ ...m, value: e.target.value }))}
                 placeholder="Name"
                 required
-                style={{ width: '100%', padding: 8, marginBottom: 16, borderRadius: 4, border: '1px solid #ccc' }}
+                className={styles.adminFormInput}
               />
             )}
             {subcategoryModal.type && subcategoryModal.type.startsWith('delete') && (
-              <div style={{ marginBottom: 16 }}>Are you sure you want to delete "{subcategoryModal.value}"?</div>
+              <div>Are you sure you want to delete "{subcategoryModal.value}"?</div>
             )}
-            <div style={{ display: 'flex', gap: 12 }}>
-              <button type="submit" style={{ background: '#1DCD9F', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.5rem', fontWeight: 700 }}>{subcategoryModal.type && subcategoryModal.type.startsWith('delete') ? 'Delete' : 'Save'}</button>
-              <button type="button" onClick={() => setSubcategoryModal({ type: null, value: '', id: null })} style={{ background: '#ccc', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.5rem', fontWeight: 700 }}>Cancel</button>
+            <div className={styles.adminModalButtons}>
+              <button type="submit" className={styles.adminButton}>{subcategoryModal.type && subcategoryModal.type.startsWith('delete') ? 'Delete' : 'Save'}</button>
+              <button type="button" onClick={() => setSubcategoryModal({ type: null, value: '', id: null })} className={styles.adminButton}>Cancel</button>
             </div>
           </form>
         </div>
       )}
       {/* Product Modal */}
       {productModal.type && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.3)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ background: 'white', padding: 32, borderRadius: 8, minWidth: 400, boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}>
+        <div className={styles.adminModal}>
+          <div className={styles.adminModalContent}>
             <ProductForm
               initialValues={productModal.initialValues}
               onSubmit={form => handleProductAction(productModal.type, form, productModal.initialValues?.id)}
