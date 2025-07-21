@@ -163,6 +163,7 @@ const ProductDetail = (props) => {
                     id: product.id,
                     name: product.name,
                     price: product.price,
+                    image: product.image, // Pass image
                     quantity,
                   })}
                 >
@@ -176,6 +177,7 @@ const ProductDetail = (props) => {
                       id: product.id,
                       name: product.name,
                       price: product.price,
+                      image: product.image, // Pass image
                       quantity,
                     });
                     navigate('/order-summary');

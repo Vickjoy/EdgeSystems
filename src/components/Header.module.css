@@ -121,8 +121,6 @@
   box-shadow: 0 4px 12px rgba(29,205,159,0.18);
 }
 .dropdownMenu {
-  position: absolute;
-  display: none;
   min-width: 180px; /* reduced from 260px */
   left: 0;
   top: 100%;

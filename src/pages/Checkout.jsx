@@ -3,8 +3,9 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import styles from './Checkout.module.css';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import PaymentImage from '../assets/Payment.jpg';
 
-const mpesaImage = null; // TODO: Replace with actual image import when available
+const mpesaImage = PaymentImage; // Now using the Payment image
 
 const Checkout = () => {
   const { cartItems, removeFromCart, getTotal } = useCart();
@@ -98,7 +99,15 @@ const Checkout = () => {
               <div className={styles.paymentMpesa}>Lipa na Mpesa</div>
               <div className={styles.paymentImage}>
                 {/* Replace with actual image when available */}
-                {mpesaImage ? <img src={mpesaImage} alt="Mpesa Payment Details" style={{ maxWidth: '100%' }} /> : <div style={{ background: '#eee', height: 120, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888' }}>[Mpesa Payment Image Here]</div>}
+                {mpesaImage ? (
+                  <img 
+                    src={mpesaImage} 
+                    alt="Mpesa Payment Details" 
+                    style={{ maxWidth: '400px', maxHeight: '500px', width: '100%', height: 'auto', display: 'block', margin: '0 auto' }} 
+                  />
+                ) : (
+                  <div style={{ background: '#eee', height: 120, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888' }}>[Mpesa Payment Image Here]</div>
+                )}
               </div>
               <button className={styles.placeOrderButton} style={{ marginTop: 16, width: '100%' }}>
                 Place Order

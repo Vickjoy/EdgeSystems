@@ -65,35 +65,47 @@ const Header = () => {
   const fireCategories = categories.filter(cat => cat.type === 'fire');
   const ictCategories = categories.filter(cat => cat.type === 'ict');
 
-  // All Categories dropdown rendered in a portal
-  const allCategoriesDropdown = openDropdown === 'all' && ReactDOM.createPortal(
-    <ul
-      className={styles.dropdownMenu}
-      ref={allCategoriesRef}
-      style={{
-        position: 'fixed',
-        left: dropdownPos.left,
-        top: dropdownPos.top,
-        minWidth: dropdownPos.width,
-        zIndex: 30000
-      }}
-    >
-      {categories.map(cat => (
-        <li key={cat.id}>
-          <button
-            className={styles.dropdownItem}
-            onClick={() => {
-              setOpenDropdown(null);
-              navigate(`/category/${cat.slug}`);
+  console.log('categories:', categories, 'openDropdown:', openDropdown);
+  // All Categories dropdown using portal, always on top
+  const [dropdownCoords, setDropdownCoords] = useState({ left: 0, top: 0, width: 0 });
+
+  useEffect(() => {
+    if (openDropdown === 'all' && allCategoriesBtnRef.current) {
+      const rect = allCategoriesBtnRef.current.getBoundingClientRect();
+      setDropdownCoords({ left: rect.left, top: rect.bottom, width: rect.width });
+    }
+  }, [openDropdown]);
+
+  const allCategoriesDropdown =
+    openDropdown === 'all'
+      ? ReactDOM.createPortal(
+          <ul
+            className={styles.dropdownMenu}
+            style={{
+              position: 'fixed',
+              left: dropdownCoords.left,
+              top: dropdownCoords.top,
+              minWidth: dropdownCoords.width,
+              zIndex: 99999,
             }}
           >
-            {cat.name}
-          </button>
-        </li>
-      ))}
-    </ul>,
-    document.body
-  );
+            {categories.map(cat => (
+              <li key={cat.id}>
+                <button
+                  className={styles.dropdownItem}
+                  onClick={() => {
+                    setOpenDropdown(null);
+                    navigate(`/category/${cat.slug}`);
+                  }}
+                >
+                  {cat.name}
+                </button>
+              </li>
+            ))}
+          </ul>,
+          document.body
+        )
+      : null;
 
   return (
     <header className={styles.header}>
@@ -111,7 +123,7 @@ const Header = () => {
         </div>
         <div className={styles.headerActions}>
           {/* All Categories Dropdown */}
-          <div className={`${styles.dropdownContainer} ${styles.headerDropdownContainer}`}>
+          <div className={`${styles.dropdownContainer} ${styles.headerDropdownContainer}`} style={{ position: 'relative' }}>
             <button
               ref={allCategoriesBtnRef}
               className={styles.dropdownButton}
@@ -120,7 +132,7 @@ const Header = () => {
             >
               All Categories
             </button>
-            {/* Dropdown is rendered in a portal */}
+            {allCategoriesDropdown}
           </div>
           <SearchBar />
           <button onClick={() => setCartOpen(true)} style={{ background: 'none', border: 'none', color: '#97FEED', fontSize: 22, cursor: 'pointer', position: 'relative' }}>
@@ -140,7 +152,7 @@ const Header = () => {
       <nav className={styles.navigation}>
         <ul className={styles.navList}>
           <li><Link to="/" className={styles.navLink}>Home</Link></li>
-          <li ref={fireRef} className={styles.dropdownContainer}>
+          <li ref={fireRef} className={styles.dropdownContainer} style={{ position: 'relative' }}>
             <button
               className={styles.dropdownButton}
               onClick={() => setOpenDropdown(openDropdown === 'fire' ? null : 'fire')}
@@ -148,7 +160,7 @@ const Header = () => {
               Fire Safety Products & Services
             </button>
             {openDropdown === 'fire' && (
-              <ul className={styles.dropdownMenu} style={{ left: 0, top: '100%' }}>
+              <ul className={styles.dropdownMenu} style={{ left: 0, top: '100%', position: 'absolute', zIndex: 9999 }}>
                 {fireCategories.map(cat => (
                   <li key={cat.id}>
                     <button
@@ -165,7 +177,7 @@ const Header = () => {
               </ul>
             )}
           </li>
-          <li ref={ictRef} className={styles.dropdownContainer}>
+          <li ref={ictRef} className={styles.dropdownContainer} style={{ position: 'relative' }}>
             <button
               className={styles.dropdownButton}
               onClick={() => setOpenDropdown(openDropdown === 'ict' ? null : 'ict')}
@@ -173,7 +185,7 @@ const Header = () => {
               ICT/Telecommunication Products & Services
             </button>
             {openDropdown === 'ict' && (
-              <ul className={styles.dropdownMenu} style={{ left: 0, top: '100%' }}>
+              <ul className={styles.dropdownMenu} style={{ left: 0, top: '100%', position: 'absolute', zIndex: 9999 }}>
                 {ictCategories.map(cat => (
                   <li key={cat.id}>
                     <button
