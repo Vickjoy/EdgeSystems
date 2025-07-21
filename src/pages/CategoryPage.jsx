@@ -137,12 +137,6 @@ const CategoryPage = () => {
                       >
                         View Product
                       </button>
-                      <button
-                        style={{ flex: 1, background: '#93BFCF', color: 'white', fontWeight: 700, padding: '0.5rem 1rem', borderRadius: 4, border: 'none', cursor: 'pointer' }}
-                        onClick={() => navigate(`/checkout?product=${product.id}`)}
-                      >
-                        Buy Now
-                      </button>
                     </div>
                   </div>
                 ))}

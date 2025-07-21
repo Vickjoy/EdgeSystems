@@ -7,8 +7,8 @@ const Breadcrumbs = ({ crumbs }) => {
     <nav className="container mx-auto px-4 py-2">
       <ol className={styles.container}>
         {crumbs.map((crumb, index) => (
-          <li key={index}>
-            {index !== 0 && <span className={styles.separator}>/</span>}
+          <li key={index} style={{ display: 'inline', fontWeight: 500 }}>
+            {index !== 0 && <span className={styles.separator}>&gt;</span>}
             {crumb.path ? (
               <Link to={crumb.path} className={styles.link}>
                 {crumb.label}

@@ -16,6 +16,7 @@ import AdminCategoryManager from './pages/AdminCategoryManager';
 import CategoryPage from './pages/CategoryPage';
 import AdminLayout from './components/AdminLayout';
 import AdminSubcategoryManager from './pages/AdminSubcategoryManager';
+import OrderSummary from './pages/OrderSummary';
 
 const App = () => {
   const location = useLocation();
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-summary" element={<OrderSummary />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetail />} />

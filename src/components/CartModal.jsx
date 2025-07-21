@@ -19,7 +19,7 @@ const CartModal = ({ onClose }) => {
               {cartItems.map(item => (
                 <li key={item.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, borderBottom: '1px solid #eee', paddingBottom: 8 }}>
                   <div>
-                    <div style={{ fontWeight: 700 }}>{item.name || `Product #${item.id}`}</div>
+                    <div style={{ fontWeight: 700, color: '#000' }}>{item.name || `Product #${item.id}`}</div>
                     <div style={{ fontSize: 13, color: '#1DCD9F' }}>KES {(item.price * (item.quantity || 1)).toLocaleString('en-KE', { minimumFractionDigits: 2 })} ({item.quantity || 1}x)</div>
                   </div>
                 </li>
@@ -30,7 +30,7 @@ const CartModal = ({ onClose }) => {
             </div>
             <button
               style={{ width: '100%', background: '#1DCD9F', color: 'white', fontWeight: 700, padding: '0.7rem 0', borderRadius: 6, border: 'none', fontSize: 17, cursor: 'pointer', marginTop: 8 }}
-              onClick={() => { onClose(); navigate('/checkout'); }}
+              onClick={() => { onClose(); navigate('/order-summary'); }}
             >
               Checkout
             </button>

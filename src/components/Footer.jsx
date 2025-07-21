@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaTiktok } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok } from 'react-icons/fa';
 import CompanyLogo from '../assets/Company_logo.webp';
 import styles from './Footer.module.css';
 
@@ -14,19 +14,16 @@ const Footer = () => {
           At Edge Systems Ltd, we provide reliable communication and security solutions, specializing in unified systems like Nortel, Alcatel-Lucent, and Avaya. We offer structured cabling, VoIP, wireless access, CCTV/IP cameras, and fire alarm systems, supporting businesses from small offices to large campuses. Our goal is to keep your networks connected and secure with smart, dependable technology.
         </p>
         <div className={styles.socialLinks}>
-          <a href="https://www.linkedin.com " target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+          <a href="https://www.linkedin.com/in/edge-systems-903b32222?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
             <FaLinkedin className={styles.socialIcon} />
           </a>
-          <a href="https://www.facebook.com " target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+          <a href="https://www.facebook.com/edgesystemslimited" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
             <FaFacebook className={styles.socialIcon} />
           </a>
-          <a href="https://www.instagram.com " target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+          <a href="https://www.instagram.com/edge_systems.co.ke?utm_source=qr&igsh=aHpldnhnZnRmYjM3" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
             <FaInstagram className={styles.socialIcon} />
           </a>
-          <a href="https://twitter.com " target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-            <FaTwitter className={styles.socialIcon} />
-          </a>
-          <a href="https://www.tiktok.com " target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+          <a href="https://www.tiktok.com/@edgesystems6?_t=ZM-8yCr3l8iIwn&_r=1" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
             <FaTiktok className={styles.socialIcon} />
           </a>
         </div>

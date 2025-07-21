@@ -55,6 +55,21 @@ const ProductDetail = (props) => {
       .catch(error => console.error('Error fetching product details:', error));
   }, [productId]);
 
+  // Fallback: If categoryName or subcategoryName are missing, try to fetch them from product object if available
+  useEffect(() => {
+    if (product && (!categoryName || !subcategoryName)) {
+      // If product.subcategory is an object with name/slug
+      if (typeof product.subcategory === 'object' && product.subcategory !== null) {
+        if (!subcategoryName && product.subcategory.name) setSubcategoryName(product.subcategory.name);
+        if (!subcategorySlug && product.subcategory.slug) setSubcategorySlug(product.subcategory.slug);
+        if (product.subcategory.category && typeof product.subcategory.category === 'object') {
+          if (!categoryName && product.subcategory.category.name) setCategoryName(product.subcategory.category.name);
+          if (!categorySlug && product.subcategory.category.slug) setCategorySlug(product.subcategory.category.slug);
+        }
+      }
+    }
+  }, [product, categoryName, subcategoryName, categorySlug, subcategorySlug]);
+
   const handleEditSubmit = async (form) => {
     try {
       const formData = new FormData();
@@ -99,11 +114,20 @@ const ProductDetail = (props) => {
       <Breadcrumbs crumbs={[
         { label: 'Home', path: '/' },
         ...(categoryName && categorySlug ? [{ label: categoryName, path: `/category/${categorySlug}` }] : []),
-        ...(subcategoryName && subcategorySlug ? [{ label: subcategoryName, path: `/subcategory/${subcategorySlug}` }] : []),
+        ...(subcategoryName && subcategorySlug ? [{ label: subcategoryName, path: `/category/${categorySlug}#${subcategorySlug}` }] : []),
         { label: product.name, path: `/product/${product.id}` }
       ]} />
       <section className={styles.section}>
         <div className={styles.container}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+            <button
+              className={styles.addToCartButton}
+              style={{ background: '#1DCD9F', color: 'white', fontWeight: 700, borderRadius: 25, border: 'none', fontSize: 16, cursor: 'pointer', padding: '0.5rem 1.5rem' }}
+              onClick={() => window.location.href = 'http://localhost:5173/category/addressable-fire-alarm-systems'}
+            >
+              Continue Shopping
+            </button>
+          </div>
           <div className={styles.productLayout}>
             {/* Image on the left */}
             <div className={styles.imageContainer}>
@@ -154,7 +178,7 @@ const ProductDetail = (props) => {
                       price: product.price,
                       quantity,
                     });
-                    navigate('/checkout');
+                    navigate('/order-summary');
                   }}
                 >
                   Buy Now

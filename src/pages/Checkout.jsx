@@ -2,16 +2,26 @@ import React from 'react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import styles from './Checkout.module.css';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const mpesaImage = null; // TODO: Replace with actual image import when available
 
 const Checkout = () => {
   const { cartItems, removeFromCart, getTotal } = useCart();
+  const navigate = useNavigate();
 
   return (
     <div>
       <Breadcrumbs crumbs={[{ label: 'Home', path: '/' }, { label: 'Checkout', path: '/checkout' }]} />
       <section className={styles.section}>
+        <div style={{ maxWidth: 900, margin: '0 auto 1.5rem auto', display: 'flex', justifyContent: 'flex-start' }}>
+          <button
+            style={{ background: '#eee', color: '#6096B4', fontWeight: 700, padding: '0.5rem 1.5rem', borderRadius: 25, border: 'none', fontSize: 16, cursor: 'pointer' }}
+            onClick={() => navigate('/order-summary')}
+          >
+            ← Back
+          </button>
+        </div>
         <div className={styles.gridContainer}>
           {/* Billing Information */}
           <div className={styles.billingColumn}>
@@ -59,7 +69,7 @@ const Checkout = () => {
             </form>
           </div>
 
-          {/* Order Summary & Payment */}
+          {/* Order & Payment Section */}
           <div className={styles.orderColumn}>
             {/* Your Order Card */}
             <div className={styles.orderCard}>

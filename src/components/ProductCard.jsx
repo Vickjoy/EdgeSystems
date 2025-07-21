@@ -49,13 +49,6 @@ const ProductCard = ({ product, onDelete }) => {
         <div className={styles.actions} onClick={e => e.stopPropagation()}>
           <button
             className={styles.button}
-            style={{ background: '#1DCD9F', color: 'white', flex: 1 }}
-            onClick={e => { e.preventDefault(); navigate(`/checkout?product=${product.id}`); }}
-          >
-            Buy Now
-          </button>
-          <button
-            className={styles.button}
             style={{ background: '#6096B4', color: 'white', flex: 1 }}
             onClick={e => { e.preventDefault(); navigate(`/product/${product.id}`); }}
           >

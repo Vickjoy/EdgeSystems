@@ -152,13 +152,23 @@
   align-items: center;
   display: flex;
 }
+.partnersGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+}
 .partnerLogo {
-  height: 2.2rem; /* reduced from 5rem */
+  height: 3.2rem;
   width: auto;
+  max-width: 150px;
+  min-width: 70px;
+  object-fit: contain;
   background: none;
   filter: none;
   border-radius: 0.5rem;
-  margin: 0 0.7rem; /* reduced from 1.5rem */
+  margin: 0 1rem;
   transition: transform 0.3s;
 }
 .partnerLogo:hover {
