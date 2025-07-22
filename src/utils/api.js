@@ -98,7 +98,7 @@ export const fetchSubcategories = async (categorySlug, token) => {
   }
 };
 
-export const createCategory = async (name, token) => {
+export const createCategory = async (name, token, type = 'fire') => {
   try {
     const response = await fetchWithAuthRetry('http://127.0.0.1:8000/api/categories/', {
       method: 'POST',
@@ -106,7 +106,7 @@ export const createCategory = async (name, token) => {
         'Content-Type': 'application/json',
         ...(token ? { 'Authorization': `Bearer ${token}` } : {})
       },
-      body: JSON.stringify({ name, type: 'fire' })
+      body: JSON.stringify({ name, type })
     });
     if (!response.ok) throw new Error('Failed to create category');
     return await response.json();
@@ -223,8 +223,7 @@ export const createProduct = async (form, token) => {
     if (form.status) formData.append('status', form.status);
     // Only send image if it's a file (not a string)
     if (form.image && typeof form.image !== 'string') formData.append('image', form.image);
-    // Use subcategory slug in the endpoint, and subcategoryId in the form data
-    if (form.subcategoryId) formData.append('subcategory', form.subcategoryId);
+    // Use subcategory slug in the endpoint
     const endpoint = `http://127.0.0.1:8000/api/subcategories/${form.subcategory}/products/`;
     const response = await fetchWithAuthRetry(endpoint, {
       method: 'POST',

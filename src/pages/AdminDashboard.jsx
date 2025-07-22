@@ -3,352 +3,240 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import {
   fetchCategories, fetchSubcategories, createCategory, updateCategory, deleteCategory,
-  createSubcategory, updateSubcategory, deleteSubcategory,
-  fetchProductsBySubcategory, createProduct, updateProduct, deleteProduct
+  fetchProductsBySubcategory, createProduct, updateProduct, deleteProduct, createSubcategory
 } from '../utils/api';
 import ProductForm from '../components/ProductForm';
 import CompanyLogo from '../assets/Company_logo.webp';
 import styles from './AdminDashboard.module.css';
 
 const AdminDashboard = () => {
-  const { token, user } = useAuth();
+  const { token, user, logout } = useAuth();
   const navigate = useNavigate();
-
-  // Category State
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [categoryModal, setCategoryModal] = useState({ type: null, value: '', id: null });
-
-  // Subcategory State
-  const [subcategories, setSubcategories] = useState([]);
-  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
-  const [subcategoryModal, setSubcategoryModal] = useState({ type: null, value: '', id: null });
-
-  // Product State
-  const [products, setProducts] = useState([]);
-  const [productModal, setProductModal] = useState({ type: null, initialValues: null });
+  const [fireCategories, setFireCategories] = useState([]);
+  const [ictCategories, setIctCategories] = useState([]);
+  const [fireSubcategories, setFireSubcategories] = useState({}); // {catId: [subcat, ...]}
+  const [ictSubcategories, setIctSubcategories] = useState({});
+  const [productsByCategory, setProductsByCategory] = useState({}); // {catId: [product, ...]}
+  const [activeSection, setActiveSection] = useState('fire');
+  const [expandedCategory, setExpandedCategory] = useState(null); // category id
+  const [productModal, setProductModal] = useState({ open: false, subcategory: null });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [deletingId, setDeletingId] = useState(null);
+  // Add state for modals
+  const [categoryModal, setCategoryModal] = useState({ open: false, type: 'fire' });
+  const [subcategoryModal, setSubcategoryModal] = useState({ open: false, category: null });
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [newSubcategoryName, setNewSubcategoryName] = useState('');
 
-  // Load categories on mount
+  // Load categories and subcategories on mount
   useEffect(() => {
-    const loadCategories = async () => {
+    const loadData = async () => {
       setLoading(true);
       try {
-        const data = await fetchCategories(token);
-        setCategories(Array.isArray(data) ? data : []);
+        const cats = await fetchCategories(token);
+        const fire = cats.filter(cat => cat.type === 'fire');
+        const ict = cats.filter(cat => cat.type === 'ict');
+        setFireCategories(fire);
+        setIctCategories(ict);
+        // Fetch subcategories for each category
+        const fireSubs = {};
+        for (const cat of fire) {
+          const subs = await fetchSubcategories(cat.slug, token);
+          fireSubs[cat.id] = subs;
+        }
+        setFireSubcategories(fireSubs);
+        const ictSubs = {};
+        for (const cat of ict) {
+          const subs = await fetchSubcategories(cat.slug, token);
+          ictSubs[cat.id] = subs;
+        }
+        setIctSubcategories(ictSubs);
       } catch (e) {
-        setCategories([]);
+        setFireCategories([]);
+        setIctCategories([]);
+        setFireSubcategories({});
+        setIctSubcategories({});
       } finally {
         setLoading(false);
       }
     };
-    loadCategories();
+    loadData();
   }, [token]);
 
-  // Load subcategories when category changes
-  useEffect(() => {
-    if (!selectedCategory) {
-      setSubcategories([]);
-      setSelectedSubcategory(null);
-      return;
-    }
-    const loadSubcategories = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchSubcategories(selectedCategory.slug, token);
-        setSubcategories(Array.isArray(data) ? data : []);
-      } catch (e) {
-        setSubcategories([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadSubcategories();
-  }, [selectedCategory, token]);
-
-  // Load products when subcategory changes
-  useEffect(() => {
-    if (!selectedSubcategory) {
-      setProducts([]);
-      return;
-    }
-    const loadProducts = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchProductsBySubcategory(selectedSubcategory.id, 1, 100, token);
-        setProducts(Array.isArray(data.results) ? data.results : (Array.isArray(data) ? data : []));
-      } catch (e) {
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, [selectedSubcategory, token]);
-
-  // Category CRUD
-  const handleCategoryAction = async (action, id, value) => {
-    setError('');
-    setLoading(true);
-    try {
-      if (action === 'add') {
-        await createCategory(value, token);
-      } else if (action === 'edit') {
-        await updateCategory(id, value, token);
-      } else if (action === 'delete') {
-        await deleteCategory(id, token);
-        setSelectedCategory(null);
-      }
-      const data = await fetchCategories(token);
-      setCategories(Array.isArray(data) ? data : []);
-      window.dispatchEvent(new Event('categoriesUpdated'));
-    } catch (e) {
-      setError('Failed to perform category action.');
-    } finally {
-      setLoading(false);
-      setCategoryModal({ type: null, value: '', id: null });
-    }
+  // Handler for expanding/collapsing a category
+  const handleCategoryClick = (catId) => {
+    setExpandedCategory(expandedCategory === catId ? null : catId);
   };
 
-  // Subcategory CRUD
-  const handleSubcategoryAction = async (action, id, value) => {
-    setError('');
-    setLoading(true);
-    try {
-      if (action === 'add') {
-        await createSubcategory(selectedCategory.slug, value, token);
-      } else if (action === 'edit') {
-        await updateSubcategory(selectedCategory.slug, id, value, token);
-      } else if (action === 'delete') {
-        await deleteSubcategory(selectedCategory.slug, id, token);
-      }
-      const data = await fetchSubcategories(selectedCategory.slug, token);
-      setSubcategories(Array.isArray(data) ? data : []);
-      window.dispatchEvent(new Event('subcategoriesUpdated'));
-    } catch (e) {
-      setError('Failed to perform subcategory action.');
-    } finally {
-      setLoading(false);
-      setSubcategoryModal({ type: null, value: '', id: null });
-    }
+  // Handler for opening the Add Product modal for a subcategory
+  const handleShowAddProductModal = (subcategory) => {
+    setProductModal({ open: true, subcategory: subcategory.slug });
   };
 
-  // Product CRUD
-  const handleProductAction = async (action, form, id) => {
-    setError('');
-    setLoading(true);
-    try {
-      if (action === 'add') {
-        await createProduct(form, token);
-      } else if (action === 'edit') {
-        await updateProduct(id, form, token);
-      } else if (action === 'delete') {
-        await deleteProduct(id, token);
-      }
-      if (selectedSubcategory) {
-        const data = await fetchProductsBySubcategory(selectedSubcategory.id, 1, 100, token);
-        setProducts(Array.isArray(data.results) ? data.results : (Array.isArray(data) ? data : []));
-      }
-      window.dispatchEvent(new Event('productsUpdated'));
-    } catch (e) {
-      setError('Failed to perform product action.');
-    } finally {
-      setLoading(false);
-      setProductModal({ type: null, initialValues: null });
-      setDeletingId(null);
-    }
+  // Handler for adding a product
+  const handleAddProduct = async (form) => {
+    if (!productModal.subcategory) return;
+    // Attach subcategory slug to form
+    const submitForm = { ...form, subcategory: productModal.subcategory };
+    await createProduct(submitForm, token);
+    setProductModal({ open: false, subcategory: null });
   };
 
-  if (!user?.is_staff && !user?.is_superuser) {
-    return <div className={styles.unauthorized}>Unauthorized</div>;
-  }
+  // Add placeholder handlers for edit/delete
+  const handleEditCategory = (cat) => { alert(`Edit category: ${cat.name}`); };
+  const handleDeleteCategory = (cat) => { if(window.confirm(`Delete category: ${cat.name}?`)){} };
+  const handleEditSubcategory = (sub) => { alert(`Edit subcategory: ${sub.name}`); };
+  const handleDeleteSubcategory = (sub) => { if(window.confirm(`Delete subcategory: ${sub.name}?`)){} };
+  // Add placeholder handlers for product edit/delete
+  const handleEditProduct = (product) => { alert(`Edit product: ${product.name}`); };
+  const handleDeleteProduct = (product) => { if(window.confirm(`Delete product: ${product.name}?`)){} };
+
+  // Add handlers for add category/subcategory
+  const handleShowAddCategoryModal = (type) => {
+    setCategoryModal({ open: true, type });
+    setNewCategoryName('');
+  };
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) return;
+    await createCategory(newCategoryName, token, categoryModal.type);
+    setCategoryModal({ open: false, type: 'fire' });
+  };
+  const handleShowAddSubcategoryModal = (category) => {
+    setSubcategoryModal({ open: true, category });
+    setNewSubcategoryName('');
+  };
+  const handleAddSubcategory = async () => {
+    if (!newSubcategoryName.trim()) return;
+    await createSubcategory(subcategoryModal.category.slug, newSubcategoryName, token);
+    setSubcategoryModal({ open: false, category: null });
+  };
+
+  // Handler for logout
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  // Render categories and subcategories for a section
+  const renderSection = (categories, subcategories, type) => (
+    <div>
+      <div className={styles.buttonRow}>
+        <button type="button" className={`${styles.adminButton} adminButton`} onClick={() => handleShowAddCategoryModal(type)}>+ Add Category</button>
+      </div>
+      {categories.length === 0 ? (
+        <p>No categories found.</p>
+      ) : (
+        categories.map(cat => (
+          <div key={cat.id} className={styles.categoryContainer}>
+            <div className={styles.categoryHeader} onClick={() => handleCategoryClick(cat.id)}>
+              <h3>{cat.name}</h3>
+              <div className={styles.buttonRow}>
+                <button type="button" className={`${styles.editButton} editButton`} onClick={e => {e.stopPropagation(); handleEditCategory(cat);}}>Edit</button>
+                <button type="button" className={`${styles.deleteButton} deleteButton`} onClick={e => {e.stopPropagation(); handleDeleteCategory(cat);}}>Delete</button>
+              </div>
+            </div>
+            {expandedCategory === cat.id && (
+              <div className={styles.subcategoryList}>
+                <h4>Subcategories:</h4>
+                <div className={styles.buttonRow}>
+                  <button type="button" className={`${styles.adminButton} adminButton`} onClick={() => handleShowAddSubcategoryModal(cat)}>+ Add Subcategory</button>
+                </div>
+                <ul>
+                  {(subcategories[cat.id] || []).map(sub => (
+                    <li key={sub.id} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span>{sub.name}</span>
+                      <div className={styles.buttonRow}>
+                        <button type="button" className={`${styles.adminButton} adminButton`} onClick={() => handleShowAddProductModal(sub)}>+ Add Product</button>
+                        <button type="button" className={`${styles.editButton} editButton`} onClick={() => handleEditSubcategory(sub)}>Edit</button>
+                        <button type="button" className={`${styles.deleteButton} deleteButton`} onClick={() => handleDeleteSubcategory(sub)}>Delete</button>
+                      </div>
+                      {sub.products && sub.products.length > 0 && (
+                        <ul>
+                          {sub.products.map(product => (
+                            <li key={product.id} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <span>{product.name}</span>
+                              <div className={styles.buttonRow}>
+                                <button type="button" className={`${styles.editButton} editButton`} onClick={() => handleEditProduct(product)}>Edit</button>
+                                <button type="button" className={`${styles.deleteButton} deleteButton`} onClick={() => handleDeleteProduct(product)}>Delete</button>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        ))
+      )}
+    </div>
+  );
 
   return (
     <div className={styles.adminDashboard}>
       <div className={styles.adminHeader}>
         <img src={CompanyLogo} alt="Company Logo" className={styles.adminLogo} />
         <h2 className={styles.adminTitle}>Admin Dashboard</h2>
+        <button className={styles.logoutButton} onClick={handleLogout}>Logout</button>
       </div>
-      <div className={styles.adminMain}>
-        {/* Sidebar: Categories & Subcategories */}
-        <aside className={styles.adminSidebar}>
-          <h3 className={styles.adminSectionTitle}>Categories</h3>
-          <button className={styles.adminButton} onClick={() => setCategoryModal({ type: 'add-category', value: '', id: null })}>+ Add Category</button>
-          <ul className={styles.adminList}>
-            {categories.map(cat => (
-              <li key={cat.id} className={styles.adminListItem + (selectedCategory?.id === cat.id ? ' ' + styles.selected : '')}>
-                <div className={styles.adminListItemRow}>
-                  <span className={styles.adminListItemName + (selectedCategory?.id === cat.id ? ' ' + styles.selected : '')} onClick={() => { setSelectedCategory(cat); setSelectedSubcategory(null); }}>{cat.name}</span>
-                  <button className={styles.adminButton} onClick={() => setCategoryModal({ type: 'edit-category', value: cat.name, id: cat.id })}>Edit</button>
-                  <button className={styles.adminButton + ' ' + styles.danger} onClick={() => setCategoryModal({ type: 'delete-category', value: cat.name, id: cat.id })}>Delete</button>
-                </div>
-                {/* Subcategories for this category */}
-                {selectedCategory?.id === cat.id && (
-                  <div>
-                    <h4 className={styles.adminSectionTitle}>Subcategories</h4>
-                    <button className={styles.adminButton} onClick={() => setSubcategoryModal({ type: 'add-subcategory', value: '', id: null })}>+ Add Subcategory</button>
-                    <ul className={styles.adminSubList}>
-                      {subcategories.map(sub => (
-                        <li key={sub.id} className={styles.adminListItemRow}>
-                          <span className={styles.adminListItemName + (selectedSubcategory?.id === sub.id ? ' ' + styles.selected : '')} onClick={() => setSelectedSubcategory(sub)}>{sub.name}</span>
-                          <button className={styles.adminButton} onClick={() => setSubcategoryModal({ type: 'edit-subcategory', value: sub.name, id: sub.id })}>Edit</button>
-                          <button className={styles.adminButton + ' ' + styles.danger} onClick={() => setSubcategoryModal({ type: 'delete-subcategory', value: sub.name, id: sub.id })}>Delete</button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-        </aside>
-        {/* Main Content: Products */}
-        <main className={styles.adminMainContent}>
-          <div className={styles.adminProductHeader}>
-            <h3 className={styles.adminProductTitle}>Products</h3>
-            {selectedSubcategory && (
-              <button className={styles.adminButton} onClick={() => setProductModal({ type: 'add', initialValues: { subcategory: selectedSubcategory.id } })}>+ Add Product</button>
-            )}
-          </div>
-          {loading ? (
-            <div>Loading...</div>
-          ) : error ? (
-            <div className={styles.errorMessage}>{error}</div>
-          ) : selectedSubcategory ? (
-            <table className={styles.adminProductTable}>
-              <thead>
-                <tr className={styles.adminProductTableHeader}>
-                  <th className={styles.adminProductTableHeaderCell}>Image</th>
-                  <th className={styles.adminProductTableHeaderCell}>Name</th>
-                  <th className={styles.adminProductTableHeaderCell}>Price</th>
-                  <th className={styles.adminProductTableHeaderCell}>Status</th>
-                  <th className={styles.adminProductTableHeaderCell}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map(product => (
-                  <tr key={product.id} className={styles.adminProductTableRow}>
-                    <td className={styles.adminProductTableCell}>
-                      {product.image ? (
-                        <img src={`http://127.0.0.1:8000${product.image}`} alt={product.name} className={styles.adminProductTableImage} />
-                      ) : (
-                        <span className={styles.adminProductTableNoImage}>No image</span>
-                      )}
-                    </td>
-                    <td className={styles.adminProductTableCell + ' ' + styles.adminProductNameCell}>{product.name}</td>
-                    <td className={styles.adminProductTableCell}>KES {(product.price * 1.3).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</td>
-                    <td className={styles.adminProductTableCell}>{product.status === 'in_stock' ? 'In Stock' : 'Out of Stock'}</td>
-                    <td className={styles.adminProductTableCell}>
-                      <button
-                        className={styles.adminButton}
-                        onClick={() => setProductModal({ type: 'edit', initialValues: product })}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className={styles.adminButton + ' ' + styles.danger}
-                        onClick={() => { if (window.confirm('Are you sure you want to delete this product?')) { setDeletingId(product.id); handleProductAction('delete', null, product.id); } }}
-                        disabled={deletingId === product.id}
-                      >
-                        {deletingId === product.id ? 'Deleting...' : 'Delete'}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className={styles.noProductsMessage}>Select a subcategory to view products.</div>
-          )}
-        </main>
+      <div className={styles.sectionSwitcher}>
+        <button type="button" onClick={() => setActiveSection('fire')} className={activeSection === 'fire' ? styles.active : ''}>Fire Safety</button>
+        <button type="button" onClick={() => setActiveSection('ict')} className={activeSection === 'ict' ? styles.active : ''}>ICT/Telecommunication</button>
       </div>
-      {/* Category Modal */}
-      {categoryModal.type && (
-        <div className={styles.adminModal}>
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              if (categoryModal.type === 'add-category') handleCategoryAction('add', null, categoryModal.value);
-              if (categoryModal.type === 'edit-category') handleCategoryAction('edit', categoryModal.id, categoryModal.value);
-              if (categoryModal.type === 'delete-category') handleCategoryAction('delete', categoryModal.id);
-            }}
-            className={styles.adminModalContent}
-          >
-            <h3 className={styles.adminSectionTitle}>
-              {categoryModal.type === 'add-category' && 'Add Category'}
-              {categoryModal.type === 'edit-category' && 'Edit Category'}
-              {categoryModal.type === 'delete-category' && 'Delete Category'}
-            </h3>
-            {(categoryModal.type === 'add-category' || categoryModal.type === 'edit-category') && (
-              <input
-                type="text"
-                value={categoryModal.value}
-                onChange={e => setCategoryModal(m => ({ ...m, value: e.target.value }))}
-                placeholder="Name"
-                required
-                className={styles.adminFormInput}
-              />
-            )}
-            {categoryModal.type && categoryModal.type.startsWith('delete') && (
-              <div>Are you sure you want to delete "{categoryModal.value}"?</div>
-            )}
-            <div className={styles.adminModalButtons}>
-              <button type="submit" className={styles.adminButton}>{categoryModal.type && categoryModal.type.startsWith('delete') ? 'Delete' : 'Save'}</button>
-              <button type="button" onClick={() => setCategoryModal({ type: null, value: '', id: null })} className={styles.adminButton}>Cancel</button>
-            </div>
-          </form>
-        </div>
-      )}
-      {/* Subcategory Modal */}
-      {subcategoryModal.type && (
-        <div className={styles.adminModal}>
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              if (subcategoryModal.type === 'add-subcategory') handleSubcategoryAction('add', null, subcategoryModal.value);
-              if (subcategoryModal.type === 'edit-subcategory') handleSubcategoryAction('edit', subcategoryModal.id, subcategoryModal.value);
-              if (subcategoryModal.type === 'delete-subcategory') handleSubcategoryAction('delete', subcategoryModal.id);
-            }}
-            className={styles.adminModalContent}
-          >
-            <h3 className={styles.adminSectionTitle}>
-              {subcategoryModal.type === 'add-subcategory' && 'Add Subcategory'}
-              {subcategoryModal.type === 'edit-subcategory' && 'Edit Subcategory'}
-              {subcategoryModal.type === 'delete-subcategory' && 'Delete Subcategory'}
-            </h3>
-            {(subcategoryModal.type === 'add-subcategory' || subcategoryModal.type === 'edit-subcategory') && (
-              <input
-                type="text"
-                value={subcategoryModal.value}
-                onChange={e => setSubcategoryModal(m => ({ ...m, value: e.target.value }))}
-                placeholder="Name"
-                required
-                className={styles.adminFormInput}
-              />
-            )}
-            {subcategoryModal.type && subcategoryModal.type.startsWith('delete') && (
-              <div>Are you sure you want to delete "{subcategoryModal.value}"?</div>
-            )}
-            <div className={styles.adminModalButtons}>
-              <button type="submit" className={styles.adminButton}>{subcategoryModal.type && subcategoryModal.type.startsWith('delete') ? 'Delete' : 'Save'}</button>
-              <button type="button" onClick={() => setSubcategoryModal({ type: null, value: '', id: null })} className={styles.adminButton}>Cancel</button>
-            </div>
-          </form>
-        </div>
-      )}
+      <main className={styles.adminMainContent}>
+        {loading ? <p>Loading...</p> : (
+          activeSection === 'fire'
+            ? renderSection(fireCategories, fireSubcategories, 'fire')
+            : renderSection(ictCategories, ictSubcategories, 'ict')
+        )}
+      </main>
       {/* Product Modal */}
-      {productModal.type && (
+      {productModal.open && (
         <div className={styles.adminModal}>
           <div className={styles.adminModalContent}>
             <ProductForm
-              initialValues={productModal.initialValues}
-              onSubmit={form => handleProductAction(productModal.type, form, productModal.initialValues?.id)}
-              onCancel={() => setProductModal({ type: null, initialValues: null })}
+              initialValues={{ subcategory: productModal.subcategory }}
+              onSubmit={handleAddProduct}
+              onCancel={() => setProductModal({ open: false, subcategory: null })}
               loading={loading}
-              subcategories={subcategories}
             />
+          </div>
+        </div>
+      )}
+      {categoryModal.open && (
+        <div className={styles.adminModal}>
+          <div className={styles.adminModalContent}>
+            <h3>Add Category</h3>
+            <input
+              className={styles.adminFormInput}
+              type="text"
+              placeholder="Category name"
+              value={newCategoryName}
+              onChange={e => setNewCategoryName(e.target.value)}
+            />
+            <div className={styles.buttonRow}>
+              <button type="button" className={`${styles.adminButton} adminButton`} onClick={handleAddCategory}>Add</button>
+              <button type="button" className={`${styles.deleteButton} deleteButton`} onClick={() => setCategoryModal({ open: false, type: 'fire' })}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {subcategoryModal.open && (
+        <div className={styles.adminModal}>
+          <div className={styles.adminModalContent}>
+            <h3>Add Subcategory</h3>
+            <input
+              className={styles.adminFormInput}
+              type="text"
+              placeholder="Subcategory name"
+              value={newSubcategoryName}
+              onChange={e => setNewSubcategoryName(e.target.value)}
+            />
+            <div className={styles.buttonRow}>
+              <button type="button" className={`${styles.adminButton} adminButton`} onClick={handleAddSubcategory}>Add</button>
+              <button type="button" className={`${styles.deleteButton} deleteButton`} onClick={() => setSubcategoryModal({ open: false, category: null })}>Cancel</button>
+            </div>
           </div>
         </div>
       )}

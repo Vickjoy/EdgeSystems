@@ -10,12 +10,9 @@ import Login from './pages/Login';
 import ProductDetail from './pages/ProductDetail';
 import ProductList from './pages/ProductList';
 import ProtectedRoute from './components/ProtectedRoute';
-import AdminProductManager from './pages/AdminProductManager';
 import AdminDashboard from './pages/AdminDashboard';
-import AdminCategoryManager from './pages/AdminCategoryManager';
 import CategoryPage from './pages/CategoryPage';
 import AdminLayout from './components/AdminLayout';
-import AdminSubcategoryManager from './pages/AdminSubcategoryManager';
 import OrderSummary from './pages/OrderSummary';
 
 const App = () => {
@@ -51,36 +48,6 @@ const App = () => {
             <ProtectedRoute adminOnly={true}>
               <AdminLayout>
                 <AdminDashboard />
-              </AdminLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-products"
-          element={
-            <ProtectedRoute adminOnly={true}>
-              <AdminLayout>
-                <AdminProductManager />
-              </AdminLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-categories"
-          element={
-            <ProtectedRoute adminOnly={true}>
-              <AdminLayout>
-                <AdminCategoryManager />
-              </AdminLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-subcategories"
-          element={
-            <ProtectedRoute adminOnly={true}>
-              <AdminLayout>
-                <AdminSubcategoryManager />
               </AdminLayout>
             </ProtectedRoute>
           }

@@ -92,20 +92,41 @@
 
 .adminButton {
   background: #1DCD9F;
-  color: white;
+  color: #111 !important;
+  font-weight: 900 !important;
   border: none;
   border-radius: 4px;
-  padding: 0.4rem 1.2rem;
-  font-weight: 700;
+  padding: 0.5rem 1.3rem;
+  font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s;
   margin-bottom: 0.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 .adminButton.danger {
   background: #e74c3c;
+  color: #fff !important;
 }
 .adminButton:hover {
   background: #6096B4;
+  color: #fff !important;
+}
+
+.logoutButton {
+  background: #e74c3c;
+  color: #fff !important;
+  font-weight: 900 !important;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.3rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s;
+}
+.logoutButton:hover {
+  background: #c0392b;
 }
 
 .adminSubList {
@@ -221,6 +242,83 @@
   color: #111;
   font-weight: 800;
   font-size: 1.08rem;
+  letter-spacing: 0.01em;
+}
+
+/* Font family for admin dashboard */
+.adminDashboard, .adminDashboard * {
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+/* Friendlier, modern font for main labels */
+.categoryContainer h3, .subcategoryList h4, .adminProductNameCell, .adminListItemName, .adminListItem {
+  color: #222;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
+}
+
+/* Subcategory label spacing */
+.subcategoryList h4 {
+  margin-top: 1.2rem;
+  margin-bottom: 0.7rem;
+}
+
+/* Subcategory label and name font matches category */
+.subcategoryList h4, .subcategoryList ul li span {
+  color: #222;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
+}
+
+/* Admin buttons: clear, modern, consistent */
+.adminButton, .editButton, .deleteButton {
+  display: inline-block;
+  background: #1DCD9F;
+  color: #fff !important;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.3rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 0.2rem 0.5rem 0.2rem 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.adminButton:hover, .editButton:hover {
+  background: #6096B4;
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(96,150,180,0.12);
+}
+.deleteButton {
+  background: #e74c3c;
+}
+.deleteButton:hover {
+  background: #c0392b;
+}
+
+/* Button container for better alignment */
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Subcategory/product list spacing */
+.subcategoryList ul, .adminSubList {
+  margin: 0.5rem 0 1.2rem 0;
+  padding-left: 1.2rem;
+}
+
+/* Product name font matches subcategory and category */
+.subcategoryList ul li ul li span {
+  color: #222;
+  font-weight: 700;
+  font-size: 1.15rem;
   letter-spacing: 0.01em;
 }
 

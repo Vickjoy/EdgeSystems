@@ -15,29 +15,30 @@ const defaultValues = {
 
 const fieldStyle = { marginBottom: 16 };
 
-const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcategories = [] }) => {
+const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcategories = [], categories = [] }) => {
   const [form, setForm] = useState({ ...defaultValues, ...initialValues });
   const [error, setError] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFileName, setImageFileName] = useState('');
   const { token } = useAuth();
 
-  // Build a list of unique categories from subcategories
-  const categories = Array.from(
-    new Map(
-      (subcategories || [])
-        .filter(sub => sub && sub.category)
-        .map(sub => [sub.category.id || sub.category, sub.category])
-    ).values()
-  );
+  // If no category is selected, default to the first available category
+  React.useEffect(() => {
+    if (!form.category && categories.length > 0) {
+      setForm(f => ({ ...f, category: String(categories[0].id) }));
+    }
+  }, [categories]);
 
-  // Determine selected category
-  const selectedCategoryId = form.category || (initialValues.category ? (initialValues.category.id || initialValues.category) : '');
+  // Filter subcategories for the selected category (compare as strings)
+  const selectedCategoryId = form.category || (initialValues.category ? String(initialValues.category.id || initialValues.category) : '');
+  const filteredSubcategories = selectedCategoryId
+    ? subcategories.filter(
+        sub => sub && String(sub.category.id) === String(selectedCategoryId)
+      )
+    : [];
 
-  // Filter subcategories for the selected category
-  const filteredSubcategories = subcategories.filter(
-    sub => sub && (sub.category.id === selectedCategoryId || sub.category === selectedCategoryId)
-  );
+  // Remove category and subcategory fields from the form UI
+  // Use subcategory from initialValues (passed from parent/modal) for product creation
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -45,15 +46,6 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
       setForm(f => ({ ...f, image: files[0] }));
       setImageFileName(files[0].name);
       setImagePreview(URL.createObjectURL(files[0]));
-    } else if (name === 'category') {
-      setForm(f => ({ ...f, category: value, subcategory: '', subcategoryId: '' }));
-    } else if (name === 'subcategory') {
-      const selected = filteredSubcategories.find(sub => sub.slug === value);
-      setForm(f => ({
-        ...f,
-        subcategory: value, // slug
-        subcategoryId: selected ? selected.id : ''
-      }));
     } else {
       setForm(f => ({ ...f, [name]: value }));
     }
@@ -62,15 +54,18 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
   const handleSubmit = async e => {
     e.preventDefault();
     setError('');
-    if (!form.name || !form.price || !form.subcategory) {
-      setError('Name, price, and subcategory are required.');
+    console.log('ProductForm handleSubmit called', form, initialValues);
+    if (!form.name || !form.price) {
+      setError('Name and price are required.');
       return;
     }
-    onSubmit(form, token);
+    // Use subcategory from initialValues
+    const submitForm = { ...form, subcategory: initialValues.subcategory || form.subcategory };
+    onSubmit(submitForm, token);
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ background: '#fff', padding: 24, borderRadius: 8, maxWidth: 420, margin: '0 auto', color: '#111' }}>
+    <form onSubmit={handleSubmit} noValidate action="#" style={{ background: '#fff', padding: 24, borderRadius: 8, maxWidth: 480, margin: '0 auto', color: '#111', maxHeight: '80vh', overflowY: 'auto', boxSizing: 'border-box' }}>
       <h3 style={{ marginBottom: 16, textAlign: 'center', color: '#111' }}>{initialValues.id ? 'Edit Product' : 'Add Product'}</h3>
       <div style={fieldStyle}>
         <input name="name" value={form.name} onChange={handleChange} required style={{ width: '100%', color: '#111' }} placeholder="Product Name" />
@@ -94,37 +89,6 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
         <select name="status" value={form.status} onChange={handleChange} style={{ width: '100%', color: '#111' }}>
           <option value="in_stock">In Stock</option>
           <option value="out_of_stock">Out of Stock</option>
-        </select>
-      </div>
-      <div style={fieldStyle}>
-        <select
-          name="category"
-          value={selectedCategoryId || ''}
-          onChange={handleChange}
-          required
-          style={{ width: '100%', color: '#111' }}
-        >
-          <option value="">Select Category</option>
-          {categories.map(cat => (
-            <option key={cat.id || cat} value={cat.id || cat}>{cat.name || cat}</option>
-          ))}
-        </select>
-      </div>
-      <div style={fieldStyle}>
-        <select
-          name="subcategory"
-          value={form.subcategory}
-          onChange={handleChange}
-          required
-          style={{ width: '100%', color: '#111' }}
-          disabled={!selectedCategoryId}
-        >
-          <option value="">Select Subcategory</option>
-          {filteredSubcategories.map(subcat => (
-            subcat && <option key={subcat.id} value={subcat.slug}>
-              {subcat.name}
-            </option>
-          ))}
         </select>
       </div>
       <div style={fieldStyle}>
