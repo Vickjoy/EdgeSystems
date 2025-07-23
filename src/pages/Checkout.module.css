@@ -1,7 +1,7 @@
 .section {
   padding: 3rem 0;
-  background-color: #6096B4;
-  color: white;
+  background-color: #fff;
+  color: #222;
 }
 
 .container {
@@ -29,9 +29,9 @@
 
 .label {
   display: block;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  color: #EEE9DA;
+  color: #222;
   margin-bottom: 0.5rem;
 }
 
@@ -41,7 +41,13 @@
   padding: 0.5rem 1rem;
   width: 100%;
   background-color: white;
-  color: #6096B4;
+  color: #111;
+  font-size: 1rem;
+}
+
+.input::placeholder {
+  color: #222;
+  opacity: 1;
 }
 
 .input:focus {
@@ -72,14 +78,15 @@
   max-width: 1100px;
   margin: 0 auto;
   align-items: flex-start;
+  position: relative;
 }
 
 .billingColumn {
   flex: 1.2;
-  background: rgba(255,255,255,0.07);
-  border-radius: 12px;
+  background: none;
+  border-radius: 0;
   padding: 2rem 1.5rem;
-  box-shadow: 0 2px 16px rgba(96,150,180,0.08);
+  box-shadow: none;
 }
 
 .orderColumn {
@@ -93,14 +100,14 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: #fff;
+  color: #222;
 }
 
 .orderCard, .paymentCard {
-  background: #fff;
-  color: #333;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(96,150,180,0.08);
+  background: none;
+  color: #222;
+  border-radius: 0;
+  box-shadow: none;
   padding: 1.5rem 1.2rem;
 }
 
@@ -191,13 +198,26 @@
   background-color: #6096B4;
 }
 
+@media (min-width: 900px) {
+  .gridContainer {
+    flex-direction: row;
+  }
+  .billingColumn {
+    border-right: 2px solid #E0E6ED;
+    padding-right: 2.5rem;
+  }
+  .orderColumn {
+    padding-left: 2.5rem;
+  }
+}
+
 @media (max-width: 900px) {
   .gridContainer {
     flex-direction: column;
     gap: 2rem;
   }
-  .orderColumn {
-    flex-direction: column;
-    gap: 1.5rem;
+  .billingColumn, .orderColumn {
+    border: none;
+    padding: 0;
   }
 } 

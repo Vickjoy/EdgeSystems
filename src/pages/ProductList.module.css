@@ -1,20 +1,23 @@
 .section {
   padding: 3rem 0;
-  background-color: #6096B4;
-  color: white;
+  background-color: #fff;
+  color: #222;
 }
 
 .container {
   max-width: 80rem;
   margin: 0 auto;
   padding: 0 1rem;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .title {
   font-size: 1.875rem;
   font-weight: 700;
   margin-bottom: 2rem;
-  color: white;
+  color: #222;
 }
 
 .filter {
@@ -39,8 +42,8 @@
   padding: 2rem 0;
   justify-items: center;
   align-items: start;
-  background: rgba(255,255,255,0.04);
-  border-radius: 1.5rem;
+  background: none;
+  border-radius: 0;
 }
 
 @media (min-width: 640px) {

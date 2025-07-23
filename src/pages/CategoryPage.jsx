@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { fetchCategories, fetchSubcategories, fetchProductsForSubcategory } from '../utils/api';
 import styles from './ProductList.module.css';
+import ProductCard from '../components/ProductCard';
 
 const CategoryPage = () => {
   const { slug } = useParams();
@@ -114,35 +115,15 @@ const CategoryPage = () => {
             <h2 className={styles.title}>{category ? category.name : slug} Products</h2>
             {error && <div style={{ color: 'red', textAlign: 'center', marginBottom: 16 }}>{error}</div>}
             {loading ? (
-              <p style={{ color: 'white', textAlign: 'center', marginTop: 32, fontSize: 18 }}>Loading...</p>
+              <p style={{ color: '#222', textAlign: 'center', marginTop: 32, fontSize: 18 }}>Loading...</p>
             ) : products.length > 0 ? (
               <div className={styles.productsGrid}>
                 {products.map(product => (
-                  <div key={product.id} style={{ background: 'white', borderRadius: 12, boxShadow: '0 4px 32px rgba(96,150,180,0.08)', padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-                    <img
-                      src={product.image ? product.image : '/placeholder.png'}
-                      alt={product.name}
-                      style={{ width: 180, height: 180, objectFit: 'cover', borderRadius: 8, marginBottom: 8, background: '#f4f4f4' }}
-                      onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
-                    />
-                    <h3 style={{ fontWeight: 700, fontSize: 18, color: '#6096B4', margin: 0 }}>{product.name}</h3>
-                    <div style={{ color: '#1DCD9F', fontWeight: 600, fontSize: 13, marginBottom: 0 }}>inclusive +16% VAT</div>
-                    <div style={{ fontSize: 20, fontWeight: 700, color: '#1DCD9F', marginBottom: 8 }}>
-                      KES {(product.price * 1.16).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
-                    </div>
-                    <div style={{ display: 'flex', gap: 8, width: '100%' }}>
-                      <button
-                        style={{ flex: 1, background: '#1DCD9F', color: 'white', fontWeight: 700, padding: '0.5rem 1rem', borderRadius: 4, border: 'none', cursor: 'pointer' }}
-                        onClick={() => navigate(`/product/${product.id}`)}
-                      >
-                        View Product
-                      </button>
-                    </div>
-                  </div>
+                  <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (
-              <p style={{ color: 'white', textAlign: 'center', marginTop: 32, fontSize: 18 }}>No products in this subcategory yet.</p>
+              <p style={{ color: '#222', textAlign: 'center', marginTop: 32, fontSize: 18 }}>No products in this subcategory yet.</p>
             )}
           </div>
         </div>

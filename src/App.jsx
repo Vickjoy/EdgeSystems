@@ -42,6 +42,7 @@ const App = () => {
         <Route path="/fire-safety/:categorySlug" element={<ProductList />} />
         <Route path="/ict/:categorySlug" element={<ProductList />} />
         <Route path="/category/:slug" element={<CategoryPage />} />
+        <Route path="/search" element={<ProductList />} />
         <Route
           path="/admin-dashboard"
           element={

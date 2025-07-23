@@ -20,8 +20,15 @@ const CartModal = ({ onClose }) => {
                 <li key={item.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, borderBottom: '1px solid #eee', paddingBottom: 8 }}>
                   <div>
                     <div style={{ fontWeight: 700, color: '#000' }}>{item.name || `Product #${item.id}`}</div>
-                    <div style={{ fontSize: 13, color: '#1DCD9F' }}>KES {(item.price * (item.quantity || 1)).toLocaleString('en-KE', { minimumFractionDigits: 2 })} ({item.quantity || 1}x)</div>
+                    <div style={{ fontSize: 13, color: '#1DCD9F' }}>KES {(Number(item.price) * item.quantity).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</div>
                   </div>
+                  <button
+                    onClick={() => removeFromCart(item.id)}
+                    style={{ background: 'none', border: 'none', color: '#e74c3c', fontSize: 20, cursor: 'pointer', marginLeft: 8 }}
+                    title="Remove"
+                  >
+                    ×
+                  </button>
                 </li>
               ))}
             </ul>

@@ -112,7 +112,7 @@ const Header = () => {
       {/* Top Bar */}
       <div className={styles.topBar}>
         <div className={styles.topBarContent}>
-          <span>☎️ +254 0202400280/0721247356</span>
+          <span>0721247356/0117320000</span>
           <span>📧 info@edgesystems.co.ke</span>
         </div>
       </div>

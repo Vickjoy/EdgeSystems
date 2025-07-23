@@ -62,11 +62,11 @@ const OrderSummary = () => {
                             : '/placeholder.png'
                         }
                         alt={item.name}
-                        style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 8, background: '#f5f5f5' }}
+                        style={{ width: 40, height: 80, objectFit: 'cover', borderRadius: 8, background: '#f5f5f5' }}
                       />
                     </td>
                     <td style={{ padding: '0.75rem', fontWeight: 600, color: '#6096B4' }}>{item.name || `Product #${item.id}`}</td>
-                    <td style={{ padding: '0.75rem', textAlign: 'right', color: '#1DCD9F', fontWeight: 500 }}>KES {item.price.toLocaleString('en-KE', { minimumFractionDigits: 2 })}</td>
+                    <td style={{ padding: '0.75rem', textAlign: 'right', color: '#1DCD9F', fontWeight: 500 }}>KES {Number(item.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</td>
                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>
                       <span style={{ fontWeight: 600, marginRight: 8 }}>{item.quantity || 1}</span>
                       <select
@@ -80,7 +80,7 @@ const OrderSummary = () => {
                       </select>
                     </td>
                     <td style={{ padding: '0.75rem', textAlign: 'right', fontWeight: 600 }}>
-                      KES {(item.price * (item.quantity || 1)).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
+                      KES {(Number(item.price) * item.quantity).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
                     </td>
                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>
                       <button onClick={() => removeFromCart(item.id)} style={{ background: 'none', border: 'none', color: '#e74c3c', fontSize: 22, cursor: 'pointer' }} title="Remove">×</button>

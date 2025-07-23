@@ -22,8 +22,19 @@ const ProductList = () => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
 
-  // Fetch categories on mount
+  // If search results are passed via location.state, use them
+  const isSearchResults = location.pathname.startsWith('/search');
+  const searchResults = location.state && location.state.results;
+
   useEffect(() => {
+    if (isSearchResults && Array.isArray(searchResults)) {
+      setProducts(searchResults);
+      setLoading(false);
+      setSubcategories([]);
+      return;
+    }
+    setLoading(true);
+    // Fetch categories on mount
     const getCategories = async () => {
       try {
         const data = await fetchCategories();
@@ -33,10 +44,11 @@ const ProductList = () => {
       }
     };
     getCategories();
-  }, []);
+  }, [isSearchResults, searchResults]);
 
-  // Fetch subcategories when category changes
+  // Only fetch subcategories/products if not search results
   useEffect(() => {
+    if (isSearchResults) return;
     if (!category) {
       setSubcategories([]);
       return;
@@ -56,10 +68,11 @@ const ProductList = () => {
       }
     };
     getSubcategories();
-  }, [category, categories]);
+  }, [category, categories, isSearchResults]);
 
-  // Fetch products with pagination
+  // Only fetch products if not search results
   const fetchProducts = useCallback(async (reset = false) => {
+    if (isSearchResults) return;
     setLoading(true);
     let url = `http://127.0.0.1:8000/api/subcategories/${subCategory ? subCategory.slug : ''}/products/?page=${page}&page_size=12`;
     try {
@@ -76,23 +89,25 @@ const ProductList = () => {
     } finally {
       setLoading(false);
     }
-  }, [category, subCategory, page]);
+  }, [category, subCategory, page, isSearchResults]);
 
   // Reset products and page when category or subCategory changes
   useEffect(() => {
+    if (isSearchResults) return;
     setProducts([]);
     setPage(1);
     setHasMore(true);
-  }, [category, subCategory]);
+  }, [category, subCategory, isSearchResults]);
 
   // Fetch products when page, category, or subCategory changes
   useEffect(() => {
+    if (isSearchResults) return;
     fetchProducts(page === 1);
     const handleProductsUpdated = () => fetchProducts(true);
     window.addEventListener('productsUpdated', handleProductsUpdated);
     return () => window.removeEventListener('productsUpdated', handleProductsUpdated);
     // eslint-disable-next-line
-  }, [category, subCategory, page]);
+  }, [category, subCategory, page, isSearchResults]);
 
   // Infinite scroll observer
   const lastProductRef = useCallback(node => {
@@ -114,9 +129,11 @@ const ProductList = () => {
   // Breadcrumbs logic
   const crumbs = [
     { label: 'Home', path: '/' },
-    { label: location.pathname.startsWith('/fire-safety') ? 'Fire Safety' : 'ICT', path: location.pathname.startsWith('/fire-safety') ? '/fire-safety' : '/ict' },
-    { label: category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()), path: location.pathname },
-    ...(subCategory ? [{ label: subCategory.name, path: '#' }] : [])
+    isSearchResults
+      ? { label: `Search Results`, path: location.pathname }
+      : { label: location.pathname.startsWith('/fire-safety') ? 'Fire Safety' : 'ICT', path: location.pathname.startsWith('/fire-safety') ? '/fire-safety' : '/ict' },
+    ...(isSearchResults ? [] : [{ label: category ? category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : '', path: location.pathname }]),
+    ...(subCategory && !isSearchResults ? [{ label: subCategory.name, path: '#' }] : [])
   ];
 
   return (
@@ -124,41 +141,43 @@ const ProductList = () => {
       <Breadcrumbs crumbs={crumbs} />
       <section className={styles.section}>
         <div className={styles.container} style={{ display: 'flex', gap: '2rem' }}>
-          {/* Sidebar with subcategories */}
-          <aside style={{ minWidth: 220 }}>
-            <h3 style={{ color: 'white', marginBottom: '1rem' }}>Subcategories</h3>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              {subcategories.length === 0 && <li style={{ color: 'white' }}>No subcategories</li>}
-              {subcategories.map(sub => (
-                <li key={sub.id}>
-                  <button
-                    style={{
-                      background: subCategory?.id === sub.id ? '#1DCD9F' : 'white',
-                      color: subCategory?.id === sub.id ? 'white' : '#6096B4',
-                      border: 'none',
-                      borderRadius: 4,
-                      padding: '0.5rem 1rem',
-                      marginBottom: 8,
-                      width: '100%',
-                      cursor: 'pointer',
-                      fontWeight: 600
-                    }}
-                    onClick={() => setSubCategory(sub)}
-                  >
-                    {sub.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </aside>
+          {/* Sidebar with subcategories - hide for search results */}
+          {!isSearchResults && (
+            <aside style={{ minWidth: 220 }}>
+              <h3 style={{ color: 'white', marginBottom: '1rem' }}>Subcategories</h3>
+              <ul style={{ listStyle: 'none', padding: 0 }}>
+                {subcategories.length === 0 && <li style={{ color: 'white' }}>No subcategories</li>}
+                {subcategories.map(sub => (
+                  <li key={sub.id}>
+                    <button
+                      style={{
+                        background: subCategory?.id === sub.id ? '#1DCD9F' : 'white',
+                        color: subCategory?.id === sub.id ? 'white' : '#6096B4',
+                        border: 'none',
+                        borderRadius: 4,
+                        padding: '0.5rem 1rem',
+                        marginBottom: 8,
+                        width: '100%',
+                        cursor: 'pointer',
+                        fontWeight: 600
+                      }}
+                      onClick={() => setSubCategory(sub)}
+                    >
+                      {sub.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          )}
           {/* Main content: Product Grid */}
           <div style={{ flex: 1 }}>
-            <h2 className={styles.title}>{category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} Products</h2>
+            <h2 className={styles.title}>{isSearchResults ? `Search Results` : category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' Products'}</h2>
             {/* Product Grid: Only show if there are products */}
             {products.length > 0 ? (
               <div className={styles.productsGrid}>
                 {products.map((product, idx) => {
-                  if (products.length === idx + 1) {
+                  if (products.length === idx + 1 && !isSearchResults) {
                     return (
                       <div ref={lastProductRef} key={product.id}>
                         <ProductCard product={product} onDelete={handleDelete} />
@@ -169,10 +188,10 @@ const ProductList = () => {
                   }
                 })}
                 {loading && <p>Loading...</p>}
-                {!hasMore && !loading && products.length > 0 && <p style={{ color: 'white', textAlign: 'center', marginTop: 16 }}>No more products.</p>}
+                {!hasMore && !loading && products.length > 0 && !isSearchResults && <p style={{ color: 'white', textAlign: 'center', marginTop: 16 }}>No more products.</p>}
               </div>
             ) : (
-              !loading && <p style={{ color: 'white', textAlign: 'center', marginTop: 32, fontSize: 18 }}>No products in this subcategory yet.</p>
+              !loading && <p style={{ color: 'white', textAlign: 'center', marginTop: 32, fontSize: 18 }}>{isSearchResults ? 'No results found.' : 'No products in this subcategory yet.'}</p>
             )}
           </div>
         </div>

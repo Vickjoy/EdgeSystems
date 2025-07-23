@@ -4,6 +4,9 @@ import styles from './ProductCard.module.css';
 import { useAuth } from '../context/AuthContext';
 
 const ProductCard = ({ product, onDelete }) => {
+  // DEBUG: Log the product name and price to confirm this file is used and what price is passed
+  console.log('[EdgeSystems ProductCard] price debug:', product.name, product.price);
+
   const { user, token } = useAuth();
   const navigate = useNavigate();
 
@@ -39,13 +42,14 @@ const ProductCard = ({ product, onDelete }) => {
           src={product.image ? (product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000${product.image}`) : '/placeholder.png'}
           alt={product.name}
           className={styles.image}
+          style={{ width: 200, height: 200, objectFit: 'cover', display: 'block', margin: '0 auto', borderRadius: 12, background: '#f4f4f4' }}
           onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
         />
       </div>
       <div className={styles.content}>
         <h3 className={styles.title}>{product.name}</h3>
-        <div className={styles.vatText}>Incl +16% VAT</div>
-        <p className={styles.price}>KES {(product.price * 1.16).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</p>
+        <div className={styles.vatText}>incl +16% VAT</div>
+        <div className={styles.price}>KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</div>
         <div className={styles.actions} onClick={e => e.stopPropagation()}>
           <button
             className={styles.button}
@@ -56,7 +60,6 @@ const ProductCard = ({ product, onDelete }) => {
           </button>
         </div>
       </div>
-
       {(user?.is_staff || user?.is_superuser) && (
         <div style={{ marginTop: 8, display: 'flex', gap: 8, padding: '0 1.5rem 1rem 1.5rem' }}>
           <Link to={`/product/edit/${product.id}`} className={styles.button} style={{ background: '#1DCD9F' }} onClick={e => e.stopPropagation()}>

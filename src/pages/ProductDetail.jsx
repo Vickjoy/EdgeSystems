@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import ProductCard from '../components/ProductCard';
 import Breadcrumbs from '../components/Breadcrumbs';
 import styles from './ProductDetail.module.css';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ProductForm from '../components/ProductForm';
-import { fetchCategories, fetchSubcategories } from '../utils/api';
+import { fetchCategories } from '../utils/api';
 import { useCart } from '../context/CartContext';
 
 const ProductDetail = (props) => {
@@ -23,6 +22,7 @@ const ProductDetail = (props) => {
   const [subcategorySlug, setSubcategorySlug] = useState('');
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [showLightbox, setShowLightbox] = useState(false);
 
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/api/products/${productId}`)
@@ -118,84 +118,98 @@ const ProductDetail = (props) => {
         { label: product.name, path: `/product/${product.id}` }
       ]} />
       <section className={styles.section}>
-        <div className={styles.container}>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
-            <button
-              className={styles.addToCartButton}
-              style={{ background: '#1DCD9F', color: 'white', fontWeight: 700, borderRadius: 25, border: 'none', fontSize: 16, cursor: 'pointer', padding: '0.5rem 1.5rem' }}
-              onClick={() => window.location.href = 'http://localhost:5173/category/addressable-fire-alarm-systems'}
-            >
-              Continue Shopping
-            </button>
-          </div>
-          <div className={styles.productLayout}>
-            {/* Image on the left */}
-            <div className={styles.imageContainer}>
-              <img
-                src={product.image ? product.image : '/placeholder.png'}
-                alt={product.name}
-                className={styles.productImage}
-                style={{ maxWidth: 400, width: '100%', background: '#f4f4f4', borderRadius: 8 }}
-                onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
-              />
-              {product.documentation && (
-                <div style={{ marginTop: 16, textAlign: 'center', wordBreak: 'break-all' }}>
-                  <b>Documentation:</b> <a href={product.documentation} target="_blank" rel="noopener noreferrer">{product.documentation}</a>
-                </div>
-              )}
-            </div>
-            {/* Details on the right */}
-            <div className={styles.detailsContainer}>
-              <h2 className={styles.productTitle}>{product.name}</h2>
-              <div style={{ color: '#1DCD9F', fontWeight: 600, fontSize: 15, marginBottom: 0 }}>inclusive +16% VAT</div>
-              <div className={styles.productPrice}>
-                KES {(product.price * 1.16).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
+        <div className={styles.detailContainer}>
+          <div className={styles.imageArea}>
+            <img
+              src={product.image ? product.image : '/placeholder.png'}
+              alt={product.name}
+              className={styles.mainImage}
+              onClick={() => setShowLightbox(true)}
+              tabIndex={0}
+              style={{ cursor: 'zoom-in' }}
+              onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
+            />
+            {showLightbox && (
+              <div className={styles.lightbox} onClick={() => setShowLightbox(false)}>
+                <img
+                  src={product.image ? product.image : '/placeholder.png'}
+                  alt={product.name}
+                  className={styles.lightboxImage}
+                />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '16px 0' }}>
+            )}
+            {product.documentation && (
+              <div className={styles.documentation}><b>Documentation:</b> <a href={product.documentation} target="_blank" rel="noopener noreferrer">{product.documentation}</a></div>
+            )}
+          </div>
+          <div className={styles.infoArea}>
+            <h1 className={styles.productTitle}>{product.name}</h1>
+            <div className={styles.vatText}>incl +16% VAT</div>
+            <div className={styles.productPrice}>KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</div>
+            <div className={styles.ctaRow}>
+              <div className={styles.quantityArea}>
                 <label htmlFor="quantity" className={styles.label}>Quantity</label>
                 <input type="number" id="quantity" value={quantity} min="1" className={styles.quantityInput} onChange={e => setQuantity(Math.max(1, parseInt(e.target.value) || 1))} />
               </div>
-              <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-                <button
-                  className={styles.addToCartButton}
-                  style={{ flex: 1 }}
-                  onClick={() => addToCart({
+              <button
+                className={styles.ctaButton}
+                onClick={() => addToCart({
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                  quantity,
+                })}
+              >
+                Add to Cart
+              </button>
+              <button
+                className={styles.ctaButtonAlt}
+                onClick={() => {
+                  addToCart({
                     id: product.id,
                     name: product.name,
                     price: product.price,
-                    image: product.image, // Pass image
+                    image: product.image,
                     quantity,
-                  })}
-                >
-                  Add to Cart
-                </button>
-                <button
-                  className={styles.addToCartButton}
-                  style={{ flex: 1, background: '#1DCD9F' }}
-                  onClick={() => {
-                    addToCart({
-                      id: product.id,
-                      name: product.name,
-                      price: product.price,
-                      image: product.image, // Pass image
-                      quantity,
-                    });
-                    navigate('/order-summary');
-                  }}
-                >
-                  Buy Now
-                </button>
-              </div>
+                  });
+                  navigate('/order-summary');
+                }}
+              >
+                Buy Now
+              </button>
             </div>
+            <div className={styles.stockStatus}>In Stock</div>
           </div>
-          {/* Below image and details: description, specifications, benefits/features */}
-          <div style={{ background: 'white', color: '#333', borderRadius: 12, marginTop: 32, padding: 32, boxShadow: '0 4px 32px rgba(96,150,180,0.08)' }}>
-            <div style={{ marginBottom: 16 }}><b>Description:</b> {product.description}</div>
-            <div style={{ marginBottom: 16 }}><b>Specifications:</b> {product.specifications}</div>
-            {product.features && (
-              <div style={{ marginBottom: 16 }}><b>Benefits:</b> {product.features}</div>
-            )}
+        </div>
+        <hr className={styles.divider} />
+        <div className={styles.detailsSection}>
+          <div className={styles.description}><b>Description:</b>
+            <ul className={styles.descList}>
+              {product.description && product.description.split(/[.,\n]/).map((item, idx) => {
+                const trimmed = item.trim();
+                return trimmed ? <li key={idx}>{trimmed}</li> : null;
+              })}
+            </ul>
           </div>
+          <div className={styles.specs}><b>Specifications:</b>
+            <ul className={styles.specList}>
+              {product.specifications && product.specifications.split(/[.,\n]/).map((item, idx) => {
+                const trimmed = item.trim();
+                return trimmed ? <li key={idx}>{trimmed}</li> : null;
+              })}
+            </ul>
+          </div>
+          {product.features && (
+            <div className={styles.features}><b>Features:</b>
+              <ul className={styles.featureList}>
+                {product.features.split(/[.,\n]/).map((item, idx) => {
+                  const trimmed = item.trim();
+                  return trimmed ? <li key={idx}>{trimmed}</li> : null;
+                })}
+              </ul>
+            </div>
+          )}
         </div>
       </section>
     </div>
