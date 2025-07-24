@@ -33,7 +33,7 @@ const ProductCard = ({ product, onDelete }) => {
     <div
       className={styles.card}
       tabIndex={0}
-      onClick={() => navigate(`/product/${product.id}`)}
+      onClick={() => navigate(`/product/${product.slug}`)}
       role="button"
       aria-label={`View details for ${product.name}`}
     >
@@ -54,15 +54,15 @@ const ProductCard = ({ product, onDelete }) => {
           <button
             className={styles.button}
             style={{ background: '#6096B4', color: 'white', flex: 1 }}
-            onClick={e => { e.preventDefault(); navigate(`/product/${product.id}`); }}
+            onClick={e => { e.preventDefault(); navigate(`/product/${product.slug}`); }}
           >
             View Product
           </button>
         </div>
       </div>
-      {(user?.is_staff || user?.is_superuser) && (
+      {(user?.is_staff || user?.is_superuser) && false && (
         <div style={{ marginTop: 8, display: 'flex', gap: 8, padding: '0 1.5rem 1rem 1.5rem' }}>
-          <Link to={`/product/edit/${product.id}`} className={styles.button} style={{ background: '#1DCD9F' }} onClick={e => e.stopPropagation()}>
+          <Link to={`/product/edit/${product.slug}`} className={styles.button} style={{ background: '#1DCD9F' }} onClick={e => e.stopPropagation()}>
             Edit
           </Link>
           <button onClick={e => { e.stopPropagation(); handleDelete(); }} className={styles.button} style={{ background: '#e74c3c' }}>

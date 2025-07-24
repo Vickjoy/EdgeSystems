@@ -15,7 +15,7 @@ const ProductDetail = (props) => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(location.pathname.startsWith('/product/edit/'));
-  const productId = params.id;
+  const productSlug = params.slug;
   const [categoryName, setCategoryName] = useState('');
   const [categorySlug, setCategorySlug] = useState('');
   const [subcategoryName, setSubcategoryName] = useState('');
@@ -25,7 +25,7 @@ const ProductDetail = (props) => {
   const [showLightbox, setShowLightbox] = useState(false);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/products/${productId}`)
+    fetch(`http://127.0.0.1:8000/api/products/${productSlug}`)
       .then(response => response.json())
       .then(async data => {
         setProduct(data);
@@ -53,7 +53,7 @@ const ProductDetail = (props) => {
         }
       })
       .catch(error => console.error('Error fetching product details:', error));
-  }, [productId]);
+  }, [productSlug]);
 
   // Fallback: If categoryName or subcategoryName are missing, try to fetch them from product object if available
   useEffect(() => {
@@ -79,7 +79,7 @@ const ProductDetail = (props) => {
       if (form.image && typeof form.image !== 'string') {
         formData.append('image', form.image);
       }
-      const response = await fetch(`http://127.0.0.1:8000/api/products/${productId}/`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/products/${productSlug}/`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -87,7 +87,7 @@ const ProductDetail = (props) => {
         body: formData
       });
       if (!response.ok) throw new Error('Failed to update product');
-      navigate(`/product/${productId}`);
+      navigate(`/product/${productSlug}`);
     } catch (err) {
       alert('Error updating product.');
     }
@@ -103,7 +103,7 @@ const ProductDetail = (props) => {
         <ProductForm
           initialValues={product}
           onSubmit={handleEditSubmit}
-          onCancel={() => navigate(`/product/${productId}`)}
+          onCancel={() => navigate(`/product/${productSlug}`)}
         />
       </div>
     );
@@ -115,7 +115,7 @@ const ProductDetail = (props) => {
         { label: 'Home', path: '/' },
         ...(categoryName && categorySlug ? [{ label: categoryName, path: `/category/${categorySlug}` }] : []),
         ...(subcategoryName && subcategorySlug ? [{ label: subcategoryName, path: `/category/${categorySlug}#${subcategorySlug}` }] : []),
-        { label: product.name, path: `/product/${product.id}` }
+        { label: product.name, path: `/product/${product.slug}` }
       ]} />
       <section className={styles.section}>
         <div className={styles.detailContainer}>

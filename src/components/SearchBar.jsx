@@ -47,7 +47,7 @@ const SearchBar = () => {
       if (matches.length === 0) {
         setNoResults(true);
       } else if (matches.length === 1) {
-        navigate(`/product/${matches[0].id}`);
+        navigate(`/product/${matches[0].slug}`);
       } else {
         // Pass results to a search results page (optional: via state or query param)
         navigate(`/search?query=${encodeURIComponent(query)}`, { state: { results: matches } });
