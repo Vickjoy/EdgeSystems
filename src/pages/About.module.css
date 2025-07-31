@@ -1,26 +1,36 @@
-.section {
-  padding: 3rem 0;
-  background-color: #6096B4;
-  color: white;
+.aboutSection {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #222;
+  padding: 4rem 0 4rem 0;
 }
 
-.container {
-  max-width: 80rem;
+.aboutContainer {
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 1rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(96,150,180,0.10);
+  padding: 3rem 2.5rem 2.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
 }
 
 .title {
-  font-size: 1.875rem;
-  font-weight: 700;
+  font-size: 2.2rem;
+  font-weight: 800;
   margin-bottom: 2rem;
-  color: white;
+  color: #1e293b;
+  text-align: center;
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  margin-bottom: 2.5rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #374151;
+  text-align: center;
 }
 
 @media (min-width: 768px) {
@@ -64,10 +74,11 @@
 }
 
 .missionVisionGrid {
-  display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
+  align-items: center;
 }
 
 @media (min-width: 768px) {
@@ -77,20 +88,38 @@
 }
 
 .missionCard, .visionCard {
-  background-color: rgba(92, 131, 116, 0.1);
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid #93B1A6;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(96,150,180,0.07);
+  padding: 2rem 1.5rem;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .missionTitle, .visionTitle {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
+  color: #2563eb;
   margin-bottom: 1rem;
-  color: #5C8374;
 }
 
 .missionText, .visionText {
-  color: #93B1A6;
-  line-height: 1.6;
+  font-size: 1.08rem;
+  color: #374151;
+  margin: 0;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .aboutContainer {
+    padding: 1.2rem 0.5rem;
+  }
+  .missionCard, .visionCard {
+    padding: 1.2rem 0.7rem;
+  }
+  .title {
+    font-size: 1.3rem;
+  }
 } 

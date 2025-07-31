@@ -1,5 +1,6 @@
 .card {
-  border: 1.5px solid #E0E6ED;
+  border: 2px solid #e0e0e0; /* Light gray border for visibility */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04); /* Subtle shadow for separation */
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(96, 150, 180, 0.07);
@@ -10,9 +11,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 220px;
-  max-width: 260px;
-  margin: 0 auto;
+  min-width: unset;
+  max-width: unset;
+  width: 220px; /* Fixed width */
+  height: 320px; /* Fixed height */
+  margin: 16px; /* Uniform margin between cards */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .card:hover, .card:focus {
@@ -28,11 +36,12 @@
   align-items: center;
   padding: 1.2rem 0 0.5rem 0;
   background: #f8f9fa;
+  height: 100px;
 }
 
 .image {
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 12px;
   background: #f4f4f4;
@@ -46,6 +55,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1 1 auto;
 }
 
 .title {
@@ -55,6 +65,10 @@
   color: #222;
   text-align: center;
   letter-spacing: 0.01em;
+  white-space: normal; /* Allow text to wrap */
+  overflow: hidden;
+  text-overflow: unset;
+  word-break: break-word;
 }
 
 .vatText {

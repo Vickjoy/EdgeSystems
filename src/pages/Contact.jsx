@@ -53,7 +53,7 @@ const Contact = () => {
             <div className={styles.leftSpread}>
               <div className={styles.contactItem}>
                 <FaPhoneAlt className={styles.icon} />
-                <span className={styles.contactText}>+254 0202400280, 0721247356</span>
+                <span className={styles.contactText}>0117320000, 0721247356</span>
               </div>
               <div className={styles.contactItem}>
                 <FaEnvelope className={styles.icon} />

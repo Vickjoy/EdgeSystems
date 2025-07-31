@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 const ProductCard = ({ product, onDelete }) => {
   // DEBUG: Log the product name and price to confirm this file is used and what price is passed
   console.log('[EdgeSystems ProductCard] price debug:', product.name, product.price);
+  console.log('Product image:', product.image); // Debug
 
   const { user, token } = useAuth();
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const ProductCard = ({ product, onDelete }) => {
           src={product.image ? (product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000${product.image}`) : '/placeholder.png'}
           alt={product.name}
           className={styles.image}
-          style={{ width: 200, height: 200, objectFit: 'cover', display: 'block', margin: '0 auto', borderRadius: 12, background: '#f4f4f4' }}
+          style={{ width: 100, height: 100, objectFit: 'cover', display: 'block', margin: '0 auto', borderRadius: 12, background: '#f4f4f4' }}
           onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
         />
       </div>
@@ -51,13 +52,7 @@ const ProductCard = ({ product, onDelete }) => {
         <div className={styles.vatText}>incl +16% VAT</div>
         <div className={styles.price}>KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</div>
         <div className={styles.actions} onClick={e => e.stopPropagation()}>
-          <button
-            className={styles.button}
-            style={{ background: '#6096B4', color: 'white', flex: 1 }}
-            onClick={e => { e.preventDefault(); navigate(`/product/${product.slug}`); }}
-          >
-            View Product
-          </button>
+          {/* Removed View Product button */}
         </div>
       </div>
       {(user?.is_staff || user?.is_superuser) && false && (

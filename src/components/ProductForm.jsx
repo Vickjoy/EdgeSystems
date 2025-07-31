@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+// REMOVE: import { uploadToCloudinary } from '../utils/cloudinary';
 
 const defaultValues = {
   name: '',
@@ -21,24 +22,39 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFileName, setImageFileName] = useState('');
   const { token } = useAuth();
-
-  // If no category is selected, default to the first available category
-  React.useEffect(() => {
-    if (!form.category && categories.length > 0) {
-      setForm(f => ({ ...f, category: String(categories[0].id) }));
+  const [allCategories, setAllCategories] = useState([]);
+  const [allSubcategories, setAllSubcategories] = useState([]);
+  const [specRows, setSpecRows] = useState(() => {
+    if (initialValues.specifications) {
+      return initialValues.specifications.split('\n').map(line => {
+        const [key, ...rest] = line.split(':');
+        return { key, value: rest.join(':') };
+      });
     }
-  }, [categories]);
+    return [{ key: '', value: '' }];
+  });
 
-  // Filter subcategories for the selected category (compare as strings)
+  useEffect(() => {
+    // Fetch all categories and subcategories from new endpoints
+    fetch('http://127.0.0.1:8000/api/products/all-categories/')
+      .then(res => res.json())
+      .then(data => setAllCategories(data));
+    fetch('http://127.0.0.1:8000/api/products/all-subcategories/')
+      .then(res => res.json())
+      .then(data => setAllSubcategories(data));
+  }, []);
+
+  // Filter subcategories for the selected category
   const selectedCategoryId = form.category || (initialValues.category ? String(initialValues.category.id || initialValues.category) : '');
   const filteredSubcategories = selectedCategoryId
-    ? subcategories.filter(
-        sub => sub && String(sub.category.id) === String(selectedCategoryId)
-      )
+    ? allSubcategories.filter(sub => sub && String(sub.category) === String(selectedCategoryId))
     : [];
 
-  // Remove category and subcategory fields from the form UI
-  // Use subcategory from initialValues (passed from parent/modal) for product creation
+  const handleSpecChange = (idx, field, value) => {
+    setSpecRows(rows => rows.map((row, i) => i === idx ? { ...row, [field]: value } : row));
+  };
+  const handleAddSpecRow = () => setSpecRows(rows => [...rows, { key: '', value: '' }]);
+  const handleRemoveSpecRow = idx => setSpecRows(rows => rows.length > 1 ? rows.filter((_, i) => i !== idx) : rows);
 
   const handleChange = e => {
     const { name, value, files } = e.target;
@@ -54,13 +70,21 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
   const handleSubmit = async e => {
     e.preventDefault();
     setError('');
-    console.log('ProductForm handleSubmit called', form, initialValues);
-    if (!form.name || !form.price) {
-      setError('Name and price are required.');
+    if (!form.name) {
+      setError('Name is required.');
       return;
     }
-    // Use subcategory from initialValues
-    const submitForm = { ...form, subcategory: initialValues.subcategory || form.subcategory };
+    if (!form.subcategory) {
+      setError('Subcategory is required.');
+      return;
+    }
+    // Serialize specifications table
+    const specString = specRows
+      .filter(row => row.key && row.value)
+      .map(row => `${row.key}:${row.value}`)
+      .join('\n');
+    // Use subcategory from form
+    const submitForm = { ...form, specifications: specString, subcategory: form.subcategory };
     onSubmit(submitForm, token);
   };
 
@@ -71,16 +95,48 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
         <input name="name" value={form.name} onChange={handleChange} required style={{ width: '100%', color: '#111' }} placeholder="Product Name" />
       </div>
       <div style={fieldStyle}>
-        <input name="price" type="number" value={form.price} onChange={handleChange} required style={{ width: '100%', color: '#111' }} placeholder="Price (KES)" />
+        <select name="category" value={form.category || ''} onChange={handleChange} style={{ width: '100%', color: '#111' }} required>
+          <option value="">Select Category</option>
+          {allCategories.map(cat => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
+      </div>
+      <div style={fieldStyle}>
+        <select name="subcategory" value={form.subcategory || ''} onChange={handleChange} style={{ width: '100%', color: '#111' }} required>
+          <option value="">Select Subcategory</option>
+          {filteredSubcategories.map(sub => (
+            <option key={sub.id || sub.slug} value={sub.id || sub.slug}>{sub.name}</option>
+          ))}
+        </select>
+      </div>
+      <div style={fieldStyle}>
+        <input name="price" type="number" value={form.price} onChange={handleChange} style={{ width: '100%', color: '#111' }} placeholder="Price (KES)" />
       </div>
       <div style={fieldStyle}>
         <textarea name="description" value={form.description} onChange={handleChange} style={{ width: '100%', color: '#111' }} rows={2} placeholder="Description" />
       </div>
       <div style={fieldStyle}>
-        <textarea name="features" value={form.features} onChange={handleChange} style={{ width: '100%', color: '#111' }} rows={2} placeholder="Features" />
-      </div>
-      <div style={fieldStyle}>
-        <textarea name="specifications" value={form.specifications} onChange={handleChange} style={{ width: '100%', color: '#111' }} rows={2} placeholder="Specifications" />
+        <label style={{ fontWeight: 500, marginBottom: 4, display: 'block' }}>Specifications</label>
+        <table style={{ width: '100%', marginBottom: 8 }}>
+          <thead>
+            <tr>
+              <th style={{ textAlign: 'left', width: '40%' }}>Key</th>
+              <th style={{ textAlign: 'left', width: '50%' }}>Value</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {specRows.map((row, idx) => (
+              <tr key={idx}>
+                <td><input type="text" value={row.key} onChange={e => handleSpecChange(idx, 'key', e.target.value)} style={{ width: '95%' }} /></td>
+                <td><input type="text" value={row.value} onChange={e => handleSpecChange(idx, 'value', e.target.value)} style={{ width: '95%' }} /></td>
+                <td><button type="button" onClick={() => handleRemoveSpecRow(idx)} disabled={specRows.length === 1}>-</button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button type="button" onClick={handleAddSpecRow}>Add Row</button>
       </div>
       <div style={fieldStyle}>
         <input name="documentation" value={form.documentation} onChange={handleChange} style={{ width: '100%', color: '#111' }} placeholder="Documentation" />

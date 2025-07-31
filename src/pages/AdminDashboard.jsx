@@ -86,7 +86,8 @@ const AdminDashboard = () => {
   };
 
   // Handler for expanding/collapsing a subcategory
-  const handleSubcategoryClick = (subcategorySlug) => {
+  const handleSubcategoryClick = (subcategory) => {
+    const subcategorySlug = typeof subcategory === 'object' && subcategory !== null ? subcategory.slug : subcategory;
     if (expandedSubcategory === subcategorySlug) {
       setExpandedSubcategory(null);
     } else {
