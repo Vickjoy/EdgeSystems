@@ -40,7 +40,7 @@ const ProductCard = ({ product, onDelete }) => {
     >
       <div className={styles.imageWrapper}>
         <img
-          src={product.image ? (product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000${product.image}`) : '/placeholder.png'}
+          src={product.image ? product.image : '/placeholder.png'}
           alt={product.name}
           className={styles.image}
           style={{ width: 100, height: 100, objectFit: 'cover', display: 'block', margin: '0 auto', borderRadius: 12, background: '#f4f4f4' }}

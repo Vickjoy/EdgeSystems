@@ -14,67 +14,38 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { token } = useAuth();
+  const { addToCart } = useCart();
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(location.pathname.startsWith('/product/edit/'));
-  const productSlug = params.slug;
+  const [quantity, setQuantity] = useState(1);
+  const [showLightbox, setShowLightbox] = useState(false);
+
   const [categoryName, setCategoryName] = useState('');
   const [categorySlug, setCategorySlug] = useState('');
   const [subcategoryName, setSubcategoryName] = useState('');
   const [subcategorySlug, setSubcategorySlug] = useState('');
-  const { addToCart } = useCart();
-  const [quantity, setQuantity] = useState(1);
-  const [showLightbox, setShowLightbox] = useState(false);
+
+  const productSlug = params.slug;
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/products/${productSlug}/`);
-        
         if (!response.ok) {
           throw new Error(response.status === 404 ? 'Product not found' : 'Failed to fetch product');
         }
-
         const productData = await response.json();
-        
-        // Ensure critical fields exist and set defaults for optional fields
-        if (!productData || !productData.name) {
-          throw new Error('Invalid product data received');
-        }
+        setProduct(productData);
 
-        setProduct({
-          ...productData,
-          description: productData.description || '',
-          specifications: productData.specifications || '',
-          features: productData.features || '',
-          image: productData.image || '/placeholder.png',
-          documentation: productData.documentation || null
-        });
-
-        // Fetch category details if needed
-        if (productData.subcategory) {
-          try {
-            const subcategoryResponse = await fetch(`${API_BASE_URL}/subcategories/${productData.subcategory}/`);
-            if (subcategoryResponse.ok) {
-              const subcategoryData = await subcategoryResponse.json();
-              setSubcategoryName(subcategoryData.name || '');
-              setSubcategorySlug(subcategoryData.slug || '');
-
-              if (subcategoryData.category) {
-                const categories = await fetchCategories();
-                const category = categories.find(c => 
-                  c.id === subcategoryData.category || 
-                  c.slug === subcategoryData.category
-                );
-                if (category) {
-                  setCategoryName(category.name || '');
-                  setCategorySlug(category.slug || '');
-                }
-              }
-            }
-          } catch (err) {
-            console.error('Error fetching subcategory:', err);
+        if (productData.subcategory_detail) {
+          setSubcategoryName(productData.subcategory_detail.name || '');
+          setSubcategorySlug(productData.subcategory_detail.slug || '');
+          if (productData.category) {
+            setCategoryName(productData.category.name || '');
+            setCategorySlug(productData.category.slug || '');
           }
         }
       } catch (err) {
@@ -114,7 +85,6 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (!product) return;
-    
     addToCart({
       id: product.id,
       slug: product.slug,
@@ -144,11 +114,7 @@ const ProductDetail = () => {
   };
 
   if (loading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <p>Loading product details...</p>
-      </div>
-    );
+    return <div className={styles.loadingContainer}><p>Loading product details...</p></div>;
   }
 
   if (error) {
@@ -156,9 +122,7 @@ const ProductDetail = () => {
       <div className={styles.errorContainer}>
         <h2>Error Loading Product</h2>
         <p>{error}</p>
-        <button onClick={() => navigate('/')} className={styles.ctaButton}>
-          Return to Home
-        </button>
+        <button onClick={() => navigate('/')} className={styles.ctaButton}>Return to Home</button>
       </div>
     );
   }
@@ -168,9 +132,7 @@ const ProductDetail = () => {
       <div className={styles.errorContainer}>
         <h2>Product Not Found</h2>
         <p>The product you're looking for doesn't exist or may have been removed.</p>
-        <button onClick={() => navigate('/')} className={styles.ctaButton}>
-          Browse Products
-        </button>
+        <button onClick={() => navigate('/')} className={styles.ctaButton}>Browse Products</button>
       </div>
     );
   }
@@ -198,93 +160,82 @@ const ProductDetail = () => {
 
       <section className={styles.section}>
         <div className={styles.detailContainer}>
-          <div className={styles.imageArea}>
-            <img
-              src={product.image}
-              alt={product.name}
-              className={styles.mainImage}
-              onClick={() => setShowLightbox(true)}
-              tabIndex={0}
-              style={{ cursor: 'zoom-in' }}
-              onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
-            />
-            {showLightbox && (
-              <div className={styles.lightbox} onClick={() => setShowLightbox(false)}>
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className={styles.lightboxImage}
-                />
-              </div>
-            )}
-            {product.documentation && (
+          {/* Left Side: Product Image and Documentation */}
+          <div className={styles.leftColumn}>
+            <div className={styles.imageArea}>
+              <img
+                src={product.image}
+                alt={product.name}
+                className={styles.mainImage}
+                onClick={() => setShowLightbox(true)}
+                style={{ cursor: 'zoom-in' }}
+                onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
+              />
+              {showLightbox && (
+                <div className={styles.lightbox} onClick={() => setShowLightbox(false)}>
+                  <img src={product.image} alt={product.name} className={styles.lightboxImage} />
+                </div>
+              )}
+            </div>
+            
+            {product.documentation_url && (
               <div className={styles.documentation}>
-                <b>Documentation:</b> 
-                <a href={product.documentation} target="_blank" rel="noopener noreferrer">
-                  {product.documentation}
+                <b>Documentation:</b>{" "}
+                <a href={product.documentation_url} target="_blank" rel="noopener noreferrer">
+                  {product.documentation_label || 'View Documentation'}
                 </a>
               </div>
             )}
           </div>
 
-          <div className={styles.infoArea}>
-            <h1 className={styles.productTitle}>{product.name}</h1>
-            <div className={styles.vatText}>incl +16% VAT</div>
-            <div className={styles.productPrice}>
-              KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
-            </div>
-            
-            <div className={styles.ctaRow}>
-              <div className={styles.quantityArea}>
-                <label htmlFor="quantity" className={styles.label}>Quantity</label>
-                <input 
-                  type="number" 
-                  id="quantity" 
-                  value={quantity} 
-                  min="1" 
-                  className={styles.quantityInput} 
-                  onChange={handleQuantityChange}
-                />
+          {/* Right Side: Product Info, Price, Actions, Status, and Features */}
+          <div className={styles.rightColumn}>
+            <div className={styles.productInfo}>
+              <h1 className={styles.productTitle}>{product.name}</h1>
+              {product.price && (
+                <div className={styles.productPrice}>
+                  KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
+                </div>
+              )}
+              
+              <div className={styles.ctaRow}>
+                <div className={styles.quantityArea}>
+                  <label htmlFor="quantity" className={styles.label}>Quantity</label>
+                  <input
+                    type="number"
+                    id="quantity"
+                    value={quantity}
+                    min="1"
+                    className={styles.quantityInput}
+                    onChange={handleQuantityChange}
+                  />
+                </div>
+                <button className={styles.ctaButton} onClick={handleAddToCart}>Add to Cart</button>
+                <button className={styles.ctaButtonAlt} onClick={handleBuyNow}>Buy Now</button>
               </div>
               
-              <button className={styles.ctaButton} onClick={handleAddToCart}>
-                Add to Cart
-              </button>
-              
-              <button className={styles.ctaButtonAlt} onClick={handleBuyNow}>
-                Buy Now
-              </button>
+              <div className={styles.stockStatus}>
+                {product.status === 'in_stock' ? 'In Stock' : 'Out of Stock'}
+              </div>
             </div>
-            
-            <div className={styles.stockStatus}>
-              {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
-            </div>
+
+            {/* Remove features from right column since it's now moved below */}
           </div>
         </div>
 
-        <hr className={styles.divider} />
-
-        <div className={styles.detailsSection}>
+        {/* Description and Features Side by Side */}
+        <div className={styles.descriptionFeaturesSection}>
+          {/* Description Section */}
           {product.description && (
             <div className={styles.description}>
               <b>Description:</b>
-              <ul className={styles.descList}>
-                {renderTextList(product.description)}
-              </ul>
+              <p>{product.description}</p>
             </div>
           )}
 
-          {product.specifications && (
-            <div className={styles.specs}>
-              <b>Specifications:</b>
-              <ul className={styles.specList}>
-                {renderTextList(product.specifications)}
-              </ul>
-            </div>
-          )}
-
+          {/* Features Section (moved from right column) */}
           {product.features && (
-            <div className={styles.features}>
+            <div className={styles.featuresStandalone}>
               <b>Features:</b>
               <ul className={styles.featureList}>
                 {renderTextList(product.features)}
@@ -292,6 +243,30 @@ const ProductDetail = () => {
             </div>
           )}
         </div>
+
+        {/* Specifications Section - Full Width Below */}
+        {product.spec_tables && product.spec_tables.length > 0 && (
+          <div className={styles.fullWidthSections}>
+            <div className={styles.specs}>
+              <b>Specifications:</b>
+              {product.spec_tables.map((table, tableIdx) => (
+                <div key={tableIdx} className={styles.specTableWrapper}>
+                  {table.title && <h4>{table.title}</h4>}
+                  <table className={styles.specTable}>
+                    <tbody>
+                      {table.rows.map((row, rowIdx) => (
+                        <tr key={rowIdx}>
+                          <td className={styles.specKey}>{row.key}</td>
+                          <td className={styles.specValue}>{row.value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

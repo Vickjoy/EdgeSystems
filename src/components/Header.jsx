@@ -62,7 +62,7 @@ const Header = () => {
     }
   }, [openDropdown]);
 
-  const fireCategories = categories.filter(cat => cat.type === 'fire');
+  const fireCategories = categories.filter(cat => cat.type === 'fire_safety');
   const ictCategories = categories.filter(cat => cat.type === 'ict');
 
   console.log('categories:', categories, 'openDropdown:', openDropdown);

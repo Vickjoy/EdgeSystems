@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-// REMOVE: import { uploadToCloudinary } from '../utils/cloudinary';
 
 const defaultValues = {
   name: '',
   price: '',
   description: '',
+  features: '', // ✅ New field
   image: '',
-  features: '',
   specifications: '',
   documentation: '',
   status: 'in_stock',
@@ -35,7 +34,6 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
   });
 
   useEffect(() => {
-    // Fetch all categories and subcategories from new endpoints
     fetch('http://127.0.0.1:8000/api/products/all-categories/')
       .then(res => res.json())
       .then(data => setAllCategories(data));
@@ -44,7 +42,6 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
       .then(data => setAllSubcategories(data));
   }, []);
 
-  // Filter subcategories for the selected category
   const selectedCategoryId = form.category || (initialValues.category ? String(initialValues.category.id || initialValues.category) : '');
   const filteredSubcategories = selectedCategoryId
     ? allSubcategories.filter(sub => sub && String(sub.category) === String(selectedCategoryId))
@@ -53,6 +50,7 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
   const handleSpecChange = (idx, field, value) => {
     setSpecRows(rows => rows.map((row, i) => i === idx ? { ...row, [field]: value } : row));
   };
+
   const handleAddSpecRow = () => setSpecRows(rows => [...rows, { key: '', value: '' }]);
   const handleRemoveSpecRow = idx => setSpecRows(rows => rows.length > 1 ? rows.filter((_, i) => i !== idx) : rows);
 
@@ -70,30 +68,34 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
   const handleSubmit = async e => {
     e.preventDefault();
     setError('');
+
     if (!form.name) {
       setError('Name is required.');
       return;
     }
+
     if (!form.subcategory) {
       setError('Subcategory is required.');
       return;
     }
-    // Serialize specifications table
+
     const specString = specRows
       .filter(row => row.key && row.value)
       .map(row => `${row.key}:${row.value}`)
       .join('\n');
-    // Use subcategory from form
+
     const submitForm = { ...form, specifications: specString, subcategory: form.subcategory };
     onSubmit(submitForm, token);
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate action="#" style={{ background: '#fff', padding: 24, borderRadius: 8, maxWidth: 480, margin: '0 auto', color: '#111', maxHeight: '80vh', overflowY: 'auto', boxSizing: 'border-box' }}>
+    <form onSubmit={handleSubmit} noValidate style={{ background: '#fff', padding: 24, borderRadius: 8, maxWidth: 480, margin: '0 auto', color: '#111', maxHeight: '80vh', overflowY: 'auto', boxSizing: 'border-box' }}>
       <h3 style={{ marginBottom: 16, textAlign: 'center', color: '#111' }}>{initialValues.id ? 'Edit Product' : 'Add Product'}</h3>
+
       <div style={fieldStyle}>
         <input name="name" value={form.name} onChange={handleChange} required style={{ width: '100%', color: '#111' }} placeholder="Product Name" />
       </div>
+
       <div style={fieldStyle}>
         <select name="category" value={form.category || ''} onChange={handleChange} style={{ width: '100%', color: '#111' }} required>
           <option value="">Select Category</option>
@@ -102,6 +104,7 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
           ))}
         </select>
       </div>
+
       <div style={fieldStyle}>
         <select name="subcategory" value={form.subcategory || ''} onChange={handleChange} style={{ width: '100%', color: '#111' }} required>
           <option value="">Select Subcategory</option>
@@ -110,12 +113,20 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
           ))}
         </select>
       </div>
+
       <div style={fieldStyle}>
         <input name="price" type="number" value={form.price} onChange={handleChange} style={{ width: '100%', color: '#111' }} placeholder="Price (KES)" />
       </div>
+
       <div style={fieldStyle}>
         <textarea name="description" value={form.description} onChange={handleChange} style={{ width: '100%', color: '#111' }} rows={2} placeholder="Description" />
       </div>
+
+      {/* ✅ Features field */}
+      <div style={fieldStyle}>
+        <textarea name="features" value={form.features} onChange={handleChange} style={{ width: '100%', color: '#111' }} rows={2} placeholder="Features" />
+      </div>
+
       <div style={fieldStyle}>
         <label style={{ fontWeight: 500, marginBottom: 4, display: 'block' }}>Specifications</label>
         <table style={{ width: '100%', marginBottom: 8 }}>
@@ -138,15 +149,18 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
         </table>
         <button type="button" onClick={handleAddSpecRow}>Add Row</button>
       </div>
+
       <div style={fieldStyle}>
         <input name="documentation" value={form.documentation} onChange={handleChange} style={{ width: '100%', color: '#111' }} placeholder="Documentation" />
       </div>
+
       <div style={fieldStyle}>
         <select name="status" value={form.status} onChange={handleChange} style={{ width: '100%', color: '#111' }}>
           <option value="in_stock">In Stock</option>
           <option value="out_of_stock">Out of Stock</option>
         </select>
       </div>
+
       <div style={fieldStyle}>
         <input name="image" type="file" accept="image/*" onChange={handleChange} style={{ width: '100%' }} />
         {imageFileName && <div style={{ fontSize: 13, color: '#6096B4', marginTop: 4 }}>{imageFileName}</div>}
@@ -155,7 +169,9 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
           <img src={`http://127.0.0.1:8000${form.image}`} alt="preview" style={{ width: 80, marginTop: 8, borderRadius: 4 }} />
         )}
       </div>
+
       {error && <div style={{ color: 'red', marginBottom: 12, textAlign: 'center' }}>{error}</div>}
+
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 16 }}>
         <button type="submit" disabled={loading} style={{ background: '#1DCD9F', color: '#fff', padding: '0.5rem 1.5rem', border: 'none', borderRadius: 4, fontWeight: 700, cursor: 'pointer' }}>
           {loading ? 'Saving...' : (initialValues.id ? 'Update' : 'Add')}
@@ -168,4 +184,4 @@ const ProductForm = ({ initialValues = {}, onSubmit, onCancel, loading, subcateg
   );
 };
 
-export default ProductForm; 
+export default ProductForm;
