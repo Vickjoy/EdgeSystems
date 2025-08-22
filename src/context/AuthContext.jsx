@@ -6,11 +6,11 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem('user');
+    const stored = localStorage.getItem('admin_user');
     return stored ? JSON.parse(stored) : null;
   });
-  const [token, setToken] = useState(() => localStorage.getItem('access_token'));
-  const [refreshToken, setRefreshToken] = useState(() => localStorage.getItem('refresh_token'));
+  const [token, setToken] = useState(() => localStorage.getItem('admin_access_token'));
+  const [refreshToken, setRefreshToken] = useState(() => localStorage.getItem('admin_refresh_token'));
 
   const fetchUserInfo = async (accessToken) => {
     try {
@@ -22,20 +22,20 @@ export const AuthProvider = ({ children }) => {
       if (!response.ok) throw new Error('Failed to fetch user info');
       const userData = await response.json();
       setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('admin_user', JSON.stringify(userData));
       return userData;
     } catch (err) {
       setUser(null);
-      localStorage.removeItem('user');
+      localStorage.removeItem('admin_user');
       return null;
     }
   };
 
-  const login = async (accessToken, refreshToken) => {
+  const login = async (accessToken, refreshTokenValue) => {
     setToken(accessToken);
-    setRefreshToken(refreshToken);
-    localStorage.setItem('access_token', accessToken);
-    localStorage.setItem('refresh_token', refreshToken);
+    setRefreshToken(refreshTokenValue);
+    localStorage.setItem('admin_access_token', accessToken);
+    localStorage.setItem('admin_refresh_token', refreshTokenValue);
     await fetchUserInfo(accessToken);
   };
 
@@ -43,13 +43,13 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setToken(null);
     setRefreshToken(null);
-    localStorage.removeItem('user');
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('admin_user');
+    localStorage.removeItem('admin_access_token');
+    localStorage.removeItem('admin_refresh_token');
   };
 
   const refreshAccessToken = async () => {
-    const storedRefresh = refreshToken || localStorage.getItem('refresh_token');
+    const storedRefresh = refreshToken || localStorage.getItem('admin_refresh_token');
     if (!storedRefresh) return false;
     try {
       const response = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (response.ok && data.access) {
         setToken(data.access);
-        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('admin_access_token', data.access);
         return data.access;
       } else {
         logout();

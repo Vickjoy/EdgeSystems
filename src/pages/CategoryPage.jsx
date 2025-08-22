@@ -61,7 +61,8 @@ const CategoryPage = () => {
     setError('');
     fetchProductsForSubcategory(selectedSubcategory.slug)
       .then(data => {
-        setProducts(Array.isArray(data) ? data : []);
+        const items = (data && data.results) ? data.results : (Array.isArray(data) ? data : []);
+        setProducts(items);
         setError('');
       })
       .catch(() => {

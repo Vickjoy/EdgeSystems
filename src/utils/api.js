@@ -1,6 +1,6 @@
 // Helper to refresh token and retry request
 async function fetchWithAuthRetry(url, options = {}, retry = true) {
-  let accessToken = localStorage.getItem('access_token');
+  let accessToken = localStorage.getItem('admin_access_token');
   options.headers = options.headers || {};
   // Only add Authorization header if accessToken exists and method is not GET, or if explicitly provided
   if (!options.headers['Authorization'] && accessToken && options.method && options.method !== 'GET') {
@@ -22,7 +22,7 @@ async function fetchWithAuthRetry(url, options = {}, retry = true) {
       errorData.detail === 'Given token not valid for any token type'
     ) {
       // Try to refresh token
-      const refreshToken = localStorage.getItem('refresh_token');
+      const refreshToken = localStorage.getItem('admin_refresh_token');
       if (refreshToken) {
         const refreshResp = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
           method: 'POST',
@@ -32,15 +32,15 @@ async function fetchWithAuthRetry(url, options = {}, retry = true) {
         const refreshData = await refreshResp.json();
         if (refreshResp.ok && refreshData.access) {
           accessToken = refreshData.access;
-          localStorage.setItem('access_token', accessToken);
+          localStorage.setItem('admin_access_token', accessToken);
           // Retry original request with new token
           options.headers['Authorization'] = `Bearer ${accessToken}`;
           return fetch(url, options);
         } else {
           // Refresh failed, log out user
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          localStorage.removeItem('user');
+          localStorage.removeItem('admin_access_token');
+          localStorage.removeItem('admin_refresh_token');
+          localStorage.removeItem('admin_user');
           throw new Error('Session expired. Please log in again.');
         }
       }

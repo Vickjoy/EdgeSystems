@@ -9,7 +9,8 @@ import { fetchCategories, fetchSubcategories } from '../utils/api';
 
 
 const ProductList = () => {
-  const { category } = useParams();
+  const { categorySlug, slug } = useParams();
+  const category = categorySlug || slug || '';
   const location = useLocation();
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
@@ -63,6 +64,10 @@ const ProductList = () => {
         // Use slug in the endpoint if your backend supports it, otherwise keep using id
         const data = await fetchSubcategories(selectedCategory.slug);
         setSubcategories(data);
+        // Auto-select the first subcategory if none is selected
+        if ((!subCategory || !subCategory.slug) && Array.isArray(data) && data.length > 0) {
+          setSubCategory(data[0]);
+        }
       } catch (error) {
         setSubcategories([]);
       }
@@ -73,8 +78,10 @@ const ProductList = () => {
   // Only fetch products if not search results
   const fetchProducts = useCallback(async (reset = false) => {
     if (isSearchResults) return;
+    // Only fetch when a subcategory is selected
+    if (!subCategory || !subCategory.slug) return;
     setLoading(true);
-    let url = `http://127.0.0.1:8000/api/subcategories/${subCategory ? subCategory.slug : ''}/products/?page=${page}&page_size=12`;
+    let url = `http://127.0.0.1:8000/api/subcategories/${subCategory.slug}/products/?page=${page}&page_size=12`;
     try {
       const response = await fetch(url);
       const data = await response.json();

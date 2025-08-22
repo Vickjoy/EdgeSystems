@@ -62,8 +62,8 @@ const Header = () => {
     }
   }, [openDropdown]);
 
-  const fireCategories = categories.filter(cat => cat.type === 'fire_safety');
-  const ictCategories = categories.filter(cat => cat.type === 'ict');
+  const fireCategories = categories.filter(cat => ['fire_safety','fire','fire-safety','firesafety'].includes(String(cat.type || '').toLowerCase()));
+  const ictCategories = categories.filter(cat => ['ict','telecom','telecommunication'].includes(String(cat.type || '').toLowerCase()));
 
   console.log('categories:', categories, 'openDropdown:', openDropdown);
   // All Categories dropdown using portal, always on top

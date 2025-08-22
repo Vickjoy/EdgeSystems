@@ -15,27 +15,38 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/token/', {
+      // Call your custom login endpoint
+      const response = await fetch('http://127.0.0.1:8000/api/auth/login/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
+
       const data = await response.json();
+
+      // If login succeeds
       if (response.ok && data.access && data.refresh) {
-        await login(data.access, data.refresh); // stores both tokens and fetches user info
+        // Store tokens
+        await login(data.access, data.refresh);
+
+        // Fetch user info
         const user = await fetchUserInfo(data.access);
-        // Redirect based on admin status
+
+        // Redirect based on role
         if (user && (user.is_staff || user.is_superuser)) {
           navigate('/admin-dashboard');
         } else {
           navigate('/');
         }
       } else {
-        setError('Login failed. Please check your credentials.');
+        // Backend returned an error
+        setError(data.detail || 'Login failed. Please check your credentials.');
       }
     } catch (err) {
       setError('Login failed. Please try again.');
+      console.error('Login error:', err);
     }
   };
 
@@ -44,7 +55,11 @@ const Login = () => {
       <section className={styles.section}>
         <div className={styles.container}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
-            <img src={CompanyLogo} alt="Company Logo" style={{ width: 80, height: 80, borderRadius: '50%', marginBottom: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
+            <img
+              src={CompanyLogo}
+              alt="Company Logo"
+              style={{ width: 80, height: 80, borderRadius: '50%', marginBottom: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
+            />
             <h2 className={styles.title}>Admin Login</h2>
           </div>
           <form className={styles.form} onSubmit={handleSubmit} autoComplete="off">
@@ -72,7 +87,11 @@ const Login = () => {
                 required
               />
             </div>
-            {error && <div style={{ color: '#e74c3c', marginBottom: 12, textAlign: 'center', fontWeight: 600 }}>{error}</div>}
+            {error && (
+              <div style={{ color: '#e74c3c', marginBottom: 12, textAlign: 'center', fontWeight: 600 }}>
+                {error}
+              </div>
+            )}
             <button className={styles.button} type="submit">Login</button>
           </form>
         </div>

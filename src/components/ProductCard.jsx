@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './ProductCard.module.css';
 import { useAuth } from '../context/AuthContext';
+import { useShopperAuth } from '../context/ShopperAuthContext';
+import ShopperLoginModal from './ShopperLoginModal';
 
 const ProductCard = ({ product, onDelete }) => {
   // DEBUG: Log the product name and price to confirm this file is used and what price is passed
@@ -9,6 +11,8 @@ const ProductCard = ({ product, onDelete }) => {
   console.log('Product image:', product.image); // Debug
 
   const { user, token } = useAuth();
+  const { shopper } = useShopperAuth();
+  const [showLogin, setShowLogin] = React.useState(false);
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -31,6 +35,7 @@ const ProductCard = ({ product, onDelete }) => {
   };
 
   return (
+    <>
     <div
       className={styles.card}
       tabIndex={0}
@@ -50,7 +55,21 @@ const ProductCard = ({ product, onDelete }) => {
       <div className={styles.content}>
         <h3 className={styles.title}>{product.name}</h3>
         <div className={styles.vatText}>incl +16% VAT</div>
-        <div className={styles.price}>KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</div>
+        {product.price_visibility === 'login_required' && !shopper ? (
+          <div
+            className={styles.price}
+            style={{ cursor: 'pointer' }}
+            onClick={(e) => { e.stopPropagation(); setShowLogin(true); }}
+          >
+            Login to view price
+          </div>
+        ) : (
+          product.price !== null && product.price !== undefined ? (
+            <div className={styles.price}>KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</div>
+          ) : (
+            <div className={styles.price}>Price unavailable</div>
+          )
+        )}
         <div className={styles.actions} onClick={e => e.stopPropagation()}>
           {/* Removed View Product button */}
         </div>
@@ -66,6 +85,15 @@ const ProductCard = ({ product, onDelete }) => {
         </div>
       )}
     </div>
+    <ShopperLoginModal
+      open={showLogin}
+      onClose={() => setShowLogin(false)}
+      onSuccess={() => {
+        setShowLogin(false);
+        navigate(`/product/${product.slug}`);
+      }}
+    />
+    </>
   );
 };
 

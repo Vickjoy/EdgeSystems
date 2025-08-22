@@ -3,6 +3,8 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import styles from './ProductDetail.module.css';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useShopperAuth } from '../context/ShopperAuthContext';
+import ShopperLoginModal from '../components/ShopperLoginModal';
 import ProductForm from '../components/ProductForm';
 import { fetchCategories } from '../utils/api';
 import { useCart } from '../context/CartContext';
@@ -14,6 +16,7 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { token } = useAuth();
+  const { shopper, token: shopperToken } = useShopperAuth();
   const { addToCart } = useCart();
 
   const [product, setProduct] = useState(null);
@@ -27,13 +30,15 @@ const ProductDetail = () => {
   const [categorySlug, setCategorySlug] = useState('');
   const [subcategoryName, setSubcategoryName] = useState('');
   const [subcategorySlug, setSubcategorySlug] = useState('');
+  const [showLogin, setShowLogin] = useState(false);
 
   const productSlug = params.slug;
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/products/${productSlug}/`);
+        const headers = shopperToken ? { 'Authorization': `Bearer ${shopperToken}` } : {};
+        const response = await fetch(`${API_BASE_URL}/products/${productSlug}/`, { headers });
         if (!response.ok) {
           throw new Error(response.status === 404 ? 'Product not found' : 'Failed to fetch product');
         }
@@ -57,7 +62,7 @@ const ProductDetail = () => {
     };
 
     fetchProductDetails();
-  }, [productSlug]);
+  }, [productSlug, shopperToken]);
 
   const handleEditSubmit = async (formData) => {
     try {
@@ -150,6 +155,7 @@ const ProductDetail = () => {
   }
 
   return (
+    <>
     <div className={styles.container}>
       <Breadcrumbs crumbs={[
         { label: 'Home', path: '/' },
@@ -192,10 +198,16 @@ const ProductDetail = () => {
           <div className={styles.rightColumn}>
             <div className={styles.productInfo}>
               <h1 className={styles.productTitle}>{product.name}</h1>
-              {product.price && (
-                <div className={styles.productPrice}>
-                  KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
+              {product.price_visibility === 'login_required' && !shopper ? (
+                <div className={styles.productPrice} style={{ cursor: 'pointer' }} onClick={() => setShowLogin(true)}>
+                  Login to view price
                 </div>
+              ) : (
+                product.price !== null && product.price !== undefined && (
+                  <div className={styles.productPrice}>
+                    KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
+                  </div>
+                )
               )}
               
               <div className={styles.ctaRow}>
@@ -269,6 +281,8 @@ const ProductDetail = () => {
         )}
       </section>
     </div>
+    <ShopperLoginModal open={showLogin} onClose={() => setShowLogin(false)} onSuccess={() => setShowLogin(false)} />
+    </>
   );
 };
 
