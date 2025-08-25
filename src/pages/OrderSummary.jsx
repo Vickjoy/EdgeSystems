@@ -25,7 +25,7 @@ const OrderSummary = () => {
           <h2 style={{ color: '#6096B4', fontWeight: 800, fontSize: '1.5rem', margin: 0 }}>Order Summary</h2>
           <button
             style={{ background: '#1DCD9F', color: 'white', fontWeight: 700, padding: '0.5rem 1.5rem', borderRadius: 25, border: 'none', fontSize: 16, cursor: 'pointer' }}
-            onClick={() => navigate('/category/addressable-fire-alarm-systems')}
+            onClick={() => navigate('/category/addressable-fire-alarm-detection-systems')}
           >
             Continue Shopping
           </button>

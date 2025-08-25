@@ -7,6 +7,7 @@ import { fetchCategories } from '../utils/api';
 import ReactDOM from 'react-dom';
 import { useCart } from '../context/CartContext';
 import CartModal from './CartModal';
+import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope } from "react-icons/fa";
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -35,7 +36,6 @@ const Header = () => {
     return () => window.removeEventListener('categoriesUpdated', handleCategoriesUpdated);
   }, []);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClick = (e) => {
       if (
@@ -50,7 +50,6 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
-  // Position All Categories dropdown
   useEffect(() => {
     if (openDropdown === 'all' && allCategoriesBtnRef.current) {
       const rect = allCategoriesBtnRef.current.getBoundingClientRect();
@@ -65,8 +64,6 @@ const Header = () => {
   const fireCategories = categories.filter(cat => ['fire_safety','fire','fire-safety','firesafety'].includes(String(cat.type || '').toLowerCase()));
   const ictCategories = categories.filter(cat => ['ict','telecom','telecommunication'].includes(String(cat.type || '').toLowerCase()));
 
-  console.log('categories:', categories, 'openDropdown:', openDropdown);
-  // All Categories dropdown using portal, always on top
   const [dropdownCoords, setDropdownCoords] = useState({ left: 0, top: 0, width: 0 });
 
   useEffect(() => {
@@ -112,8 +109,18 @@ const Header = () => {
       {/* Top Bar */}
       <div className={styles.topBar}>
         <div className={styles.topBarContent}>
-          <span>0721247356/0117320000</span>
-          <span>📧 info@edgesystems.co.ke</span>
+          <span>
+            <FaMapMarkerAlt style={{ marginRight: 6 }} />
+            Shelter house, house, Dai dai Road, South B, Ground Floor Apartment 4F31 Nairobi
+          </span>
+          <span>
+            <FaPhoneAlt style={{ marginRight: 6 }} />
+            0721247356 / 0117320000
+          </span>
+          <span>
+            <FaEnvelope style={{ marginRight: 6 }} />
+            info@edgesystems.co.ke
+          </span>
         </div>
       </div>
       {/* Middle Bar */}
@@ -202,7 +209,6 @@ const Header = () => {
               </ul>
             )}
           </li>
-          <li><Link to="/about" className={styles.navLink}>About Us</Link></li>
           <li><Link to="/contact" className={styles.navLink}>Contact Us</Link></li>
         </ul>
       </nav>

@@ -48,7 +48,6 @@ const ProductCard = ({ product, onDelete }) => {
           src={product.image ? product.image : '/placeholder.png'}
           alt={product.name}
           className={styles.image}
-          style={{ width: 100, height: 100, objectFit: 'cover', display: 'block', margin: '0 auto', borderRadius: 12, background: '#f4f4f4' }}
           onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
         />
       </div>

@@ -17,9 +17,9 @@ import TelephoneImage from '../assets/telephony.jpg';
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
-    { image: PanelImage, text: 'Protect Your Business with Fire Safety Systems', link: '/category/addressable-fire-alarm-systems' },
+    { image: PanelImage, text: 'Protect Your Business with Fire Safety Systems', link: '/category/addressable-fire-alarm-detection-systems' },
     { image: TelephoneImage, text: 'Smart VoIP & Telephony for Modern Businesses', link: '/category/communication' },
-    { image: CablingImage, text: 'Structured Cabling Solutions for Seamless Connectivity', link: '/category/cabling' },
+    { image: CablingImage, text: 'Structured Cabling Solutions for Seamless Connectivity', link: '/category/batteries-power-supplies-wiring' },
   ];
 
   useEffect(() => {
