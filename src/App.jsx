@@ -7,6 +7,7 @@ import About from './pages/About';
 import Checkout from './pages/Checkout';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
+import UserLogin from './pages/UserLogin'; // <-- import the new UserLogin page
 import ProductDetail from './pages/ProductDetail';
 import ProductList from './pages/ProductList';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/order-summary" element={<OrderSummary />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/user-login" element={<UserLogin />} /> {/* <-- new user login route */}
         <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/product/edit/:slug" element={<ProductDetail />} />
         <Route path="/fire-safety/:categorySlug" element={<ProductList />} />

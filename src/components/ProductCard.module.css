@@ -188,3 +188,25 @@
     height: 200px;
   }
 }
+
+/* Add these styles to your existing ProductCard.module.css */
+
+.loginLink {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #3498db;
+  border-radius: 4px;
+  display: inline-block;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+.loginLink:hover {
+  background: #3498db;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+}

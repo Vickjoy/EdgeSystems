@@ -536,3 +536,24 @@
     padding: 0.5rem 0.75rem;
   }
 }
+
+/* Add these styles to your existing ProductDetail.module.css */
+
+.loginLink {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border: 2px solid #3498db;
+  border-radius: 6px;
+  display: inline-block;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+.loginLink:hover {
+  background: #3498db;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}

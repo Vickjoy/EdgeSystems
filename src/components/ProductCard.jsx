@@ -1,19 +1,15 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './ProductCard.module.css';
 import { useAuth } from '../context/AuthContext';
-import { useShopperAuth } from '../context/ShopperAuthContext';
-import ShopperLoginModal from './ShopperLoginModal';
 
 const ProductCard = ({ product, onDelete }) => {
-  // DEBUG: Log the product name and price to confirm this file is used and what price is passed
   console.log('[EdgeSystems ProductCard] price debug:', product.name, product.price);
-  console.log('Product image:', product.image); // Debug
+  console.log('Product image:', product.image);
 
   const { user, token } = useAuth();
-  const { shopper } = useShopperAuth();
-  const [showLogin, setShowLogin] = React.useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
@@ -35,7 +31,6 @@ const ProductCard = ({ product, onDelete }) => {
   };
 
   return (
-    <>
     <div
       className={styles.card}
       tabIndex={0}
@@ -54,13 +49,16 @@ const ProductCard = ({ product, onDelete }) => {
       <div className={styles.content}>
         <h3 className={styles.title}>{product.name}</h3>
         <div className={styles.vatText}>incl +16% VAT</div>
-        {product.price_visibility === 'login_required' && !shopper ? (
-          <div
-            className={styles.price}
-            style={{ cursor: 'pointer' }}
-            onClick={(e) => { e.stopPropagation(); setShowLogin(true); }}
-          >
-            Login to view price
+        {product.price_visibility === 'login_required' && !user ? (
+          <div className={styles.price}>
+            <Link 
+              to="/user-login" 
+              state={{ from: location.pathname }} 
+              className={styles.loginLink}
+              onClick={(e) => e.stopPropagation()}
+            >
+              Login for prices
+            </Link>
           </div>
         ) : (
           product.price !== null && product.price !== undefined ? (
@@ -70,7 +68,7 @@ const ProductCard = ({ product, onDelete }) => {
           )
         )}
         <div className={styles.actions} onClick={e => e.stopPropagation()}>
-          {/* Removed View Product button */}
+          {/* Actions can be added here if needed */}
         </div>
       </div>
       {(user?.is_staff || user?.is_superuser) && false && (
@@ -84,15 +82,6 @@ const ProductCard = ({ product, onDelete }) => {
         </div>
       )}
     </div>
-    <ShopperLoginModal
-      open={showLogin}
-      onClose={() => setShowLogin(false)}
-      onSuccess={() => {
-        setShowLogin(false);
-        navigate(`/product/${product.slug}`);
-      }}
-    />
-    </>
   );
 };
 

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import styles from './ProductDetail.module.css';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useShopperAuth } from '../context/ShopperAuthContext';
-import ShopperLoginModal from '../components/ShopperLoginModal';
 import ProductForm from '../components/ProductForm';
-import { fetchCategories } from '../utils/api';
 import { useCart } from '../context/CartContext';
 
 const API_BASE_URL = 'http://127.0.0.1:8000/api';
@@ -15,8 +12,7 @@ const ProductDetail = () => {
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { token } = useAuth();
-  const { shopper, token: shopperToken } = useShopperAuth();
+  const { token, user } = useAuth();
   const { addToCart } = useCart();
 
   const [product, setProduct] = useState(null);
@@ -30,14 +26,13 @@ const ProductDetail = () => {
   const [categorySlug, setCategorySlug] = useState('');
   const [subcategoryName, setSubcategoryName] = useState('');
   const [subcategorySlug, setSubcategorySlug] = useState('');
-  const [showLogin, setShowLogin] = useState(false);
 
   const productSlug = params.slug;
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const headers = shopperToken ? { 'Authorization': `Bearer ${shopperToken}` } : {};
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
         const response = await fetch(`${API_BASE_URL}/products/${productSlug}/`, { headers });
         if (!response.ok) {
           throw new Error(response.status === 404 ? 'Product not found' : 'Failed to fetch product');
@@ -62,7 +57,7 @@ const ProductDetail = () => {
     };
 
     fetchProductDetails();
-  }, [productSlug, shopperToken]);
+  }, [productSlug, token]);
 
   const handleEditSubmit = async (formData) => {
     try {
@@ -155,7 +150,6 @@ const ProductDetail = () => {
   }
 
   return (
-    <>
     <div className={styles.container}>
       <Breadcrumbs crumbs={[
         { label: 'Home', path: '/' },
@@ -198,9 +192,15 @@ const ProductDetail = () => {
           <div className={styles.rightColumn}>
             <div className={styles.productInfo}>
               <h1 className={styles.productTitle}>{product.name}</h1>
-              {product.price_visibility === 'login_required' && !shopper ? (
-                <div className={styles.productPrice} style={{ cursor: 'pointer' }} onClick={() => setShowLogin(true)}>
-                  Login to view price
+              {product.price_visibility === 'login_required' && !user ? (
+                <div className={styles.productPrice}>
+                  <Link 
+                    to="/user-login" 
+                    state={{ from: location.pathname }} 
+                    className={styles.loginLink}
+                  >
+                    Login for prices
+                  </Link>
                 </div>
               ) : (
                 product.price !== null && product.price !== undefined && (
@@ -230,8 +230,6 @@ const ProductDetail = () => {
                 {product.status === 'in_stock' ? 'In Stock' : 'Out of Stock'}
               </div>
             </div>
-
-            {/* Remove features from right column since it's now moved below */}
           </div>
         </div>
 
@@ -245,7 +243,7 @@ const ProductDetail = () => {
             </div>
           )}
 
-          {/* Features Section (moved from right column) */}
+          {/* Features Section */}
           {product.features && (
             <div className={styles.featuresStandalone}>
               <b>Features:</b>
@@ -281,8 +279,6 @@ const ProductDetail = () => {
         )}
       </section>
     </div>
-    <ShopperLoginModal open={showLogin} onClose={() => setShowLogin(false)} onSuccess={() => setShowLogin(false)} />
-    </>
   );
 };
 
