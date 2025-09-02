@@ -81,7 +81,7 @@ const ProductList = () => {
     // Only fetch when a subcategory is selected
     if (!subCategory || !subCategory.slug) return;
     setLoading(true);
-    let url = `http://127.0.0.1:8000/api/subcategories/${subCategory.slug}/products/?page=${page}&page_size=12`;
+    let url = `http://127.0.0.1:8000/api/subcategories/${subCategory.slug}/products/?page=${page}&page_size=40`;
     try {
       const response = await fetch(url);
       const data = await response.json();
