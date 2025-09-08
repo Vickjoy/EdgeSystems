@@ -105,9 +105,11 @@ const ProductDetail = () => {
     setQuantity(isNaN(value) ? 1 : Math.max(1, value));
   };
 
+  // ✅ FIXED: only split on new lines, not commas or dots
   const renderTextList = (text) => {
     if (!text) return null;
-    return String(text).split(/[.,\n]/)
+    return String(text)
+      .split(/\n/)
       .map(item => item.trim())
       .filter(item => item)
       .map((item, idx) => <li key={idx}>{item}</li>);
