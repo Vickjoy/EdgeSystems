@@ -31,7 +31,7 @@
 .imageWrapper {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 180px;          /* fixed height */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,13 +40,11 @@
 }
 
 .image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  background: #f1f5f9;
-  transition: all 0.3s ease;
+  max-width: 100%;        /* scale down if too wide */
+  max-height: 100%;       /* scale down if too tall */
+  object-fit: contain;    /* show full image */
 }
+
 
 .card:hover .image {
   transform: scale(1.02);

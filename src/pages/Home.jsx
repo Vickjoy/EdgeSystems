@@ -2,20 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { FaFireExtinguisher, FaNetworkWired, FaVideo } from 'react-icons/fa';
 import { MdPhone } from 'react-icons/md';
 import styles from './Home.module.css';
-
 import EatonLogo from '../assets/Eatonn.webp';
 import AlcatelLogo from '../assets/Alcatel.webp';
 import AvayaLogo from '../assets/Avaya.webp';
 import CiscoLogo from '../assets/Cisco.webp';
 import SiemonLogo from '../assets/Siemon.webp';
 import UbiquitiLogo from '../assets/Ubiquiti.webp';
-
 import PanelImage from '../assets/Control.jpg';
 import CablingImage from '../assets/cabling.jpg';
 import TelephoneImage from '../assets/telephony.jpg';
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+
   const slides = [
     { image: PanelImage, text: 'Protect Your Business with Fire Safety Systems', link: '/category/addressable-fire-alarm-detection-systems' },
     { image: TelephoneImage, text: 'Smart VoIP & Telephony for Modern Businesses', link: '/category/communication' },
@@ -111,26 +110,6 @@ const Home = () => {
             <img src={SiemonLogo} alt="Siemon" className={styles.partnerLogo} />
             <img src={UbiquitiLogo} alt="Ubiquiti" className={styles.partnerLogo} />
           </div>
-        </div>
-      </section>
-
-      {/* Newsletter */}
-      <section className={styles.newsletterSection}>
-        <div className={styles.newsletterContainer}>
-          <h2 className={styles.newsletterTitle}>Stay Updated</h2>
-          <form className={styles.newsletterForm}>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className={styles.newsletterInput}
-            />
-            <button
-              type="submit"
-              className={styles.newsletterButton}
-            >
-              Subscribe
-            </button>
-          </form>
         </div>
       </section>
     </div>

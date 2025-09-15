@@ -1,120 +1,165 @@
+/* Header - Clean minimalistic design */
 .header {
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-  box-shadow: 0 4px 12px -2px rgba(14, 165, 233, 0.25);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 10;
   overflow: visible;
 }
 
-/* Top Bar - Attractive contact info */
+/* Top Bar - Sky blue theme */
 .topBar {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  color: #f0f9ff;
-  font-size: 0.875rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px 32px;
+  background: #6096B4;
+  color: #ffffff;
+  font-size: 14px;
+  border-bottom: 1px solid #5086A4;
 }
 
 @media (min-width: 768px) {
   .topBar {
-    padding: 0.75rem 2rem;
+    padding: 16px 40px;
   }
 }
 
 .topBarContent {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 40px;
   font-weight: 500;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
   .topBarContent {
-    gap: 1rem;
-    font-size: 0.8rem;
+    gap: 20px;
+    font-size: 12px;
     flex-wrap: wrap;
     justify-content: center;
   }
 }
 
-/* Main Header - Modern sky blue theme */
+/* Main Header - Clean white with maximized spacing */
 .mainHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 1rem;
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  padding: 24px 40px;
+  background: #ffffff;
   position: relative;
   z-index: 11;
   overflow: visible;
+  border-bottom: 1px solid #e2e8f0;
+  min-height: 80px;
 }
 
 @media (min-width: 768px) {
   .mainHeader {
-    padding: 1.25rem 2rem;
+    padding: 24px 48px;
   }
 }
 
 .logo {
-  width: 9rem;
+  width: 160px;
   height: auto;
-  filter: brightness(1.1) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   transition: transform 0.2s ease;
 }
 
 .logo:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 32px;
+  flex: 1;
+  justify-content: center;
+  max-width: 600px;
 }
 
-/* Login and Cart Links - Sky blue theme */
-.loginLink, .cartLink {
-  color: #f0f9ff;
+/* Login Link - Sky blue theme */
+.loginLink {
+  color: #6096B4;
   text-decoration: none;
   font-weight: 600;
-  padding: 0.625rem 1.25rem;
+  padding: 12px 24px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
+  background: #f8fafc;
   transition: all 0.2s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  white-space: nowrap;
 }
 
-.loginLink:hover, .cartLink:hover {
-  background: rgba(255, 255, 255, 0.25);
+.loginLink:hover {
+  background: #6096B4;
+  color: #ffffff;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Navigation - Perfectly aligned horizontal menu */
+/* Cart Button */
+.cartButton {
+  background: none;
+  border: none;
+  color: #6096B4;
+  font-size: 24px;
+  cursor: pointer;
+  position: relative;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.cartButton:hover {
+  background: #f8fafc;
+  transform: scale(1.1);
+}
+
+.cartBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  fontSize: 13px;
+  padding: 0 6px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navigation - Clean horizontal menu with proper spacing */
 .navigation {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
   padding: 0;
   position: relative;
   z-index: 12;
   overflow: visible;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .navList {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 0;
   list-style: none;
   margin: 0;
-  padding: 0;
-  min-height: 60px;
+  padding: 0 40px;
+  min-height: 70px;
+}
+
+@media (min-width: 768px) {
+  .navList {
+    padding: 0 48px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -122,16 +167,17 @@
     flex-wrap: wrap;
     justify-content: center;
     min-height: auto;
+    padding: 0 20px;
   }
 }
 
-/* Navigation Links and Dropdown Buttons - Perfectly aligned */
+/* Navigation Links and Dropdown Buttons - Clean design with sky blue theme */
 .navLink, .dropdownButton {
-  color: #f0f9ff;
+  color: #475569;
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.95rem;
-  padding: 1rem 1.5rem;
+  font-size: 15px;
+  padding: 24px 28px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -139,24 +185,24 @@
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  height: 60px;
+  gap: 8px;
+  height: 70px;
   box-sizing: border-box;
   white-space: nowrap;
 }
 
 @media (max-width: 768px) {
   .navLink, .dropdownButton {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.875rem;
+    padding: 18px 24px;
+    font-size: 14px;
     height: auto;
-    min-height: 50px;
+    min-height: 56px;
   }
 }
 
 .navLink:hover, .dropdownButton:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
+  color: #6096B4;
+  background: #f8fafc;
 }
 
 .navLink:hover::after, .dropdownButton:hover::after {
@@ -166,7 +212,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #38bdf8 0%, #0ea5e9 100%);
+  background: #6096B4;
   animation: slideIn 0.3s ease;
 }
 
@@ -175,7 +221,20 @@
   to { transform: scaleX(1); }
 }
 
-/* Dropdown Containers - Properly positioned */
+/* Chevron icons */
+.navChevron, .headerChevron {
+  font-size: 12px;
+  color: #94a3b8;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.dropdownButton:hover .navChevron,
+.dropdownButton:hover .headerChevron {
+  color: #6096B4;
+  transform: rotate(180deg);
+}
+
+/* Dropdown Containers */
 .dropdownContainer {
   position: relative;
   z-index: 13;
@@ -183,30 +242,60 @@
   align-items: center;
 }
 
-/* Dropdown Menus - Modern sky blue theme */
-.dropdownMenu {
-  min-width: 280px;
-  left: 0;
-  top: 100%;
-  background: #ffffff;
-  color: #1e293b;
-  font-size: 0.9rem;
-  font-weight: 500;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  border-radius: 12px;
-  list-style: none;
+/* Header Dropdown Container - All Categories button */
+.headerDropdownContainer {
+  position: relative;
+  z-index: 20001;
+}
+
+.headerDropdownContainer .dropdownButton {
+  background: #f8fafc;
   border: 1px solid #e2e8f0;
-  z-index: 20000;
-  animation: dropdownSlide 0.3s ease-out;
-  padding: 0.75rem 0;
-  margin-top: 0.5rem;
+  border-radius: 8px;
+  color: #475569;
+  padding: 14px 24px;
+  height: auto;
+  min-width: 180px;
+  font-size: 14px;
+  font-weight: 600;
+  justify-content: space-between;
+}
+
+.headerDropdownContainer .dropdownButton:hover {
+  background: #6096B4;
+  color: #ffffff;
+  border-color: #6096B4;
+}
+
+.headerDropdownContainer .dropdownButton:hover .headerChevron {
+  color: #ffffff;
+}
+
+/* ========================================
+   MULTILEVEL DROPDOWN STYLES - CLEAN DESIGN
+   ======================================== */
+
+/* Mega Dropdown Container */
+.megaDropdown {
   position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
+  overflow: visible;
+  animation: dropdownSlide 0.25s ease-out;
+  min-width: 320px;
+  max-width: 900px;
+  z-index: 99999;
+  margin-top: 4px;
 }
 
 @keyframes dropdownSlide {
   from {
     opacity: 0;
-    transform: translateY(-12px) scale(0.95);
+    transform: translateY(-8px) scale(0.98);
   }
   to {
     opacity: 1;
@@ -214,14 +303,40 @@
   }
 }
 
-/* Dropdown Items - Clean and modern */
-.dropdownItem {
-  display: block;
-  padding: 0.875rem 1.5rem;
+/* Multilevel Container */
+.multilevelContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  position: relative;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Category Item with potential subcategories */
+.categoryItem {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.categoryItem:hover {
+  background: #f8fafc;
+}
+
+.categoryItemHovered {
+  background: #f1f5f9;
+}
+
+/* Main category buttons in dropdown */
+.categoryItem .dropdownItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
   color: #475569;
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 15px;
   transition: all 0.2s ease;
   background: transparent;
   border: none;
@@ -229,59 +344,118 @@
   text-align: left;
   cursor: pointer;
   position: relative;
+  border-radius: 0;
 }
 
-.dropdownItem:hover {
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+.categoryItem .dropdownItem:hover {
+  background: #f1f5f9;
+  color: #6096B4;
+  padding-left: 28px;
+}
+
+.categoryItem .dropdownItem span {
+  flex: 1;
+}
+
+/* Chevron icon for categories with subcategories */
+.chevronIcon {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-left: 8px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.categoryItemHovered .chevronIcon {
+  transform: rotate(90deg);
+  color: #6096B4;
+}
+
+/* Subcategory Dropdown - Appears to the RIGHT */
+.subcategoryDropdown {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  min-width: 320px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
+  margin-left: 8px;
+  z-index: 100000;
+  animation: subcategorySlide 0.2s ease-out;
+  overflow: hidden;
+}
+
+@keyframes subcategorySlide {
+  from {
+    opacity: 0;
+    transform: translateX(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Subcategory Header */
+.subcategoryHeader {
+  background: #6096B4;
+  padding: 18px 24px;
+  font-weight: 600;
+  font-size: 14px;
   color: #ffffff;
-  padding-left: 2rem;
-  transform: translateX(4px);
+  border-bottom: 1px solid #5086A4;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.dropdownItem:hover::before {
+/* Subcategory Grid */
+.subcategoryGrid {
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Subcategory Items */
+.subcategoryItem {
+  display: block;
+  padding: 14px 24px;
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  border-radius: 0;
+  margin: 0;
+}
+
+.subcategoryItem:hover {
+  background: #f1f5f9;
+  color: #6096B4;
+  padding-left: 32px;
+}
+
+.subcategoryItem:hover::before {
   content: '→';
   position: absolute;
-  left: 1rem;
-  color: #ffffff;
+  left: 20px;
+  color: #6096B4;
   font-weight: 600;
-}
-
-/* Header Dropdown Container */
-.headerDropdownContainer {
-  position: relative;
-  z-index: 20001;
-}
-
-/* Category Dropdown in Header */
-.categoryDropdown {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  padding: 0.625rem 1rem;
-  font-size: 0.95rem;
-  color: #1e293b;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  min-width: 180px;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.categoryDropdown:focus {
-  outline: none;
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
-  background: #ffffff;
-}
-
-/* All Categories Button Specific Styling */
-.dropdownButton {
-  white-space: nowrap;
 }
 
 /* Active/Open dropdown state */
 .dropdownContainer .dropdownButton[aria-expanded="true"] {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: #f1f5f9;
+  color: #6096B4;
+  border-color: #6096B4;
 }
 
 .dropdownContainer .dropdownButton[aria-expanded="true"]::after {
@@ -291,54 +465,98 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #38bdf8 0%, #0ea5e9 100%);
+  background: #6096B4;
 }
 
 /* Mobile Optimizations */
 @media (max-width: 640px) {
   .headerActions {
-    gap: 0.75rem;
+    gap: 16px;
+    max-width: none;
   }
-  
+
   .loginLink {
-    padding: 0.5rem 0.875rem;
-    font-size: 0.875rem;
+    padding: 10px 18px;
+    font-size: 14px;
   }
-  
+
   .logo {
-    width: 7rem;
+    width: 130px;
   }
-  
-  .dropdownMenu {
-    min-width: 240px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
+
   .navList {
-    gap: 0.25rem;
+    gap: 0;
   }
-  
+
   .navLink, .dropdownButton {
-    font-size: 0.8rem;
-    padding: 0.75rem 1rem;
+    font-size: 13px;
+    padding: 16px 20px;
+  }
+
+  .headerDropdownContainer .dropdownButton {
+    min-width: 160px;
+    font-size: 13px;
+    padding: 12px 20px;
   }
 }
 
-/* Responsive navigation for very small screens */
-@media (max-width: 480px) {
-  .navList {
-    flex-direction: column;
-    width: 100%;
+/* Responsive adjustments for multilevel dropdown */
+@media (max-width: 768px) {
+  .subcategoryDropdown {
+    position: fixed;
+    left: 24px !important;
+    right: 24px;
+    top: 50% !important;
+    transform: translateY(-50%);
+    min-width: auto;
+    max-height: 60vh;
+    margin-left: 0;
   }
-  
-  .navLink, .dropdownButton {
-    width: 100%;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  .megaDropdown {
+    left: 24px !important;
+    right: 24px;
+    min-width: auto;
+    max-width: none;
   }
-  
-  .navLink:last-child, .dropdownContainer:last-child .dropdownButton {
-    border-bottom: none;
-  }
+}
+
+/* Clean scrollbar for subcategory grid */
+.subcategoryGrid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.subcategoryGrid::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.subcategoryGrid::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.subcategoryGrid::-webkit-scrollbar-thumb:hover {
+  background: #6096B4;
+}
+
+/* Focus states for accessibility */
+.categoryItem .dropdownItem:focus,
+.subcategoryItem:focus {
+  outline: 2px solid #6096B4;
+  outline-offset: -2px;
+  background: #f1f5f9;
+  color: #6096B4;
+}
+
+/* Ensure proper z-index stacking */
+.headerDropdownContainer {
+  z-index: 20001;
+}
+
+.megaDropdown {
+  z-index: 99999;
+}
+
+.subcategoryDropdown {
+  z-index: 100000;
 }

@@ -46,14 +46,14 @@
 }
 
 .heroButton {
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  background: linear-gradient(135deg, #6096B4 0%, #4A7A96 100%);
   color: #fff;
   font-weight: 700;
   font-size: 1.1rem;
   padding: 1rem 2rem;
   border-radius: 8px;
   border: none;
-  box-shadow: 0 8px 16px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 8px 16px rgba(96, 150, 180, 0.25);
   transition: all 0.2s ease;
   cursor: pointer;
   text-transform: uppercase;
@@ -61,21 +61,21 @@
 }
 
 .heroButton:hover {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  background: linear-gradient(135deg, #4A7A96 0%, #3A6078 100%);
   transform: translateY(-2px);
-  box-shadow: 0 12px 20px rgba(14, 165, 233, 0.35);
+  box-shadow: 0 12px 20px rgba(96, 150, 180, 0.35);
 }
 
 /* Services Section - Professional white background */
 .servicesSection {
-  padding: 5rem 0;
+  padding: 6rem 0;
   background: #fff;
 }
 
 .servicesContainer {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 3rem;
 }
 
 .servicesTitle {
@@ -83,7 +83,7 @@
   font-weight: 800;
   color: #1f2937;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   letter-spacing: -0.025em;
   position: relative;
 }
@@ -96,15 +96,16 @@
   transform: translateX(-50%);
   width: 80px;
   height: 4px;
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  background: linear-gradient(135deg, #6096B4 0%, #4A7A96 100%);
   border-radius: 2px;
 }
 
 .servicesGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  gap: 3rem;
   justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .serviceCard {
@@ -112,7 +113,7 @@
   color: #1f2937;
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  padding: 2rem 1.5rem;
+  padding: 3rem 2rem;
   text-align: center;
   transition: all 0.3s ease;
   border: 1px solid #e5e7eb;
@@ -127,7 +128,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  background: linear-gradient(135deg, #6096B4 0%, #4A7A96 100%);
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
@@ -142,16 +143,16 @@
 }
 
 .serviceIcon {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-  color: #0ea5e9;
+  font-size: 3.5rem;
+  margin-bottom: 2rem;
+  color: #6096B4;
 }
 
 .serviceTitle {
   font-size: 1.25rem;
   font-weight: 700;
   color: #1f2937;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .serviceDescription {
@@ -162,14 +163,14 @@
 
 /* Why Choose Us Section */
 .whyChooseSection {
-  padding: 5rem 0;
+  padding: 6rem 0;
   background: #f9fafb;
 }
 
 .whyChooseContainer {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 3rem;
 }
 
 .whyChooseTitle {
@@ -177,7 +178,7 @@
   font-weight: 800;
   color: #1f2937;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   letter-spacing: -0.025em;
   position: relative;
 }
@@ -190,14 +191,14 @@
   transform: translateX(-50%);
   width: 80px;
   height: 4px;
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  background: linear-gradient(135deg, #6096B4 0%, #4A7A96 100%);
   border-radius: 2px;
 }
 
 .whyChooseGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  gap: 3rem;
   justify-content: center;
 }
 
@@ -206,7 +207,7 @@
   color: #1f2937;
   border-radius: 12px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  padding: 2rem 1.5rem;
+  padding: 3rem 2rem;
   text-align: center;
   transition: all 0.3s ease;
   border: 1px solid #e5e7eb;
@@ -221,7 +222,7 @@
   font-size: 1.2rem;
   font-weight: 700;
   color: #1f2937;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .whyChooseDescription {
@@ -230,18 +231,17 @@
   font-size: 0.95rem;
 }
 
-/* Partners Section */
+/* Partners Section - Updated to show colored logos */
 .partnersSection {
   background: #fff;
-  padding: 4rem 0;
+  padding: 6rem 0;
   border-top: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
 }
 
 .partnersContainer {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 3rem;
 }
 
 .partnersHeader {
@@ -249,7 +249,7 @@
   font-weight: 700;
   color: #1f2937;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   letter-spacing: -0.025em;
 }
 
@@ -258,138 +258,60 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 3rem 4rem;
+  gap: 4rem 5rem;
 }
 
 .partnerLogo {
-  height: 60px;
+  height: 70px;
   width: auto;
-  max-width: 150px;
+  max-width: 160px;
   object-fit: contain;
-  filter: grayscale(100%) opacity(0.7);
+  /* Removed grayscale and opacity filters to show colored logos */
   transition: all 0.3s ease;
   border-radius: 8px;
 }
 
 .partnerLogo:hover {
-  filter: grayscale(0%) opacity(1);
-  transform: scale(1.05);
-}
-
-/* Newsletter Section */
-.newsletterSection {
-  padding: 4rem 0;
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-  color: white;
-  position: relative;
-}
-
-.newsletterContainer {
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 0 2rem;
-}
-
-.newsletterTitle {
-  font-size: 2.25rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
-  color: white;
-}
-
-.newsletterForm {
-  display: flex;
-  gap: 0;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  padding: 0.5rem;
-  border-radius: 12px;
-  max-width: 400px;
-  margin: 0 auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.newsletterInput {
-  flex: 1;
-  padding: 0.875rem 1rem;
-  border: none;
-  border-radius: 8px 0 0 8px;
-  outline: none;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  color: #1f2937;
-  font-weight: 500;
-}
-
-.newsletterInput::placeholder {
-  color: #9ca3af;
-}
-
-.newsletterInput:focus {
-  outline: none;
-  background: #ffffff;
-}
-
-.newsletterButton {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  color: white;
-  padding: 0.875rem 1.5rem;
-  border: none;
-  border-radius: 0 8px 8px 0;
-  cursor: pointer;
-  font-weight: 700;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  font-size: 0.95rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.newsletterButton:hover {
-  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  /* Enhanced hover effect for colored logos */
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(96, 150, 180, 0.2);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .servicesContainer,
   .whyChooseContainer,
-  .partnersContainer,
-  .newsletterContainer {
-    padding: 0 1rem;
+  .partnersContainer {
+    padding: 0 2rem;
   }
-  
+
   .servicesGrid,
   .whyChooseGrid {
     grid-template-columns: 1fr;
-  }
-  
-  .partnersGrid {
     gap: 2rem;
   }
-  
+
+  .partnersGrid {
+    gap: 3rem 2rem;
+  }
+
   .partnerLogo {
-    height: 50px;
+    height: 60px;
   }
-  
-  .newsletterForm {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .newsletterInput,
-  .newsletterButton {
-    border-radius: 6px;
-  }
-  
+
   .servicesTitle,
   .whyChooseTitle {
     font-size: 2rem;
   }
-  
-  .newsletterTitle {
-    font-size: 1.75rem;
+
+  .servicesSection,
+  .whyChooseSection,
+  .partnersSection {
+    padding: 4rem 0;
+  }
+
+  .servicesContainer .servicesTitle::after,
+  .whyChooseContainer .whyChooseTitle::after {
+    margin-bottom: 2rem;
   }
 }

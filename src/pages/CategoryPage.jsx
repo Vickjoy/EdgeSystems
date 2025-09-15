@@ -83,40 +83,46 @@ const CategoryPage = () => {
     <div>
       <Breadcrumbs crumbs={crumbs} />
       <section className={styles.section}>
-        <div className={styles.container} style={{ display: 'flex', gap: '2rem' }}>
-          {/* Sidebar with subcategories */}
-          <aside style={{ minWidth: 220 }}>
-            <h3 style={{ color: 'white', marginBottom: '1rem' }}>Subcategories</h3>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              {subcategories.length === 0 && <li style={{ color: 'white' }}>No subcategories</li>}
-              {subcategories.map(sub => (
-                <li key={sub.id}>
+        <div className={styles.categoryContainer}>
+          {/* Sticky Sidebar with subcategories */}
+          <aside className={styles.stickySidebar}>
+            <div className={styles.sidebarContent}>
+              <h3 className={styles.sidebarTitle}>Subcategories</h3>
+              <div className={styles.subcategoryList}>
+                {subcategories.length === 0 && (
+                  <div className={styles.noSubcategories}>No subcategories available</div>
+                )}
+                {subcategories.map(sub => (
                   <button
-                    style={{
-                      background: selectedSubcategory?.id === sub.id ? '#1DCD9F' : 'white',
-                      color: selectedSubcategory?.id === sub.id ? 'white' : '#6096B4',
-                      border: 'none',
-                      borderRadius: 4,
-                      padding: '0.5rem 1rem',
-                      marginBottom: 8,
-                      width: '100%',
-                      cursor: 'pointer',
-                      fontWeight: 600
-                    }}
+                    key={sub.id}
+                    className={`${styles.subcategoryButton} ${selectedSubcategory?.id === sub.id ? styles.active : ''}`}
                     onClick={() => setSelectedSubcategory(sub)}
                   >
                     {sub.name}
                   </button>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+            </div>
           </aside>
+
           {/* Main content: Product Grid */}
-          <div style={{ flex: 1 }}>
-            <h2 className={styles.title}>{category ? category.name : slug} Products</h2>
-            {error && <div style={{ color: 'red', textAlign: 'center', marginBottom: 16 }}>{error}</div>}
+          <div className={styles.mainContent}>
+            <h2 className={styles.categoryTitle}>
+              {category ? category.name : slug} Products
+            </h2>
+
+            {selectedSubcategory && (
+              <p className={styles.subcategoryInfo}>
+                Showing products in: <strong>{selectedSubcategory.name}</strong>
+              </p>
+            )}
+
+            {error && (
+              <div className={styles.errorMessage}>{error}</div>
+            )}
+
             {loading ? (
-              <p style={{ color: '#222', textAlign: 'center', marginTop: 32, fontSize: 18 }}>Loading...</p>
+              <div className={styles.loadingMessage}>Loading products...</div>
             ) : products.length > 0 ? (
               <div className={styles.productsGrid}>
                 {products.map(product => (
@@ -124,7 +130,9 @@ const CategoryPage = () => {
                 ))}
               </div>
             ) : (
-              <p style={{ color: '#222', textAlign: 'center', marginTop: 32, fontSize: 18 }}>No products in this subcategory yet.</p>
+              <div className={styles.noProductsMessage}>
+                No products available in this subcategory yet.
+              </div>
             )}
           </div>
         </div>
@@ -133,4 +141,4 @@ const CategoryPage = () => {
   );
 };
 
-export default CategoryPage; 
+export default CategoryPage;
