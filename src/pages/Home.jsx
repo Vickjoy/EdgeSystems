@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FaFireExtinguisher, FaNetworkWired, FaVideo } from 'react-icons/fa';
-import { MdPhone } from 'react-icons/md';
 import styles from './Home.module.css';
 import EatonLogo from '../assets/Eatonn.webp';
 import AlcatelLogo from '../assets/Alcatel.webp';
@@ -8,17 +6,69 @@ import AvayaLogo from '../assets/Avaya.webp';
 import CiscoLogo from '../assets/Cisco.webp';
 import SiemonLogo from '../assets/Siemon.webp';
 import UbiquitiLogo from '../assets/Ubiquiti.webp';
+import GiganetLogo from '../assets/giganet.jpeg';
+import HikvisionLogo from '../assets/hikvision.png';
 import PanelImage from '../assets/Control.jpg';
 import CablingImage from '../assets/cabling.jpg';
 import TelephoneImage from '../assets/telephony.jpg';
 
+// Import service images
+import FireAlarmImage from '../assets/FireAlarm.jpeg';
+import SolarImage from '../assets/Solar.jpeg';
+import VoIPImage from '../assets/VoIP.jpeg';
+import IPImage from '../assets/IP.jpeg';
+import StructuredCablingImage from '../assets/StructuredCabling.jpeg';
+
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-
+  
   const slides = [
     { image: PanelImage, text: 'Protect Your Business with Fire Safety Systems', link: '/category/addressable-fire-alarm-detection-systems' },
     { image: TelephoneImage, text: 'Smart VoIP & Telephony for Modern Businesses', link: '/category/communication' },
     { image: CablingImage, text: 'Structured Cabling Solutions for Seamless Connectivity', link: '/category/batteries-power-supplies-wiring' },
+  ];
+
+const services = [
+  {
+    id: 1,
+    image: FireAlarmImage,
+    title: 'Fire Alarm & Detection',
+    description: 'Fire safety systems with smoke detectors, heat sensors, and panels. Ensure fast detection, real-time alerts, regulatory compliance, and secure operations.'
+  },
+  {
+    id: 2,
+    image: StructuredCablingImage,
+    title: 'Structured Cabling',
+    description: 'Fiber optics, Cat6/Cat6a cabling, and management systems. Enable seamless communication, high-speed transmission, scalability, and reduced downtime for businesses.'
+  },
+  {
+    id: 3,
+    image: IPImage,
+    title: 'CCTV/IP Camera',
+    description: 'HD IP cameras with night vision, motion detection, and cloud storage. Provide continuous monitoring, analytics, and asset protection around-the-clock.'
+  },
+  {
+    id: 4,
+    image: VoIPImage,
+    title: 'VoIP & Telephony',
+    description: 'VoIP systems with call routing, conferencing, voicemail-to-email, and mobile integration. Improve collaboration, cut costs, and scale communication efficiently.'
+  },
+  {
+    id: 5,
+    image: SolarImage,
+    title: 'Solar Energy & Solutions',
+    description: 'Solar panels, batteries, and inverters delivering renewable power. Reduce energy costs, achieve independence, and support long-term sustainability goals.'
+  }
+];
+
+
+  const whyChoosePoints = [
+    'Authorized Eaton Distributor - Certified partnership with globally trusted brands',
+    'Quality Products - We deliver only premium solutions that meet the highest industry standards',
+    'Top Brands - Our partners are world leaders in technology and innovation',
+    'Certified Technicians - Professional installation and support services guaranteed',
+    'Competitive Pricing - Best value solutions without compromising on quality',
+    'Industry Experience - Over a decade of expertise in telecommunications and security'
   ];
 
   useEffect(() => {
@@ -49,26 +99,21 @@ const Home = () => {
         <div className={styles.servicesContainer}>
           <h2 className={styles.servicesTitle}>Our Services</h2>
           <div className={styles.servicesGrid}>
-            <div className={styles.serviceCard}>
-              <FaFireExtinguisher className={styles.serviceIcon} />
-              <h3 className={styles.serviceTitle}>Fire Alarm & Detection</h3>
-              <p className={styles.serviceDescription}>Protect your property with advanced fire alarm systems.</p>
-            </div>
-            <div className={styles.serviceCard}>
-              <FaNetworkWired className={styles.serviceIcon} />
-              <h3 className={styles.serviceTitle}>Structured Cabling</h3>
-              <p className={styles.serviceDescription}>Reliable network infrastructure for your business needs.</p>
-            </div>
-            <div className={styles.serviceCard}>
-              <FaVideo className={styles.serviceIcon} />
-              <h3 className={styles.serviceTitle}>CCTV / IP Cameras</h3>
-              <p className={styles.serviceDescription}>Surveillance solutions to keep your premises safe.</p>
-            </div>
-            <div className={styles.serviceCard}>
-              <MdPhone className={styles.serviceIcon} />
-              <h3 className={styles.serviceTitle}>VoIP & Telephony</h3>
-              <p className={styles.serviceDescription}>Efficient communication systems for your business.</p>
-            </div>
+            {services.map((service) => (
+              <div key={service.id} className={styles.serviceCard}>
+                <div className={styles.serviceImageWrapper}>
+                  <img 
+                    src={service.image} 
+                    alt={service.title}
+                    className={styles.serviceImage}
+                  />
+                </div>
+                <div className={styles.serviceContent}>
+                  <h3 className={styles.serviceTitle}>{service.title}</h3>
+                  <p className={styles.serviceDescription}>{service.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -77,23 +122,13 @@ const Home = () => {
       <section className={styles.whyChooseSection}>
         <div className={styles.whyChooseContainer}>
           <h2 className={styles.whyChooseTitle}>Why Choose Us?</h2>
-          <div className={styles.whyChooseGrid}>
-            <div className={styles.whyChooseCard}>
-              <h4 className={styles.whyChooseTitle}>Authorized Eaton Distributor</h4>
-              <p className={styles.whyChooseDescription}>Certified partner with trusted brands.</p>
-            </div>
-            <div className={styles.whyChooseCard}>
-              <h4 className={styles.whyChooseTitle}>Quality Products</h4>
-              <p className={styles.whyChooseDescription}>We deliver only the best for your needs.</p>
-            </div>
-            <div className={styles.whyChooseCard}>
-              <h4 className={styles.whyChooseTitle}>Top Brands</h4>
-              <p className={styles.whyChooseDescription}>Our partners are world leaders in tech.</p>
-            </div>
-            <div className={styles.whyChooseCard}>
-              <h4 className={styles.whyChooseTitle}>Certified Technicians</h4>
-              <p className={styles.whyChooseDescription}>Professional service and support guaranteed.</p>
-            </div>
+          <div className={styles.whyChooseList}>
+            {whyChoosePoints.map((point, index) => (
+              <div key={index} className={styles.whyChooseItem}>
+                <span className={styles.bulletIcon}>✦</span>
+                <span className={styles.whyChooseText}>{point}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -109,6 +144,8 @@ const Home = () => {
             <img src={EatonLogo} alt="Eaton" className={styles.partnerLogo} />
             <img src={SiemonLogo} alt="Siemon" className={styles.partnerLogo} />
             <img src={UbiquitiLogo} alt="Ubiquiti" className={styles.partnerLogo} />
+            <img src={GiganetLogo} alt="Giganet" className={styles.partnerLogo} />
+            <img src={HikvisionLogo} alt="Hikvision" className={styles.partnerLogo} />
           </div>
         </div>
       </section>

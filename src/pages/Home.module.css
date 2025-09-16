@@ -1,7 +1,7 @@
-/* Hero Section - Keeping interactive functionality */
+/* Hero Section - Keeping original functionality */
 .heroSection {
   position: relative;
-  height: 65vh;
+  height: 80vh;
   background: linear-gradient(135deg, #071952 0%, #35A29F 100%);
   display: flex;
   align-items: center;
@@ -66,93 +66,104 @@
   box-shadow: 0 12px 20px rgba(96, 150, 180, 0.35);
 }
 
-/* Services Section - Professional white background */
+/* Services Section - Clean white background with subtle blue accents */
 .servicesSection {
-  padding: 6rem 0;
-  background: #fff;
+  padding: 5rem 0;
+  background: #ffffff;
 }
 
 .servicesContainer {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 3rem;
+  padding: 0 2rem;
 }
 
 .servicesTitle {
   font-size: 2.5rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #1f2937;
   text-align: center;
-  margin-bottom: 4rem;
-  letter-spacing: -0.025em;
+  margin-bottom: 3rem;
   position: relative;
 }
 
 .servicesTitle::after {
   content: '';
   position: absolute;
-  bottom: -10px;
+  bottom: -12px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(135deg, #6096B4 0%, #4A7A96 100%);
+  width: 60px;
+  height: 3px;
+  background: #6096B4;
   border-radius: 2px;
 }
 
 .servicesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 3rem;
-  justify-content: center;
+  grid-template-columns: 1fr;
+  gap: 2rem;
   margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .servicesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .servicesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .serviceCard {
-  background: #fff;
-  color: #1f2937;
+  background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  padding: 3rem 2rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
-  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-}
-
-.serviceCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(135deg, #6096B4 0%, #4A7A96 100%);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.serviceCard:hover::before {
-  transform: scaleX(1);
+  transition: all 0.3s ease;
+  border: 1px solid #f1f5f9;
 }
 
 .serviceCard:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(96, 150, 180, 0.15);
+  border-color: #6096B4;
 }
 
-.serviceIcon {
-  font-size: 3.5rem;
-  margin-bottom: 2rem;
-  color: #6096B4;
+.serviceImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.serviceImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.serviceCard:hover .serviceImage {
+  transform: scale(1.05);
+}
+
+.serviceContent {
+  padding: 1.5rem;
 }
 
 .serviceTitle {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 600;
   color: #1f2937;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.serviceCard:hover .serviceTitle {
+  color: #6096B4;
 }
 
 .serviceDescription {
@@ -161,120 +172,140 @@
   font-size: 0.95rem;
 }
 
-/* Why Choose Us Section */
+/* Why Choose Us Section - Clean layout with blue highlights */
 .whyChooseSection {
-  padding: 6rem 0;
-  background: #f9fafb;
+  padding: 5rem 0;
+  background: #f8fafc;
 }
 
 .whyChooseContainer {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 0 3rem;
+  padding: 0 2rem;
 }
 
 .whyChooseTitle {
   font-size: 2.5rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #1f2937;
   text-align: center;
-  margin-bottom: 4rem;
-  letter-spacing: -0.025em;
+  margin-bottom: 3rem;
   position: relative;
 }
 
 .whyChooseTitle::after {
   content: '';
   position: absolute;
-  bottom: -10px;
+  bottom: -12px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(135deg, #6096B4 0%, #4A7A96 100%);
+  width: 60px;
+  height: 3px;
+  background: #6096B4;
   border-radius: 2px;
 }
 
-.whyChooseGrid {
+.whyChooseList {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 3rem;
-  justify-content: center;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
 }
 
-.whyChooseCard {
-  background: #fff;
-  color: #1f2937;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  padding: 3rem 2rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
+@media (min-width: 768px) {
+  .whyChooseList {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.whyChooseCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+.whyChooseItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
 }
 
-.whyChooseCard h4 {
+.whyChooseItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(96, 150, 180, 0.12);
+  border-left-color: #6096B4;
+}
+
+.bulletIcon {
+  color: #6096B4;
   font-size: 1.2rem;
   font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 1.5rem;
+  margin-top: 2px;
+  flex-shrink: 0;
 }
 
-.whyChooseDescription {
-  color: #6b7280;
-  line-height: 1.6;
+.whyChooseText {
+  color: #4b5563;
   font-size: 0.95rem;
+  line-height: 1.6;
+  font-weight: 500;
 }
 
-/* Partners Section - Updated to show colored logos */
+/* Partners Section - Clean grid with subtle styling */
 .partnersSection {
-  background: #fff;
-  padding: 6rem 0;
-  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
+  padding: 5rem 0;
+  border-top: 1px solid #f1f5f9;
 }
 
 .partnersContainer {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 3rem;
+  padding: 0 2rem;
 }
 
 .partnersHeader {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #1f2937;
   text-align: center;
-  margin-bottom: 4rem;
-  letter-spacing: -0.025em;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.partnersHeader::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: #6096B4;
+  border-radius: 2px;
 }
 
 .partnersGrid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
   align-items: center;
-  gap: 4rem 5rem;
+  justify-items: center;
 }
 
 .partnerLogo {
-  height: 70px;
+  height: 80px;
   width: auto;
-  max-width: 160px;
+  max-width: 140px;
   object-fit: contain;
-  /* Removed grayscale and opacity filters to show colored logos */
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
   border-radius: 8px;
+  filter: grayscale(30%) opacity(0.8);
 }
 
 .partnerLogo:hover {
-  /* Enhanced hover effect for colored logos */
-  transform: scale(1.1);
-  box-shadow: 0 8px 25px rgba(96, 150, 180, 0.2);
+  transform: scale(1.05);
+  filter: grayscale(0%) opacity(1);
 }
 
 /* Responsive Design */
@@ -282,17 +313,20 @@
   .servicesContainer,
   .whyChooseContainer,
   .partnersContainer {
-    padding: 0 2rem;
+    padding: 0 1.5rem;
   }
 
-  .servicesGrid,
-  .whyChooseGrid {
+  .servicesGrid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+  }
+
+  .whyChooseList {
+    grid-template-columns: 1fr;
   }
 
   .partnersGrid {
-    gap: 3rem 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
 
   .partnerLogo {
@@ -304,14 +338,32 @@
     font-size: 2rem;
   }
 
+  .partnersHeader {
+    font-size: 1.8rem;
+  }
+
   .servicesSection,
   .whyChooseSection,
   .partnersSection {
-    padding: 4rem 0;
+    padding: 3rem 0;
   }
 
-  .servicesContainer .servicesTitle::after,
-  .whyChooseContainer .whyChooseTitle::after {
-    margin-bottom: 2rem;
+  .serviceImageWrapper {
+    height: 180px;
+  }
+
+  .serviceContent {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .serviceTitle {
+    font-size: 1.2rem;
+  }
+
+  .serviceDescription,
+  .whyChooseText {
+    font-size: 0.9rem;
   }
 }

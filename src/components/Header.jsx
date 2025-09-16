@@ -16,6 +16,7 @@ const Header = () => {
   const navigate = useNavigate();
   const fireRef = useRef();
   const ictRef = useRef();
+  const solarRef = useRef();
   const allCategoriesRef = useRef();
   const { cartItems } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
@@ -56,6 +57,7 @@ const Header = () => {
       if (
         fireRef.current && !fireRef.current.contains(e.target) &&
         ictRef.current && !ictRef.current.contains(e.target) &&
+        solarRef.current && !solarRef.current.contains(e.target) &&
         allCategoriesRef.current && !allCategoriesRef.current.contains(e.target)
       ) {
         setOpenDropdown(null);
@@ -72,6 +74,10 @@ const Header = () => {
 
   const ictCategories = categories.filter(cat =>
     ['ict','telecom','telecommunication'].includes(String(cat.type || '').toLowerCase())
+  );
+
+  const solarCategories = categories.filter(cat =>
+    ['solar', 'solar_solutions','solar-solutions'].includes(String(cat.type || '').toLowerCase())
   );
 
   const handleCategoryClick = (categorySlug) => {
@@ -222,6 +228,17 @@ const Header = () => {
               <FaChevronDown className={styles.navChevron} />
             </button>
             {renderMegaDropdown(ictCategories, openDropdown === 'ict')}
+          </li>
+
+          <li ref={solarRef} className={styles.dropdownContainer}>
+            <button
+              className={styles.dropdownButton}
+              onClick={() => setOpenDropdown(openDropdown === 'solar' ? null : 'solar')}
+            >
+              Solar Power Solutions
+              <FaChevronDown className={styles.navChevron} />
+            </button>
+            {renderMegaDropdown(solarCategories, openDropdown === 'solar')}
           </li>
           
           <li><Link to="/contact" className={styles.navLink}>Contact Us</Link></li>
