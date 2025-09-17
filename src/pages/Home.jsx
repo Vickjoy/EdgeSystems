@@ -8,8 +8,7 @@ import SiemonLogo from '../assets/Siemon.webp';
 import UbiquitiLogo from '../assets/Ubiquiti.webp';
 import GiganetLogo from '../assets/giganet.jpeg';
 import HikvisionLogo from '../assets/hikvision.png';
-import PanelImage from '../assets/Control.jpg';
-import CablingImage from '../assets/cabling.jpg';
+import PanelImage from '../assets/FireSafety.jpg';
 import TelephoneImage from '../assets/telephony.jpg';
 
 // Import service images
@@ -25,7 +24,7 @@ const Home = () => {
   const slides = [
     { image: PanelImage, text: 'Protect Your Business with Fire Safety Systems', link: '/category/addressable-fire-alarm-detection-systems' },
     { image: TelephoneImage, text: 'Smart VoIP & Telephony for Modern Businesses', link: '/category/communication' },
-    { image: CablingImage, text: 'Structured Cabling Solutions for Seamless Connectivity', link: '/category/batteries-power-supplies-wiring' },
+   
   ];
 
 const services = [
@@ -74,7 +73,7 @@ const services = [
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 4000);
+    }, 6000); // Extended from 4000ms to 6000ms (6 seconds)
     return () => clearInterval(interval);
   }, []);
 

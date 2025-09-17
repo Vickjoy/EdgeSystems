@@ -1,4 +1,4 @@
-/* Hero Section - Keeping original functionality */
+/* Hero Section - Professional styling with better text positioning */
 .heroSection {
   position: relative;
   height: 80vh;
@@ -16,54 +16,102 @@
   height: 100%;
   object-fit: cover;
   z-index: 1;
-  opacity: 0.85;
-  filter: brightness(0.85) contrast(1.1);
+  opacity: 0.7;
+  filter: brightness(0.6) contrast(1.2);
 }
 
 .heroOverlay {
   position: relative;
   z-index: 2;
   color: #fff;
-  text-align: center;
+  text-align: right;
   padding: 2rem;
   max-width: 800px;
+  margin-left: auto;
+  margin-right: 3rem;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
 }
 
 .heroTitle {
-  font-size: 3.5rem;
-  font-weight: 900;
+  font-size: 2.8rem;
+  font-weight: 800;
   margin-bottom: 1.5rem;
   color: #fff;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-  letter-spacing: -1px;
-  line-height: 1.1;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 @media (max-width: 768px) {
   .heroTitle {
-    font-size: 2.5rem;
+    font-size: 2rem;
+  }
+  
+  .heroOverlay {
+    text-align: center;
+    margin-right: 0;
+    margin-left: 0;
   }
 }
 
 .heroButton {
-  background: linear-gradient(135deg, #6096B4 0%, #4A7A96 100%);
+  background: linear-gradient(135deg, #6096B4 0%, #35A29F 100%);
   color: #fff;
   font-weight: 700;
   font-size: 1.1rem;
-  padding: 1rem 2rem;
-  border-radius: 8px;
+  padding: 1.2rem 2.5rem;
+  border-radius: 12px;
   border: none;
-  box-shadow: 0 8px 16px rgba(96, 150, 180, 0.25);
-  transition: all 0.2s ease;
+  box-shadow: 0 8px 20px rgba(96, 150, 180, 0.3);
+  transition: all 0.3s ease;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.heroButton:hover::before {
+  left: 100%;
 }
 
 .heroButton:hover {
-  background: linear-gradient(135deg, #4A7A96 0%, #3A6078 100%);
+  background: linear-gradient(135deg, #35A29F 0%, #6096B4 100%);
   transform: translateY(-2px);
-  box-shadow: 0 12px 20px rgba(96, 150, 180, 0.35);
+  box-shadow: 0 12px 25px rgba(96, 150, 180, 0.4);
+}
+
+.buttonText {
+  position: relative;
+  z-index: 1;
+}
+
+.buttonIcon {
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.heroButton:hover .buttonIcon {
+  transform: translateX(5px);
 }
 
 /* Services Section - Clean white background with subtle blue accents */
@@ -172,10 +220,13 @@
   font-size: 0.95rem;
 }
 
-/* Why Choose Us Section - Clean layout with blue highlights */
+/* Why Choose Us Section - Professional list styling without cards */
 .whyChooseSection {
-  padding: 5rem 0;
-  background: #f8fafc;
+  padding: 6rem 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../assets/WHY.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 .whyChooseContainer {
@@ -185,76 +236,96 @@
 }
 
 .whyChooseTitle {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #fff;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   position: relative;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .whyChooseTitle::after {
   content: '';
   position: absolute;
-  bottom: -12px;
+  bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: #6096B4;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(135deg, #6096B4 0%, #35A29F 100%);
   border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(96, 150, 180, 0.4);
 }
 
 .whyChooseList {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 @media (min-width: 768px) {
   .whyChooseList {
     grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
   }
 }
 
 .whyChooseItem {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  padding: 1.5rem;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition: all 0.2s ease;
-  border-left: 4px solid transparent;
+  gap: 1.5rem;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  transition: all 0.3s ease;
+  border-left: none;
+  position: relative;
 }
 
 .whyChooseItem:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(96, 150, 180, 0.12);
-  border-left-color: #6096B4;
+  transform: translateX(10px);
 }
 
 .bulletIcon {
   color: #6096B4;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-top: 2px;
+  margin-top: 3px;
   flex-shrink: 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+.whyChooseItem:hover .bulletIcon {
+  color: #35A29F;
+  transform: scale(1.2) rotate(15deg);
 }
 
 .whyChooseText {
-  color: #4b5563;
-  font-size: 0.95rem;
-  line-height: 1.6;
+  color: #f8fafc;
+  font-size: 1.1rem;
+  line-height: 1.7;
   font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
 }
 
-/* Partners Section - Clean grid with subtle styling */
+.whyChooseItem:hover .whyChooseText {
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+/* Partners Section - With WHY.jpg background */
 .partnersSection {
-  background: #ffffff;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/WHY.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   padding: 5rem 0;
-  border-top: 1px solid #f1f5f9;
 }
 
 .partnersContainer {
@@ -266,10 +337,11 @@
 .partnersHeader {
   font-size: 2rem;
   font-weight: 600;
-  color: #1f2937;
+  color: #fff;
   text-align: center;
   margin-bottom: 3rem;
   position: relative;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .partnersHeader::after {
@@ -297,15 +369,21 @@
   width: auto;
   max-width: 140px;
   object-fit: contain;
-  transition: all 0.2s ease;
-  padding: 0.5rem;
-  border-radius: 8px;
-  filter: grayscale(30%) opacity(0.8);
+  transition: all 0.3s ease;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  filter: grayscale(20%);
 }
 
 .partnerLogo:hover {
-  transform: scale(1.05);
-  filter: grayscale(0%) opacity(1);
+  transform: scale(1.05) translateY(-5px);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  filter: grayscale(0%);
 }
 
 /* Responsive Design */
@@ -322,6 +400,11 @@
 
   .whyChooseList {
     grid-template-columns: 1fr;
+  }
+
+  .whyChooseSection,
+  .partnersSection {
+    background-attachment: scroll;
   }
 
   .partnersGrid {
@@ -355,6 +438,10 @@
   .serviceContent {
     padding: 1.25rem;
   }
+
+  .whyChooseItem {
+    padding: 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -365,5 +452,9 @@
   .serviceDescription,
   .whyChooseText {
     font-size: 0.9rem;
+  }
+
+  .whyChooseTitle {
+    font-size: 1.8rem;
   }
 }
