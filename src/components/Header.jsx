@@ -104,7 +104,15 @@ const Header = () => {
     ['solar', 'solar_solutions','solar-solutions'].includes(String(cat.type || '').toLowerCase())
   );
 
+  // Updated: Dropdown closes after selection
+  const handleDropdownToggle = (dropdownName) => {
+    const isCurrentlyOpen = openDropdown === dropdownName;
+    setOpenDropdown(isCurrentlyOpen ? null : dropdownName);
+    setHoveredCategory(null);
+  };
+
   const handleCategoryClick = (categorySlug) => {
+    // Close dropdown after selection
     setOpenDropdown(null);
     setHoveredCategory(null);
     setMobileMenuOpen(false);
@@ -112,12 +120,15 @@ const Header = () => {
     navigate(`/category/${categorySlug}`);
   };
 
+  // Updated: Navigate to specific subcategory instead of just category
   const handleSubcategoryClick = (categorySlug, subcategorySlug) => {
+    // Close dropdown after selection
     setOpenDropdown(null);
     setHoveredCategory(null);
     setMobileMenuOpen(false);
     setMobileExpandedCategory(null);
-    navigate(`/category/${categorySlug}#${subcategorySlug}`);
+    // Navigate directly to the specific subcategory
+    navigate(`/category/${categorySlug}`, { state: { selectedSubcategory: subcategorySlug } });
   };
 
   const handleCategoryHover = (categorySlug) => {
@@ -290,7 +301,7 @@ const Header = () => {
           <li ref={fireRef} className={styles.dropdownContainer}>
             <button
               className={styles.dropdownButton}
-              onClick={() => setOpenDropdown(openDropdown === 'fire' ? null : 'fire')}
+              onClick={() => handleDropdownToggle('fire')}
             >
               Fire Safety Products & Services
               <FaChevronDown className={styles.navChevron} />
@@ -301,7 +312,7 @@ const Header = () => {
           <li ref={ictRef} className={styles.dropdownContainer}>
             <button
               className={styles.dropdownButton}
-              onClick={() => setOpenDropdown(openDropdown === 'ict' ? null : 'ict')}
+              onClick={() => handleDropdownToggle('ict')}
             >
               ICT/Telecommunication Products & Services
               <FaChevronDown className={styles.navChevron} />
@@ -312,7 +323,7 @@ const Header = () => {
           <li ref={solarRef} className={styles.dropdownContainer}>
             <button
               className={styles.dropdownButton}
-              onClick={() => setOpenDropdown(openDropdown === 'solar' ? null : 'solar')}
+              onClick={() => handleDropdownToggle('solar')}
             >
               Solar Power Solutions
               <FaChevronDown className={styles.navChevron} />

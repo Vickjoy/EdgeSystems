@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { fetchCategories, fetchSubcategories, fetchProductsForSubcategory } from '../utils/api';
 import styles from './CategoryPage.module.css';
@@ -13,6 +13,7 @@ import SolarImg from '../assets/Solare.webp';
 const CategoryPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [category, setCategory] = useState(null);
   const [subcategories, setSubcategories] = useState([]);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -20,45 +21,36 @@ const CategoryPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Get category-specific image and use actual category name as title
+  // Get category-specific image and display name
   const getCategoryDisplay = (category) => {
     if (!category) return { image: null, displayName: slug };
-    
+
     const categoryType = String(category.type || '').toLowerCase();
     const categoryName = category.name.toLowerCase();
-    
-    // Fire Safety
-    if (['fire_safety', 'fire', 'fire-safety', 'firesafety'].includes(categoryType) ||
-        categoryName.includes('fire')) {
-      return {
-        image: FireSafetyImg,
-        displayName: category.name
-      };
+
+    if (
+      ['fire_safety', 'fire', 'fire-safety', 'firesafety'].includes(categoryType) ||
+      categoryName.includes('fire')
+    ) {
+      return { image: FireSafetyImg, displayName: category.name };
     }
-    
-    // ICT/Telecommunication
-    if (['ict', 'telecom', 'telecommunication'].includes(categoryType) ||
-        categoryName.includes('ict') || categoryName.includes('telecom')) {
-      return {
-        image: ICTImg,
-        displayName: category.name
-      };
+
+    if (
+      ['ict', 'telecom', 'telecommunication'].includes(categoryType) ||
+      categoryName.includes('ict') ||
+      categoryName.includes('telecom')
+    ) {
+      return { image: ICTImg, displayName: category.name };
     }
-    
-    // Solar
-    if (['solar', 'solar_solutions', 'solar-solutions'].includes(categoryType) ||
-        categoryName.includes('solar')) {
-      return {
-        image: SolarImg,
-        displayName: category.name
-      };
+
+    if (
+      ['solar', 'solar_solutions', 'solar-solutions'].includes(categoryType) ||
+      categoryName.includes('solar')
+    ) {
+      return { image: SolarImg, displayName: category.name };
     }
-    
-    // Default fallback
-    return {
-      image: null,
-      displayName: category.name
-    };
+
+    return { image: null, displayName: category.name };
   };
 
   // Fetch category by slug
@@ -66,7 +58,7 @@ const CategoryPage = () => {
     const getCategory = async () => {
       try {
         const cats = await fetchCategories();
-        const found = cats.find(cat => cat.slug === slug);
+        const found = cats.find((cat) => cat.slug === slug);
         setCategory(found || null);
         setSubcategories([]);
         setSelectedSubcategory(null);
@@ -82,36 +74,56 @@ const CategoryPage = () => {
   // Fetch subcategories for this category
   useEffect(() => {
     if (!category) return;
+
     const getSubs = async () => {
       try {
         const subs = await fetchSubcategories(category.slug);
-        const filtered = subs.filter(sub => 
-          sub.category === category.id || 
-          sub.category === category.slug || 
-          !sub.category || 
-          sub.category === category
+        const filtered = subs.filter(
+          (sub) =>
+            sub.category === category.id ||
+            sub.category === category.slug ||
+            !sub.category ||
+            sub.category === category
         );
         setSubcategories(filtered);
-        setSelectedSubcategory(filtered[0] || null);
+
+        // Determine which subcategory to show
+        const targetSubcategorySlug =
+          location.state?.selectedSubcategory || location.hash?.substring(1);
+
+        if (targetSubcategorySlug) {
+          const targetSubcategory = filtered.find((sub) => sub.slug === targetSubcategorySlug);
+          setSelectedSubcategory(targetSubcategory || filtered[0] || null);
+        } else {
+          // Default to first subcategory if available
+          setSelectedSubcategory(filtered[0] || null);
+        }
       } catch {
         setSubcategories([]);
         setSelectedSubcategory(null);
       }
     };
+
     getSubs();
+
     const handleSubcategoriesUpdated = () => getSubs();
     window.addEventListener('subcategoriesUpdated', handleSubcategoriesUpdated);
+
     return () => window.removeEventListener('subcategoriesUpdated', handleSubcategoriesUpdated);
-  }, [category]);
+  }, [category, location.state?.selectedSubcategory, location.hash]);
 
   // Fetch products for selected subcategory
   useEffect(() => {
-    if (!selectedSubcategory) return;
+    if (!selectedSubcategory) {
+      setProducts([]);
+      return;
+    }
+
     setLoading(true);
     setError('');
     fetchProductsForSubcategory(selectedSubcategory.slug)
-      .then(data => {
-        const items = (data && data.results) ? data.results : (Array.isArray(data) ? data : []);
+      .then((data) => {
+        const items = data?.results ? data.results : Array.isArray(data) ? data : [];
         setProducts(items);
         setError('');
       })
@@ -122,42 +134,44 @@ const CategoryPage = () => {
       .finally(() => setLoading(false));
   }, [selectedSubcategory]);
 
-  // Get category display info
+  // Handle subcategory selection
+  const handleSubcategorySelect = (subcategory) => {
+    setSelectedSubcategory(subcategory);
+    navigate(`/category/${slug}#${subcategory.slug}`, { replace: true });
+  };
+
   const categoryDisplay = getCategoryDisplay(category);
 
-  // Breadcrumbs
   const crumbs = [
     { label: 'Home', path: '/' },
     { label: category ? category.name : slug, path: `/category/${slug}` },
-    ...(selectedSubcategory ? [{ label: selectedSubcategory.name, path: '#' }] : [])
+    ...(selectedSubcategory ? [{ label: selectedSubcategory.name, path: '#' }] : []),
   ];
 
   return (
     <div className={styles.pageWrapper}>
       {/* Hero Banner Section */}
       <div className={styles.heroSection}>
-        <div 
+        <div
           className={styles.heroBackground}
           style={{
             backgroundImage: categoryDisplay.image ? `url(${categoryDisplay.image})` : 'none',
-            backgroundColor: categoryDisplay.image ? 'transparent' : '#6096B4'
+            backgroundColor: categoryDisplay.image ? 'transparent' : '#6096B4',
           }}
         >
           <div className={styles.heroOverlay}></div>
           <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>
-              {categoryDisplay.displayName}
-            </h1>
+            <h1 className={styles.heroTitle}>{categoryDisplay.displayName}</h1>
           </div>
         </div>
       </div>
 
-      {/* Breadcrumbs positioned immediately below hero */}
+      {/* Breadcrumbs */}
       <div className={styles.breadcrumbWrapper}>
         <Breadcrumbs crumbs={crumbs} />
       </div>
 
-      {/* Main Content Section */}
+      {/* Main Content */}
       <section className={styles.mainSection}>
         <div className={styles.containerLayout}>
           {/* Sidebar */}
@@ -166,17 +180,15 @@ const CategoryPage = () => {
               <h3 className={styles.sidebarTitle}>Product Categories</h3>
               <div className={styles.subcategoryList}>
                 {subcategories.length === 0 ? (
-                  <div className={styles.noSubcategories}>
-                    No subcategories available
-                  </div>
+                  <div className={styles.noSubcategories}>No subcategories available</div>
                 ) : (
-                  subcategories.map(sub => (
+                  subcategories.map((sub) => (
                     <button
                       key={sub.id}
                       className={`${styles.subcategoryButton} ${
                         selectedSubcategory?.id === sub.id ? styles.active : ''
                       }`}
-                      onClick={() => setSelectedSubcategory(sub)}
+                      onClick={() => handleSubcategorySelect(sub)}
                     >
                       {sub.name}
                     </button>
@@ -186,35 +198,42 @@ const CategoryPage = () => {
             </div>
           </aside>
 
-          {/* Main Content Area */}
+          {/* Products Section */}
           <main className={styles.mainContent}>
-            {error && (
+            {!selectedSubcategory ? (
+              <div className={styles.selectPrompt}>
+                <div className={styles.selectPromptIcon}>📋</div>
+                <h3>Select a Category</h3>
+                <p>Please select a subcategory from the sidebar to view available products.</p>
+              </div>
+            ) : error ? (
               <div className={styles.errorMessage}>
                 <p>{error}</p>
               </div>
-            )}
-
-            {loading ? (
+            ) : loading ? (
               <div className={styles.loadingState}>
                 <div className={styles.loadingSpinner}></div>
                 <p>Loading products...</p>
               </div>
             ) : products.length > 0 ? (
-              <div className={styles.productsGrid}>
-                {products.map(product => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
+              <div>
+                <div className={styles.categoryHeader}>
+                  <h2>{selectedSubcategory.name}</h2>
+                  <p className={styles.productCount}>
+                    {products.length} product{products.length !== 1 ? 's' : ''} available
+                  </p>
+                </div>
+                <div className={styles.productsGrid}>
+                  {products.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
               </div>
             ) : (
               <div className={styles.emptyState}>
                 <div className={styles.emptyStateIcon}>📦</div>
                 <h3>No Products Available</h3>
-                <p>
-                  {selectedSubcategory 
-                    ? `No products are currently available in ${selectedSubcategory.name}.`
-                    : 'Please select a subcategory to view products.'
-                  }
-                </p>
+                <p>No products are currently available in {selectedSubcategory.name}.</p>
               </div>
             )}
           </main>

@@ -42,14 +42,33 @@ const SearchBar = () => {
         }
       });
       const uniqueProducts = Array.from(uniqueProductsNameMap.values());
-      // Filter products by name (case-insensitive)
-      const matches = uniqueProducts.filter(p => p.name && p.name.toLowerCase().includes(query.toLowerCase()));
+      
+      // Enhanced case-insensitive search - check name, description, and features
+      const searchTerm = query.toLowerCase().trim();
+      const matches = uniqueProducts.filter(p => {
+        if (!p.name) return false;
+        
+        // Search in product name
+        const nameMatch = p.name.toLowerCase().includes(searchTerm);
+        
+        // Search in product description if available
+        const descriptionMatch = p.description && 
+          p.description.toLowerCase().includes(searchTerm);
+        
+        // Search in product features if available
+        const featuresMatch = p.features && 
+          p.features.toLowerCase().includes(searchTerm);
+        
+        // Return true if any field contains the search term
+        return nameMatch || descriptionMatch || featuresMatch;
+      });
+      
       if (matches.length === 0) {
         setNoResults(true);
       } else if (matches.length === 1) {
         navigate(`/product/${matches[0].slug}`);
       } else {
-        // Pass results to a search results page (optional: via state or query param)
+        // Pass results to a search results page (via state or query param)
         navigate(`/search?query=${encodeURIComponent(query)}`, { state: { results: matches } });
       }
     } catch (err) {
