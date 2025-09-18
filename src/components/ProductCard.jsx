@@ -48,7 +48,7 @@ const ProductCard = ({ product, onDelete }) => {
       </div>
       <div className={styles.content}>
         <h3 className={styles.title}>{product.name}</h3>
-        <div className={styles.vatText}>incl +16% VAT</div>
+        <div className={styles.vatText}>excl +16% VAT</div>
         {product.price_visibility === 'login_required' && !user ? (
           <div className={styles.price}>
             <Link 
