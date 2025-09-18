@@ -6,18 +6,19 @@ import styles from './Header.module.css';
 import { fetchCategories, fetchSubcategories } from '../utils/api';
 import { useCart } from '../context/CartContext';
 import CartModal from './CartModal';
-import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaChevronDown } from "react-icons/fa";
+import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaChevronDown, FaBars, FaTimes, FaChevronRight } from "react-icons/fa";
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [categories, setCategories] = useState([]);
   const [subcategoriesMap, setSubcategoriesMap] = useState({});
   const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileExpandedCategory, setMobileExpandedCategory] = useState(null);
   const navigate = useNavigate();
   const fireRef = useRef();
   const ictRef = useRef();
   const solarRef = useRef();
-  const allCategoriesRef = useRef();
   const { cartItems } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
 
@@ -57,8 +58,7 @@ const Header = () => {
       if (
         fireRef.current && !fireRef.current.contains(e.target) &&
         ictRef.current && !ictRef.current.contains(e.target) &&
-        solarRef.current && !solarRef.current.contains(e.target) &&
-        allCategoriesRef.current && !allCategoriesRef.current.contains(e.target)
+        solarRef.current && !solarRef.current.contains(e.target)
       ) {
         setOpenDropdown(null);
         setHoveredCategory(null);
@@ -67,6 +67,30 @@ const Header = () => {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (mobileMenuOpen && !e.target.closest(`.${styles.mobileMenu}`) && !e.target.closest(`.${styles.hamburgerButton}`)) {
+        setMobileMenuOpen(false);
+        setMobileExpandedCategory(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [mobileMenuOpen]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileMenuOpen]);
 
   const fireCategories = categories.filter(cat =>
     ['fire_safety','fire','fire-safety','firesafety'].includes(String(cat.type || '').toLowerCase())
@@ -83,12 +107,16 @@ const Header = () => {
   const handleCategoryClick = (categorySlug) => {
     setOpenDropdown(null);
     setHoveredCategory(null);
+    setMobileMenuOpen(false);
+    setMobileExpandedCategory(null);
     navigate(`/category/${categorySlug}`);
   };
 
   const handleSubcategoryClick = (categorySlug, subcategorySlug) => {
     setOpenDropdown(null);
     setHoveredCategory(null);
+    setMobileMenuOpen(false);
+    setMobileExpandedCategory(null);
     navigate(`/category/${categorySlug}#${subcategorySlug}`);
   };
 
@@ -97,7 +125,20 @@ const Header = () => {
     loadSubcategories(categorySlug);
   };
 
-  const renderMegaDropdown = (dropdownCategories, isOpen) => {
+  const handleMobileCategoryClick = (categoryType) => {
+    if (mobileExpandedCategory === categoryType) {
+      setMobileExpandedCategory(null);
+    } else {
+      setMobileExpandedCategory(categoryType);
+      // Load subcategories for all categories of this type
+      const categoryList = categoryType === 'fire' ? fireCategories : 
+                          categoryType === 'ict' ? ictCategories : 
+                          categoryType === 'solar' ? solarCategories : [];
+      categoryList.forEach(cat => loadSubcategories(cat.slug));
+    }
+  };
+
+  const renderDesktopMegaDropdown = (dropdownCategories, isOpen) => {
     if (!isOpen) return null;
     
     return (
@@ -145,6 +186,47 @@ const Header = () => {
     );
   };
 
+  const renderMobileCategorySection = (categoryList, categoryType, title) => (
+    <div key={categoryType} className={styles.mobileCategorySection}>
+      <button
+        className={`${styles.mobileCategoryButton} ${mobileExpandedCategory === categoryType ? styles.expanded : ''}`}
+        onClick={() => handleMobileCategoryClick(categoryType)}
+      >
+        <span>{title}</span>
+        <FaChevronRight className={`${styles.mobileChevron} ${mobileExpandedCategory === categoryType ? styles.rotated : ''}`} />
+      </button>
+      
+      {mobileExpandedCategory === categoryType && (
+        <div className={styles.mobileSubcategoryContainer}>
+          {categoryList.map(cat => (
+            <div key={cat.id} className={styles.mobileCategoryGroup}>
+              <button
+                className={styles.mobileCategoryName}
+                onClick={() => handleCategoryClick(cat.slug)}
+              >
+                {cat.name}
+              </button>
+              
+              {subcategoriesMap[cat.slug] && subcategoriesMap[cat.slug].length > 0 && (
+                <div className={styles.mobileSubcategoryList}>
+                  {subcategoriesMap[cat.slug].map(sub => (
+                    <button
+                      key={sub.id}
+                      className={styles.mobileSubcategoryItem}
+                      onClick={() => handleSubcategoryClick(cat.slug, sub.slug)}
+                    >
+                      {sub.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <header className={styles.header}>
       {/* Top Bar */}
@@ -167,22 +249,11 @@ const Header = () => {
 
       {/* Main Header */}
       <div className={styles.mainHeader}>
-        <div>
+        <div className={styles.logoContainer}>
           <img src={CompanyLogo} alt="Edge Systems Logo" className={styles.logo} />
         </div>
         
         <div className={styles.headerActions}>
-          <div className={`${styles.dropdownContainer} ${styles.headerDropdownContainer}`} ref={allCategoriesRef}>
-            <button
-              className={styles.dropdownButton}
-              onClick={() => setOpenDropdown(openDropdown === 'all' ? null : 'all')}
-            >
-              All Categories
-              <FaChevronDown className={styles.headerChevron} />
-            </button>
-            {renderMegaDropdown(categories, openDropdown === 'all')}
-          </div>
-          
           <SearchBar />
           
           <button 
@@ -196,14 +267,22 @@ const Header = () => {
           </button>
         </div>
 
-        <div>
+        <div className={styles.headerRight}>
           <Link to="/login" className={styles.loginLink}>
             👤 Login
           </Link>
+          
+          {/* Hamburger Menu Button - Mobile Only */}
+          <button 
+            className={styles.hamburgerButton}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
         </div>
       </div>
 
-      {/* Navigation Bar */}
+      {/* Desktop Navigation Bar */}
       <nav className={styles.navigation}>
         <ul className={styles.navList}>
           <li><Link to="/" className={styles.navLink}>Home</Link></li>
@@ -216,7 +295,7 @@ const Header = () => {
               Fire Safety Products & Services
               <FaChevronDown className={styles.navChevron} />
             </button>
-            {renderMegaDropdown(fireCategories, openDropdown === 'fire')}
+            {renderDesktopMegaDropdown(fireCategories, openDropdown === 'fire')}
           </li>
           
           <li ref={ictRef} className={styles.dropdownContainer}>
@@ -227,7 +306,7 @@ const Header = () => {
               ICT/Telecommunication Products & Services
               <FaChevronDown className={styles.navChevron} />
             </button>
-            {renderMegaDropdown(ictCategories, openDropdown === 'ict')}
+            {renderDesktopMegaDropdown(ictCategories, openDropdown === 'ict')}
           </li>
 
           <li ref={solarRef} className={styles.dropdownContainer}>
@@ -238,12 +317,50 @@ const Header = () => {
               Solar Power Solutions
               <FaChevronDown className={styles.navChevron} />
             </button>
-            {renderMegaDropdown(solarCategories, openDropdown === 'solar')}
+            {renderDesktopMegaDropdown(solarCategories, openDropdown === 'solar')}
           </li>
           
           <li><Link to="/contact" className={styles.navLink}>Contact Us</Link></li>
         </ul>
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && <div className={styles.mobileOverlay} />}
+
+      {/* Mobile Menu Sidebar */}
+      <div className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
+        <div className={styles.mobileMenuHeader}>
+          <h3>Menu</h3>
+          <button 
+            className={styles.mobileMenuClose}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <FaTimes />
+          </button>
+        </div>
+        
+        <div className={styles.mobileMenuContent}>
+          <Link 
+            to="/" 
+            className={styles.mobileNavLink}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Home
+          </Link>
+          
+          {renderMobileCategorySection(fireCategories, 'fire', 'Fire Safety Products & Services')}
+          {renderMobileCategorySection(ictCategories, 'ict', 'ICT/Telecommunication Products & Services')}
+          {renderMobileCategorySection(solarCategories, 'solar', 'Solar Power Solutions')}
+          
+          <Link 
+            to="/contact" 
+            className={styles.mobileNavLink}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Contact Us
+          </Link>
+        </div>
+      </div>
 
       {cartOpen && <CartModal onClose={() => setCartOpen(false)} />}
     </header>
