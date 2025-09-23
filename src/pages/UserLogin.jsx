@@ -105,8 +105,10 @@ const UserLogin = () => {
     }
   };
 
+  // ✅ Updated Google Login
   const handleGoogleLogin = () => {
-    const redirectUrl = encodeURIComponent(location.state?.from || '/');
+    const currentPath = location.pathname;
+    const redirectUrl = encodeURIComponent(location.state?.from || currentPath);
     window.location.href = `http://localhost:8000/accounts/google/login/?next=${redirectUrl}`;
   };
 
