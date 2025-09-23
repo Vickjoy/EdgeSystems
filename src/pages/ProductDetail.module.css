@@ -1,3 +1,6 @@
+/* =========================
+   Base Sections
+========================= */
 .section {
   padding: 2rem 0 4rem 0;
   background: #ffffff;
@@ -12,7 +15,11 @@
   position: relative;
 }
 
-.loadingContainer, .errorContainer {
+/* =========================
+   Loading & Error States
+========================= */
+.loadingContainer,
+.errorContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -54,7 +61,9 @@
   50% { opacity: 0.6; }
 }
 
-/* Main Detail Container */
+/* =========================
+   Product Detail Container
+========================= */
 .detailContainer {
   max-width: 1200px;
   margin: 2rem auto;
@@ -78,7 +87,9 @@
   }
 }
 
-/* Left Column - Image and Documentation */
+/* =========================
+   Left Column - Image & Docs
+========================= */
 .leftColumn {
   display: flex;
   flex-direction: column;
@@ -106,31 +117,24 @@
   overflow: hidden;
 }
 
-.mainImage:hover, .mainImage:focus {
+.mainImage:hover,
+.mainImage:focus {
   transform: scale(1.02);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
   outline: none;
 }
 
 @media (max-width: 768px) {
-  .mainImage {
-    height: 320px;
-    max-width: 100%;
-  }
+  .mainImage { height: 320px; max-width: 100%; }
 }
-
 @media (max-width: 480px) {
-  .mainImage {
-    height: 280px;
-  }
+  .mainImage { height: 280px; }
 }
 
+/* Lightbox */
 .lightbox {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.9);
   z-index: 9999;
   display: flex;
@@ -148,16 +152,10 @@
   animation: zoomIn 0.2s ease-out;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+@keyframes zoomIn { from {transform: scale(0.9); opacity: 0;} to {transform: scale(1); opacity: 1;} }
 
-@keyframes zoomIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
+/* Documentation box */
 .documentation {
   padding: 1.5rem;
   background: #f0fdf4;
@@ -188,7 +186,9 @@
   text-decoration: underline;
 }
 
-/* Right Column - Product Info */
+/* =========================
+   Right Column - Info
+========================= */
 .rightColumn {
   display: flex;
   flex-direction: column;
@@ -210,28 +210,10 @@
 }
 
 @media (max-width: 768px) {
-  .productTitle {
-    font-size: 2rem;
-  }
+  .productTitle { font-size: 2rem; }
 }
 
-.vatText {
-  color: #16a34a;
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.productPrice {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #111827;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.025em;
-}
-
+/* CTA row */
 .ctaRow {
   display: flex;
   gap: 1rem;
@@ -241,93 +223,7 @@
 }
 
 @media (max-width: 640px) {
-  .ctaRow {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-  }
-}
-
-.quantityArea {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-}
-
-.label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 0.25rem;
-}
-
-.quantityInput {
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 0.75rem 1rem;
-  width: 80px;
-  background: #ffffff;
-  color: #111827;
-  font-size: 1rem;
-  font-weight: 500;
-  text-align: center;
-  transition: all 0.2s ease;
-}
-
-.quantityInput:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.ctaButton, .ctaButtonAlt {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 0.875rem 2rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  outline: none;
-  position: relative;
-  min-width: 140px;
-}
-
-.ctaButton {
-  background: #16a34a;
-  color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.ctaButtonAlt {
-  background: #3b82f6;
-  color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.ctaButton:hover, .ctaButton:focus {
-  background: #15803d;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
-}
-
-.ctaButtonAlt:hover, .ctaButtonAlt:focus {
-  background: #2563eb;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-}
-
-.ctaButton:active, .ctaButtonAlt:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 640px) {
-  .ctaButton, .ctaButtonAlt {
+  .ctaButton {
     width: 100%;
     justify-content: center;
   }
@@ -346,7 +242,9 @@
   border: 1px solid #bbf7d0;
 }
 
-/* Description and Features Section */
+/* =========================
+   Description & Features
+========================= */
 .descriptionFeaturesSection {
   max-width: 1200px;
   margin: 2rem auto;
@@ -387,7 +285,6 @@
   color: #374151;
   font-size: 1rem;
   list-style: none;
-  position: relative;
 }
 
 .featuresStandalone .featureList li {
@@ -406,7 +303,9 @@
   font-size: 1.2rem;
 }
 
-/* Full Width Sections */
+/* =========================
+   Full Width Sections
+========================= */
 .fullWidthSections {
   max-width: 1200px;
   margin: 2rem auto;
@@ -415,7 +314,8 @@
   gap: 2rem;
 }
 
-.description, .specs {
+.description,
+.specs {
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
@@ -425,38 +325,17 @@
   font-size: 1rem;
 }
 
-.description b, .specs b {
+.description b,
+.specs b {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #111827;
+  margin-bottom: 1rem;
   display: block;
-  margin-bottom: 1rem;
 }
 
-.description p {
-  color: #374151;
-  line-height: 1.7;
-  font-size: 1rem;
-  margin: 0;
-}
-
-/* Specification Tables */
-.specTableWrapper {
-  margin-bottom: 2rem;
-}
-
-.specTableWrapper:last-child {
-  margin-bottom: 0;
-}
-
-.specTableWrapper h4 {
-  color: #111827;
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e5e7eb;
-}
+/* Specs Table */
+.specTableWrapper { margin-bottom: 2rem; }
+.specTableWrapper:last-child { margin-bottom: 0; }
 
 .specTable {
   width: 100%;
@@ -467,14 +346,11 @@
 }
 
 .specTable td {
-  border: none;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #f3f4f6;
 }
 
-.specTable tr:last-child td {
-  border-bottom: none;
-}
+.specTable tr:last-child td { border-bottom: none; }
 
 .specKey {
   font-weight: 600;
@@ -491,69 +367,108 @@
   line-height: 1.6;
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-  .detailContainer {
-    padding: 1.5rem;
-    gap: 2rem;
-  }
-  
-  .fullWidthSections {
-    padding: 0 1.5rem;
-  }
-  
-  .description, .specs, .featuresStandalone {
-    padding: 1.5rem;
-  }
-  
-  .productTitle {
-    font-size: 1.875rem;
-  }
-  
-  .productPrice {
-    font-size: 1.75rem;
-  }
+/* =========================
+   WhatsApp Section
+========================= */
+.whatsappSection {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 2px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
 
-  .specTable td {
-    padding: 0.75rem 1rem;
-  }
+.whatsappButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: #25d366;
+  color: white;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  min-width: 180px;
+}
+
+.whatsappButton:hover {
+  background: #20ba5a;
+  transform: translateY(-2px);
+}
+
+.whatsappIcon { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* =========================
+   Quantity + CTA Buttons
+========================= */
+.quantityArea {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.quantityInput {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  width: 80px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  min-width: 140px;
+  background: #16a34a;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.ctaButton:hover { background: #15803d; }
+
+/* =========================
+   Responsive Adjustments
+========================= */
+@media (max-width: 768px) {
+  .detailContainer { padding: 1.5rem; gap: 2rem; }
+  .fullWidthSections { padding: 0 1.5rem; }
+  .description, .specs, .featuresStandalone { padding: 1.5rem; }
+  .productTitle { font-size: 1.875rem; }
+  .specTable td { padding: 0.75rem 1rem; }
+  .whatsappButton { width: 100%; font-size: 0.95rem; padding: 0.75rem 1.5rem; }
+  .whatsappIcon { width: 18px; height: 18px; }
 }
 
 @media (max-width: 480px) {
-  .detailContainer {
-    padding: 1rem;
-  }
-  
-  .fullWidthSections {
-    padding: 0 1rem;
-  }
-  
-  .description, .specs, .featuresStandalone {
-    padding: 1rem;
-  }
-
-  .specTable td {
-    padding: 0.5rem 0.75rem;
-  }
-}
-
-/* Add these styles to your existing ProductDetail.module.css */
-
-.loginLink {
-  color: #3498db;
-  text-decoration: none;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border: 2px solid #3498db;
-  border-radius: 6px;
-  display: inline-block;
-  transition: all 0.3s ease;
-  background: transparent;
-}
-
-.loginLink:hover {
-  background: #3498db;
-  color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+  .detailContainer { padding: 1rem; }
+  .fullWidthSections { padding: 0 1rem; }
+  .description, .specs, .featuresStandalone { padding: 1rem; }
+  .specTable td { padding: 0.5rem 0.75rem; }
+  .whatsappButton { font-size: 0.9rem; padding: 0.75rem 1.25rem; gap: 0.5rem; }
+  .whatsappIcon { width: 16px; height: 16px; }
+  .ctaRow { flex-direction: column; align-items: stretch; gap: 1rem; }
 }

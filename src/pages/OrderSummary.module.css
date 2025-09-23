@@ -80,10 +80,6 @@
   text-align: left;
 }
 
-.tableHeaderCell.right {
-  text-align: right;
-}
-
 .tableHeaderCell.center {
   text-align: center;
 }
@@ -179,37 +175,6 @@
   border-color: #6096B4;
 }
 
-.priceCell {
-  text-align: right;
-  min-width: 200px;
-}
-
-.priceContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.priceBeforeTax {
-  font-weight: 600;
-  color: #6096B4;
-  font-size: 15px;
-}
-
-.taxInfo {
-  font-size: 13px;
-  color: #888;
-  font-weight: 500;
-}
-
-.totalPrice {
-  font-weight: 700;
-  color: #1DCD9F;
-  font-size: 16px;
-  padding-top: 0.2rem;
-  border-top: 1px solid #e8f1f5;
-}
-
 .removeButton {
   background: linear-gradient(135deg, #ff6b6b 0%, #e74c3c 100%);
   border: none;
@@ -232,63 +197,13 @@
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
 }
 
-.priceSummaryContainer {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 2rem;
-}
-
-.priceSummaryTable {
-  border-collapse: separate;
-  border-spacing: 0;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(96, 150, 180, 0.15);
-  min-width: 350px;
-  border: 3px solid #6096B4;
-}
-
-.priceSummaryRow {
-  border-bottom: 1px solid #e8f1f5;
-}
-
-.priceSummaryRow:last-child {
-  border-bottom: none;
-}
-
-.priceSummaryCell {
-  padding: 1rem 1.5rem;
-  font-weight: 600;
-  color: #333;
-}
-
-.priceSummaryValue {
-  padding: 1rem 1.5rem;
-  text-align: right;
-  font-weight: 600;
-  color: #6096B4;
-}
-
-.totalRow {
-  background: linear-gradient(135deg, #6096B4 0%, #5086A4 100%);
-}
-
-.totalCell,
-.totalValue {
-  color: white;
-  padding: 1.2rem 1.5rem;
-  font-weight: 700;
-  font-size: 16px;
-}
-
-.nextButtonContainer {
+.requestQuotationContainer {
   display: flex;
   justify-content: flex-end;
 }
 
-.nextButton {
-  background: linear-gradient(135deg, #6096B4 0%, #5086A4 100%);
+.requestQuotationButton {
+  background: linear-gradient(135deg, #1DCD9F 0%, #17B892 100%);
   color: white;
   font-weight: 700;
   padding: 1rem 3rem;
@@ -299,18 +214,20 @@
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(29, 205, 159, 0.2);
 }
 
-.nextButton:disabled {
+.requestQuotationButton:disabled {
   cursor: not-allowed;
   opacity: 0.5;
   background: #ccc;
+  box-shadow: none;
 }
 
-.nextButton:not(:disabled):hover {
-  background: linear-gradient(135deg, #5086A4 0%, #4076A4 100%);
+.requestQuotationButton:not(:disabled):hover {
+  background: linear-gradient(135deg, #17B892 0%, #14A682 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(96, 150, 180, 0.4);
+  box-shadow: 0 6px 20px rgba(29, 205, 159, 0.4);
 }
 
 /* Mobile Styles */
@@ -355,22 +272,6 @@
     font-size: 12px;
   }
   
-  .priceContainer {
-    gap: 0.2rem;
-  }
-  
-  .priceBeforeTax {
-    font-size: 12px;
-  }
-  
-  .taxInfo {
-    font-size: 10px;
-  }
-  
-  .totalPrice {
-    font-size: 13px;
-  }
-  
   .quantitySelect {
     padding: 0.4rem 0.6rem;
     min-width: 50px;
@@ -383,29 +284,13 @@
     font-size: 16px;
   }
   
-  .priceSummaryTable {
-    min-width: 280px;
-  }
-  
-  .priceSummaryCell,
-  .priceSummaryValue {
-    padding: 0.8rem 1rem;
-    font-size: 13px;
-  }
-  
-  .totalCell,
-  .totalValue {
-    padding: 1rem;
-    font-size: 14px;
-  }
-  
-  .nextButton {
+  .requestQuotationButton {
     padding: 0.75rem 2rem;
     font-size: 16px;
     width: 100%;
   }
   
-  .nextButtonContainer {
+  .requestQuotationContainer {
     justify-content: stretch;
   }
 }
@@ -418,19 +303,6 @@
   }
   
   .table {
-    min-width: 600px;
-  }
-  
-  .priceCell {
-    min-width: 180px;
-  }
-  
-  .priceSummaryContainer {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  .priceSummaryTable {
-    min-width: 300px;
+    min-width: 500px;
   }
 }

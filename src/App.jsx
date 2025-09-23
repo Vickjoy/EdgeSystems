@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -7,7 +7,7 @@ import About from './pages/About';
 import Checkout from './pages/Checkout';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
-import UserLogin from './pages/UserLogin'; // <-- import the new UserLogin page
+import UserLogin from './pages/UserLogin';
 import ProductDetail from './pages/ProductDetail';
 import ProductList from './pages/ProductList';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -15,9 +15,12 @@ import AdminDashboard from './pages/AdminDashboard';
 import CategoryPage from './pages/CategoryPage';
 import AdminLayout from './components/AdminLayout';
 import OrderSummary from './pages/OrderSummary';
+import FloatingWhatsAppButton from './components/FloatingWhatsAppButton';
 
+// Component to handle routes + header/footer visibility
 const App = () => {
   const location = useLocation();
+
   // List of admin routes where Header/Footer should be hidden
   const adminRoutes = [
     '/admin-dashboard',
@@ -25,12 +28,16 @@ const App = () => {
     '/admin-categories',
     '/admin-subcategories'
   ];
+
   // Check if current path starts with any admin route
-  const isAdminRoute = adminRoutes.some(route => location.pathname.startsWith(route));
+  const isAdminRoute = adminRoutes.some(route =>
+    location.pathname.startsWith(route)
+  );
 
   return (
-    <div>
+    <div className="App">
       {!isAdminRoute && <Header />}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -38,7 +45,7 @@ const App = () => {
         <Route path="/order-summary" element={<OrderSummary />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/user-login" element={<UserLogin />} /> {/* <-- new user login route */}
+        <Route path="/user-login" element={<UserLogin />} />
         <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/product/edit/:slug" element={<ProductDetail />} />
         <Route path="/fire-safety/:categorySlug" element={<ProductList />} />
@@ -56,7 +63,11 @@ const App = () => {
           }
         />
       </Routes>
+
       {!isAdminRoute && <Footer />}
+
+      {/* Floating WhatsApp Button - appears on all pages */}
+      <FloatingWhatsAppButton />
     </div>
   );
 };

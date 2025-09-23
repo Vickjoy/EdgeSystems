@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok } from 'react-icons/fa';
 import CompanyLogo from '../assets/Company_logo.webp';
+import InstagramIcon from '../assets/Instagram.png';
+import LinkedInIcon from '../assets/LinkedIn.png';
+import TiktokIcon from '../assets/Tiktok.png';
+import FacebookIcon from '../assets/Facebook.png';
+import WhatsAppIcon from '../assets/whatsapp.png';
 import styles from './Footer.module.css';
 
 const Footer = () => {
@@ -15,16 +19,19 @@ const Footer = () => {
         </p>
         <div className={styles.socialLinks}>
           <a href="https://www.linkedin.com/in/edge-systems-903b32222?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-            <FaLinkedin className={styles.socialIcon} />
+            <img src={LinkedInIcon} alt="LinkedIn" className={styles.socialIcon} />
           </a>
           <a href="https://www.facebook.com/edgesystemslimited" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-            <FaFacebook className={styles.socialIcon} />
+            <img src={FacebookIcon} alt="Facebook" className={styles.socialIcon} />
           </a>
           <a href="https://www.instagram.com/edge_systems.co.ke?utm_source=qr&igsh=aHpldnhnZnRmYjM3" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-            <FaInstagram className={styles.socialIcon} />
+            <img src={InstagramIcon} alt="Instagram" className={styles.socialIcon} />
           </a>
           <a href="https://www.tiktok.com/@edgesystems6?_t=ZM-8yCr3l8iIwn&_r=1" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-            <FaTiktok className={styles.socialIcon} />
+            <img src={TiktokIcon} alt="TikTok" className={styles.socialIcon} />
+          </a>
+          <a href="https://wa.me/254117320000" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+            <img src={WhatsAppIcon} alt="WhatsApp" className={styles.socialIcon} />
           </a>
         </div>
       </div>

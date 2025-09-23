@@ -45,7 +45,6 @@
   object-fit: contain;    /* show full image */
 }
 
-
 .card:hover .image {
   transform: scale(1.02);
 }
@@ -134,6 +133,46 @@
   transform: translateY(0);
 }
 
+/* WhatsApp Button Styles */
+.whatsappButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #25d366;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 140px;
+}
+
+.whatsappButton:hover {
+  background: #20ba5a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+.whatsappButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+}
+
+.whatsappIcon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 /* Edit/Delete button styles */
 .button[style*="background: #1DCD9F"] {
   background: #10b981 !important;
@@ -174,6 +213,17 @@
   .price {
     font-size: 1.25rem;
   }
+
+  .whatsappButton {
+    padding: 0.625rem 1rem;
+    font-size: 0.8rem;
+    min-width: 120px;
+  }
+
+  .whatsappIcon {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -184,6 +234,12 @@
   
   .imageWrapper {
     height: 200px;
+  }
+
+  .whatsappButton {
+    width: 100%;
+    justify-content: center;
+    min-width: auto;
   }
 }
 

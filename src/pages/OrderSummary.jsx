@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './OrderSummary.module.css';
 
 const OrderSummary = () => {
-  const { cartItems, removeFromCart, addToCart } = useCart();
+  const { cartItems, removeFromCart, addToCart, setCart } = useCart();
   const navigate = useNavigate();
 
   // Quantity change handler for dropdown
@@ -15,15 +15,28 @@ const OrderSummary = () => {
     addToCart({ ...item, quantity: newQty });
   };
 
-  // Price calculations
-  const totalBeforeTax = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-  const taxRate = 0.16; // 16%
-  const taxAmount = totalBeforeTax * taxRate;
-  const totalWithTax = totalBeforeTax + taxAmount;
+  // Handle Request Quotation
+  const handleRequestQuotation = () => {
+    if (cartItems.length === 0) return;
 
-  const handleNext = () => {
-    navigate('/checkout');
-    // Removed clearCart() to keep cart content throughout
+    // Format the message with product names and quantities
+    let message = "Hello! I would like to request a quotation for the following items:\n\n";
+    
+    cartItems.forEach((item, index) => {
+      message += `${index + 1}. ${item.name || `Product #${item.id}`} - Quantity: ${item.quantity || 1}\n`;
+    });
+    
+    message += "\nPlease provide me with pricing and availability information. Thank you!";
+    
+    // Encode the message for URL
+    const encodedMessage = encodeURIComponent(message);
+    
+    // Open WhatsApp with prefilled message
+    const whatsappUrl = `https://wa.me/254117320000?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+    
+    // Clear the cart after sending
+    setCart([]);
   };
 
   return (
@@ -56,9 +69,6 @@ const OrderSummary = () => {
                 <th className={`${styles.tableHeaderCell} ${styles.center}`}>
                   Quantity
                 </th>
-                <th className={`${styles.tableHeaderCell} ${styles.right}`}>
-                  Price
-                </th>
                 <th className={`${styles.tableHeaderCell} ${styles.center}`}>
                   Remove
                 </th>
@@ -67,7 +77,7 @@ const OrderSummary = () => {
             <tbody>
               {cartItems.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className={styles.emptyCell}>
+                  <td colSpan={4} className={styles.emptyCell}>
                     Your cart is empty.
                   </td>
                 </tr>
@@ -105,19 +115,6 @@ const OrderSummary = () => {
                         </select>
                       </div>
                     </td>
-                    <td className={`${styles.tableCell} ${styles.priceCell}`}>
-                      <div className={styles.priceContainer}>
-                        <div className={styles.priceBeforeTax}>
-                          KES {(Number(item.price) * item.quantity).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
-                        </div>
-                        <div className={styles.taxInfo}>
-                          Tax (16%): KES {(Number(item.price) * item.quantity * 0.16).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
-                        </div>
-                        <div className={styles.totalPrice}>
-                          Total: KES {(Number(item.price) * item.quantity * 1.16).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
-                        </div>
-                      </div>
-                    </td>
                     <td className={`${styles.tableCell} ${styles.center}`}>
                       <button 
                         onClick={() => removeFromCart(item.id)} 
@@ -134,47 +131,13 @@ const OrderSummary = () => {
           </table>
         </div>
 
-        {/* Price Summary Table */}
-        {cartItems.length > 0 && (
-          <div className={styles.priceSummaryContainer}>
-            <table className={styles.priceSummaryTable}>
-              <tbody>
-                <tr className={styles.priceSummaryRow}>
-                  <td className={styles.priceSummaryCell}>
-                    Total before tax:
-                  </td>
-                  <td className={styles.priceSummaryValue}>
-                    KES {totalBeforeTax.toLocaleString('en-KE', { minimumFractionDigits: 2 })}
-                  </td>
-                </tr>
-                <tr className={styles.priceSummaryRow}>
-                  <td className={styles.priceSummaryCell}>
-                    Total VAT (16%):
-                  </td>
-                  <td className={styles.priceSummaryValue}>
-                    KES {taxAmount.toLocaleString('en-KE', { minimumFractionDigits: 2 })}
-                  </td>
-                </tr>
-                <tr className={`${styles.priceSummaryRow} ${styles.totalRow}`}>
-                  <td className={`${styles.priceSummaryCell} ${styles.totalCell}`}>
-                    Total:
-                  </td>
-                  <td className={`${styles.priceSummaryValue} ${styles.totalValue}`}>
-                    KES {totalWithTax.toLocaleString('en-KE', { minimumFractionDigits: 2 })}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        <div className={styles.nextButtonContainer}>
+        <div className={styles.requestQuotationContainer}>
           <button
-            className={styles.nextButton}
-            onClick={handleNext}
+            className={styles.requestQuotationButton}
+            onClick={handleRequestQuotation}
             disabled={cartItems.length === 0}
           >
-            Next
+            Request Quotation
           </button>
         </div>
       </div>

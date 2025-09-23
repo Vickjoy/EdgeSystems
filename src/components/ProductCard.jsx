@@ -1,15 +1,14 @@
 import React from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './ProductCard.module.css';
 import { useAuth } from '../context/AuthContext';
 
 const ProductCard = ({ product, onDelete }) => {
-  console.log('[EdgeSystems ProductCard] price debug:', product.name, product.price);
+  console.log('[EdgeSystems ProductCard] product debug:', product.name);
   console.log('Product image:', product.image);
 
   const { user, token } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
@@ -48,28 +47,6 @@ const ProductCard = ({ product, onDelete }) => {
       </div>
       <div className={styles.content}>
         <h3 className={styles.title}>{product.name}</h3>
-        <div className={styles.vatText}>excl 16% VAT</div>
-        {product.price_visibility === 'login_required' && !user ? (
-          <div className={styles.price}>
-            <Link 
-              to="/user-login" 
-              state={{ from: location.pathname }} 
-              className={styles.loginLink}
-              onClick={(e) => e.stopPropagation()}
-            >
-              Login for prices
-            </Link>
-          </div>
-        ) : (
-          product.price !== null && product.price !== undefined ? (
-            <div className={styles.price}>KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</div>
-          ) : (
-            <div className={styles.price}>Price unavailable</div>
-          )
-        )}
-        <div className={styles.actions} onClick={e => e.stopPropagation()}>
-          {/* Actions can be added here if needed */}
-        </div>
       </div>
       {(user?.is_staff || user?.is_superuser) && false && (
         <div style={{ marginTop: 8, display: 'flex', gap: 8, padding: '0 1.5rem 1rem 1.5rem' }}>
