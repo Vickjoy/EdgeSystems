@@ -106,9 +106,9 @@
 
 .mainImage {
   width: 100%;
-  max-width: 500px;
-  height: 400px;
-  object-fit: cover;
+  max-width: 420px; /* Reduced from 500px - smaller than before but bigger than product card */
+  height: 320px; /* Reduced from 400px */
+  object-fit: contain; /* Changed from cover to contain to match product card style */
   border-radius: 8px;
   background: #f9fafb;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -125,10 +125,10 @@
 }
 
 @media (max-width: 768px) {
-  .mainImage { height: 320px; max-width: 100%; }
+  .mainImage { height: 280px; max-width: 100%; }
 }
 @media (max-width: 480px) {
-  .mainImage { height: 280px; }
+  .mainImage { height: 240px; }
 }
 
 /* Lightbox */
@@ -213,7 +213,7 @@
   .productTitle { font-size: 2rem; }
 }
 
-/* CTA row */
+/* CTA row with Ask for Price button */
 .ctaRow {
   display: flex;
   gap: 1rem;
@@ -223,9 +223,14 @@
 }
 
 @media (max-width: 640px) {
-  .ctaButton {
+  .ctaButton,
+  .askPriceButton {
     width: 100%;
     justify-content: center;
+  }
+  .ctaRow {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
@@ -368,45 +373,6 @@
 }
 
 /* =========================
-   WhatsApp Section
-========================= */
-.whatsappSection {
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border: 2px solid #bbf7d0;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  text-align: center;
-}
-
-.whatsappButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  background: #25d366;
-  color: white;
-  font-weight: 500;
-  font-size: 1rem;
-  padding: 0.875rem 2rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-  min-width: 180px;
-}
-
-.whatsappButton:hover {
-  background: #20ba5a;
-  transform: translateY(-2px);
-}
-
-.whatsappIcon { width: 20px; height: 20px; flex-shrink: 0; }
-
-/* =========================
    Quantity + CTA Buttons
 ========================= */
 .quantityArea {
@@ -450,6 +416,38 @@
 
 .ctaButton:hover { background: #15803d; }
 
+/* Ask for Price Button - Same size as Add to Cart */
+.askPriceButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  min-width: 140px;
+  background: #25d366;
+  color: white;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.askPriceButton:hover {
+  background: #20ba5a;
+  transform: translateY(-1px);
+}
+
+.whatsappIcon { 
+  width: 18px; 
+  height: 18px; 
+  flex-shrink: 0; 
+}
+
 /* =========================
    Responsive Adjustments
 ========================= */
@@ -459,8 +457,12 @@
   .description, .specs, .featuresStandalone { padding: 1.5rem; }
   .productTitle { font-size: 1.875rem; }
   .specTable td { padding: 0.75rem 1rem; }
-  .whatsappButton { width: 100%; font-size: 0.95rem; padding: 0.75rem 1.5rem; }
-  .whatsappIcon { width: 18px; height: 18px; }
+  .askPriceButton { 
+    width: 100%; 
+    font-size: 0.95rem; 
+    padding: 0.75rem 1.5rem; 
+  }
+  .whatsappIcon { width: 16px; height: 16px; }
 }
 
 @media (max-width: 480px) {
@@ -468,7 +470,11 @@
   .fullWidthSections { padding: 0 1rem; }
   .description, .specs, .featuresStandalone { padding: 1rem; }
   .specTable td { padding: 0.5rem 0.75rem; }
-  .whatsappButton { font-size: 0.9rem; padding: 0.75rem 1.25rem; gap: 0.5rem; }
+  .askPriceButton { 
+    font-size: 0.9rem; 
+    padding: 0.75rem 1.25rem; 
+    gap: 0.5rem; 
+  }
   .whatsappIcon { width: 16px; height: 16px; }
   .ctaRow { flex-direction: column; align-items: stretch; gap: 1rem; }
 }

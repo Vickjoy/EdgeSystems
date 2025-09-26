@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './ProductCard.module.css';
 import { useAuth } from '../context/AuthContext';
@@ -11,6 +11,26 @@ const ProductCard = ({ product, onDelete }) => {
   const { user, token } = useAuth();
   const { addToCart } = useCart();
   const navigate = useNavigate();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    // This will run when the component mounts, including after navigation back
+    const handlePageLoad = () => {
+      window.scrollTo(0, 0);
+    };
+
+    // Handle page refresh/back button
+    window.addEventListener('beforeunload', handlePageLoad);
+    window.addEventListener('pageshow', handlePageLoad);
+
+    // Scroll to top on mount
+    window.scrollTo(0, 0);
+
+    return () => {
+      window.removeEventListener('beforeunload', handlePageLoad);
+      window.removeEventListener('pageshow', handlePageLoad);
+    };
+  }, []);
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
