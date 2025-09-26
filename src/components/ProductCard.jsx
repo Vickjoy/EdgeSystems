@@ -2,12 +2,14 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './ProductCard.module.css';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 const ProductCard = ({ product, onDelete }) => {
   console.log('[EdgeSystems ProductCard] product debug:', product.name);
   console.log('Product image:', product.image);
 
   const { user, token } = useAuth();
+  const { addToCart } = useCart();
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -29,11 +31,39 @@ const ProductCard = ({ product, onDelete }) => {
     }
   };
 
+  const handleAddToCart = (e) => {
+    e.stopPropagation(); // Prevent navigation to product detail
+    addToCart(product);
+    
+    // Optional: Show a brief success message
+    const button = e.target;
+    const originalText = button.textContent;
+    button.textContent = 'Added!';
+    button.style.color = '#10b981';
+    
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.style.color = '';
+    }, 1500);
+  };
+
+  const handleCardClick = () => {
+    navigate(`/product/${product.slug}`);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleCardClick();
+    }
+  };
+
   return (
     <div
       className={styles.card}
       tabIndex={0}
-      onClick={() => navigate(`/product/${product.slug}`)}
+      onClick={handleCardClick}
+      onKeyDown={handleKeyDown}
       role="button"
       aria-label={`View details for ${product.name}`}
     >
@@ -47,6 +77,15 @@ const ProductCard = ({ product, onDelete }) => {
       </div>
       <div className={styles.content}>
         <h3 className={styles.title}>{product.name}</h3>
+        
+        {/* Add to Cart Link */}
+        <button
+          className={styles.addToCartLink}
+          onClick={handleAddToCart}
+          aria-label={`Add ${product.name} to cart`}
+        >
+          Add to Cart
+        </button>
       </div>
       {(user?.is_staff || user?.is_superuser) && false && (
         <div style={{ marginTop: 8, display: 'flex', gap: 8, padding: '0 1.5rem 1rem 1.5rem' }}>
