@@ -1,36 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './ProductCard.module.css';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
 const ProductCard = ({ product, onDelete }) => {
-  console.log('[EdgeSystems ProductCard] product debug:', product.name);
-  console.log('Product image:', product.image);
-
   const { user, token } = useAuth();
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
   const navigate = useNavigate();
-
-  // Scroll to top when component mounts
-  useEffect(() => {
-    // This will run when the component mounts, including after navigation back
-    const handlePageLoad = () => {
-      window.scrollTo(0, 0);
-    };
-
-    // Handle page refresh/back button
-    window.addEventListener('beforeunload', handlePageLoad);
-    window.addEventListener('pageshow', handlePageLoad);
-
-    // Scroll to top on mount
-    window.scrollTo(0, 0);
-
-    return () => {
-      window.removeEventListener('beforeunload', handlePageLoad);
-      window.removeEventListener('pageshow', handlePageLoad);
-    };
-  }, []);
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
@@ -52,19 +29,17 @@ const ProductCard = ({ product, onDelete }) => {
   };
 
   const handleAddToCart = (e) => {
-    e.stopPropagation(); // Prevent navigation to product detail
+    e.preventDefault();
+    e.stopPropagation();
+    
     addToCart(product);
     
-    // Optional: Show a brief success message
-    const button = e.target;
-    const originalText = button.textContent;
-    button.textContent = 'Added!';
-    button.style.color = '#10b981';
+    const link = e.currentTarget;
+    link.textContent = 'Added';
     
     setTimeout(() => {
-      button.textContent = originalText;
-      button.style.color = '';
-    }, 1500);
+      link.textContent = 'Add to Cart';
+    }, 1000);
   };
 
   const handleCardClick = () => {
@@ -78,6 +53,11 @@ const ProductCard = ({ product, onDelete }) => {
     }
   };
 
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.src = '/placeholder.png';
+  };
+
   return (
     <div
       className={styles.card}
@@ -89,34 +69,35 @@ const ProductCard = ({ product, onDelete }) => {
     >
       <div className={styles.imageWrapper}>
         <img
-          src={product.image ? product.image : '/placeholder.png'}
+          src={product.image || '/placeholder.png'}
           alt={product.name}
           className={styles.image}
-          onError={e => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
+          loading="lazy"
+          onError={handleImageError}
         />
       </div>
       <div className={styles.content}>
         <h3 className={styles.title}>{product.name}</h3>
         
-        {/* Add to Cart Link */}
-        <button
+        {product.price && (
+          <div className={styles.price}>
+            KES {Number(product.price).toLocaleString('en-KE', { minimumFractionDigits: 2 })}
+          </div>
+        )}
+        
+        <div className={styles.stockStatus}>
+          In Stock
+        </div>
+        
+        <a
+          href="#"
           className={styles.addToCartLink}
           onClick={handleAddToCart}
           aria-label={`Add ${product.name} to cart`}
         >
           Add to Cart
-        </button>
+        </a>
       </div>
-      {(user?.is_staff || user?.is_superuser) && false && (
-        <div style={{ marginTop: 8, display: 'flex', gap: 8, padding: '0 1.5rem 1rem 1.5rem' }}>
-          <Link to={`/product/edit/${product.slug}`} className={styles.button} style={{ background: '#1DCD9F' }} onClick={e => e.stopPropagation()}>
-            Edit
-          </Link>
-          <button onClick={e => { e.stopPropagation(); handleDelete(); }} className={styles.button} style={{ background: '#e74c3c' }}>
-            Delete
-          </button>
-        </div>
-      )}
     </div>
   );
 };

@@ -7,6 +7,102 @@ import { useAuth } from '../context/AuthContext';
 import ProductForm from '../components/ProductForm';
 import { fetchCategories, fetchSubcategories } from '../utils/api';
 
+// Cache configuration
+const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
+const CACHE_KEYS = {
+  CATEGORIES: 'edgeSystemsCategories',
+  SUBCATEGORIES: 'edgeSystemsSubcategories',
+  PRODUCTS: 'edgeSystemsProducts'
+};
+
+// Cache utility functions
+const getCacheKey = (key, params = '') => `${key}${params ? `_${params}` : ''}`;
+
+const getCachedData = (cacheKey) => {
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    if (!cached) return null;
+    
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+    
+    // Check if cache is still valid
+    if (now - timestamp < CACHE_DURATION) {
+      return data;
+    }
+    
+    // Cache expired, remove it
+    localStorage.removeItem(cacheKey);
+    return null;
+  } catch (error) {
+    console.error('Error reading cache:', error);
+    localStorage.removeItem(cacheKey);
+    return null;
+  }
+};
+
+const setCachedData = (cacheKey, data) => {
+  try {
+    const cacheObject = {
+      data,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheObject));
+  } catch (error) {
+    console.error('Error setting cache:', error);
+    // Handle storage quota exceeded
+    if (error.name === 'QuotaExceededError') {
+      // Clear old cache entries
+      Object.values(CACHE_KEYS).forEach(key => {
+        const keys = Object.keys(localStorage).filter(k => k.startsWith(key));
+        keys.forEach(k => localStorage.removeItem(k));
+      });
+    }
+  }
+};
+
+// Enhanced API functions with caching
+const fetchCategoriesWithCache = async () => {
+  const cacheKey = getCacheKey(CACHE_KEYS.CATEGORIES);
+  const cached = getCachedData(cacheKey);
+  
+  if (cached) {
+    return cached;
+  }
+  
+  const data = await fetchCategories();
+  setCachedData(cacheKey, data);
+  return data;
+};
+
+const fetchSubcategoriesWithCache = async (categorySlug) => {
+  const cacheKey = getCacheKey(CACHE_KEYS.SUBCATEGORIES, categorySlug);
+  const cached = getCachedData(cacheKey);
+  
+  if (cached) {
+    return cached;
+  }
+  
+  const data = await fetchSubcategories(categorySlug);
+  setCachedData(cacheKey, data);
+  return data;
+};
+
+const fetchProductsWithCache = async (subcategorySlug, page = 1, pageSize = 40) => {
+  const cacheKey = getCacheKey(CACHE_KEYS.PRODUCTS, `${subcategorySlug}_${page}_${pageSize}`);
+  const cached = getCachedData(cacheKey);
+  
+  if (cached) {
+    return cached;
+  }
+  
+  const url = `http://127.0.0.1:8000/api/subcategories/${subcategorySlug}/products/?page=${page}&page_size=${pageSize}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  
+  setCachedData(cacheKey, data);
+  return data;
+};
 
 const ProductList = () => {
   const { categorySlug, slug } = useParams();
@@ -22,6 +118,8 @@ const ProductList = () => {
   const { user, token } = useAuth();
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
+  const [loadingSubcategories, setLoadingSubcategories] = useState(false);
 
   // If search results are passed via location.state, use them
   const isSearchResults = location.pathname.startsWith('/search');
@@ -34,14 +132,19 @@ const ProductList = () => {
       setSubcategories([]);
       return;
     }
+    
     setLoading(true);
-    // Fetch categories on mount
+    // Fetch categories on mount with caching
     const getCategories = async () => {
+      setLoadingCategories(true);
       try {
-        const data = await fetchCategories();
+        const data = await fetchCategoriesWithCache();
         setCategories(data);
       } catch (error) {
+        console.error('Error fetching categories:', error);
         setCategories([]);
+      } finally {
+        setLoadingCategories(false);
       }
     };
     getCategories();
@@ -54,22 +157,27 @@ const ProductList = () => {
       setSubcategories([]);
       return;
     }
+    
     const selectedCategory = categories.find(cat => cat.slug === category);
     if (!selectedCategory) {
       setSubcategories([]);
       return;
     }
+    
     const getSubcategories = async () => {
+      setLoadingSubcategories(true);
       try {
-        // Use slug in the endpoint if your backend supports it, otherwise keep using id
-        const data = await fetchSubcategories(selectedCategory.slug);
+        const data = await fetchSubcategoriesWithCache(selectedCategory.slug);
         setSubcategories(data);
         // Auto-select the first subcategory if none is selected
         if ((!subCategory || !subCategory.slug) && Array.isArray(data) && data.length > 0) {
           setSubCategory(data[0]);
         }
       } catch (error) {
+        console.error('Error fetching subcategories:', error);
         setSubcategories([]);
+      } finally {
+        setLoadingSubcategories(false);
       }
     };
     getSubcategories();
@@ -80,11 +188,11 @@ const ProductList = () => {
     if (isSearchResults) return;
     // Only fetch when a subcategory is selected
     if (!subCategory || !subCategory.slug) return;
+    
     setLoading(true);
-    let url = `http://127.0.0.1:8000/api/subcategories/${subCategory.slug}/products/?page=${page}&page_size=40`;
     try {
-      const response = await fetch(url);
-      const data = await response.json();
+      const data = await fetchProductsWithCache(subCategory.slug, page, 40);
+      
       if (reset) {
         setProducts(data.results || data);
       } else {
@@ -110,7 +218,17 @@ const ProductList = () => {
   useEffect(() => {
     if (isSearchResults) return;
     fetchProducts(page === 1);
-    const handleProductsUpdated = () => fetchProducts(true);
+    
+    const handleProductsUpdated = () => {
+      // Clear relevant product cache when products are updated
+      const keys = Object.keys(localStorage).filter(key => 
+        key.startsWith(CACHE_KEYS.PRODUCTS) && 
+        subCategory && key.includes(subCategory.slug)
+      );
+      keys.forEach(key => localStorage.removeItem(key));
+      fetchProducts(true);
+    };
+    
     window.addEventListener('productsUpdated', handleProductsUpdated);
     return () => window.removeEventListener('productsUpdated', handleProductsUpdated);
     // eslint-disable-next-line
@@ -131,6 +249,22 @@ const ProductList = () => {
   // Handle product deletion
   const handleDelete = (id) => {
     setProducts(prev => prev.filter(p => p.id !== id));
+    // Clear relevant cache when a product is deleted
+    if (subCategory) {
+      const keys = Object.keys(localStorage).filter(key => 
+        key.startsWith(CACHE_KEYS.PRODUCTS) && key.includes(subCategory.slug)
+      );
+      keys.forEach(key => localStorage.removeItem(key));
+    }
+  };
+
+  // Function to clear all cache (useful for debugging or force refresh)
+  const clearCache = () => {
+    Object.values(CACHE_KEYS).forEach(cacheKey => {
+      const keys = Object.keys(localStorage).filter(key => key.startsWith(cacheKey));
+      keys.forEach(key => localStorage.removeItem(key));
+    });
+    window.location.reload();
   };
 
   // Breadcrumbs logic
@@ -152,34 +286,63 @@ const ProductList = () => {
           {!isSearchResults && (
             <aside style={{ minWidth: 220 }}>
               <h3 style={{ color: 'white', marginBottom: '1rem' }}>Subcategories</h3>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                {subcategories.length === 0 && <li style={{ color: 'white' }}>No subcategories</li>}
-                {subcategories.map(sub => (
-                  <li key={sub.id}>
-                    <button
-                      style={{
-                        background: subCategory?.id === sub.id ? '#1DCD9F' : 'white',
-                        color: subCategory?.id === sub.id ? 'white' : '#6096B4',
-                        border: 'none',
-                        borderRadius: 4,
-                        padding: '0.5rem 1rem',
-                        marginBottom: 8,
-                        width: '100%',
-                        cursor: 'pointer',
-                        fontWeight: 600
-                      }}
-                      onClick={() => setSubCategory(sub)}
-                    >
-                      {sub.name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              {loadingSubcategories ? (
+                <div style={{ color: 'white' }}>Loading subcategories...</div>
+              ) : (
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                  {subcategories.length === 0 && <li style={{ color: 'white' }}>No subcategories</li>}
+                  {subcategories.map(sub => (
+                    <li key={sub.id}>
+                      <button
+                        style={{
+                          background: subCategory?.id === sub.id ? '#1DCD9F' : 'white',
+                          color: subCategory?.id === sub.id ? 'white' : '#6096B4',
+                          border: 'none',
+                          borderRadius: 4,
+                          padding: '0.5rem 1rem',
+                          marginBottom: 8,
+                          width: '100%',
+                          cursor: 'pointer',
+                          fontWeight: 600
+                        }}
+                        onClick={() => setSubCategory(sub)}
+                      >
+                        {sub.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {/* Debug button for development */}
+              {process.env.NODE_ENV === 'development' && (
+                <button
+                  onClick={clearCache}
+                  style={{
+                    background: '#e74c3c',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: 4,
+                    padding: '0.5rem 1rem',
+                    marginTop: '1rem',
+                    cursor: 'pointer',
+                    fontSize: '12px'
+                  }}
+                >
+                  Clear Cache
+                </button>
+              )}
             </aside>
           )}
+          
           {/* Main content: Product Grid */}
           <div style={{ flex: 1 }}>
-            <h2 className={styles.title}>{isSearchResults ? `Search Results` : category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' Products'}</h2>
+            <h2 className={styles.title}>
+              {isSearchResults 
+                ? `Search Results` 
+                : category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' Products'
+              }
+            </h2>
+            
             {/* Product Grid: Only show if there are products */}
             {products.length > 0 ? (
               <div className={styles.productsGrid}>
@@ -194,11 +357,38 @@ const ProductList = () => {
                     return <ProductCard key={product.id} product={product} onDelete={handleDelete} />;
                   }
                 })}
-                {loading && <p>Loading...</p>}
-                {!hasMore && !loading && products.length > 0 && !isSearchResults && <p style={{ color: 'white', textAlign: 'center', marginTop: 16 }}>No more products.</p>}
+                {loading && (
+                  <div style={{ 
+                    color: 'white', 
+                    textAlign: 'center', 
+                    gridColumn: '1 / -1',
+                    padding: '2rem'
+                  }}>
+                    Loading more products...
+                  </div>
+                )}
+                {!hasMore && !loading && products.length > 0 && !isSearchResults && (
+                  <p style={{ 
+                    color: 'white', 
+                    textAlign: 'center', 
+                    marginTop: 16,
+                    gridColumn: '1 / -1'
+                  }}>
+                    No more products.
+                  </p>
+                )}
               </div>
             ) : (
-              !loading && <p style={{ color: 'white', textAlign: 'center', marginTop: 32, fontSize: 18 }}>{isSearchResults ? 'No results found.' : 'No products in this subcategory yet.'}</p>
+              !loading && (
+                <p style={{ 
+                  color: 'white', 
+                  textAlign: 'center', 
+                  marginTop: 32, 
+                  fontSize: 18 
+                }}>
+                  {isSearchResults ? 'No results found.' : 'No products in this subcategory yet.'}
+                </p>
+              )
             )}
           </div>
         </div>

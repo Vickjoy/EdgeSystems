@@ -1,20 +1,16 @@
 .card {
   background: #ffffff;
-  border: none;
+  border: 1px solid #f1f5f9;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  position: relative;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   width: 280px;
   height: auto;
-  min-height: 360px; /* Increased to accommodate Add to Cart button */
-  margin: 0;
-  box-sizing: border-box;
-  border: 1px solid #f1f5f9;
+  min-height: 360px;
 }
 
 .card:hover, .card:focus {
@@ -32,7 +28,6 @@
 }
 
 .imageWrapper {
-  position: relative;
   width: 100%;
   height: 200px;
   display: flex;
@@ -59,131 +54,43 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
   flex: 1;
-  position: relative;
-  min-height: 140px; /* Increased to accommodate Add to Cart button */
 }
 
 .title {
   font-weight: 600;
   font-size: 1.125rem;
   line-height: 1.4;
-  margin: 0 0 1rem 0; /* Added bottom margin for spacing */
+  margin: 0 0 0.75rem 0;
   color: #1f2937;
-  text-align: left;
-  white-space: normal;
   overflow: hidden;
-  word-break: break-word;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Allow up to 3 lines for better product name display */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  flex: 1; /* Take available space */
 }
 
-/* Add to Cart Link Styling */
+.price {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #1DCD9F;
+  margin-bottom: 0.5rem;
+}
+
+.stockStatus {
+  font-size: 0.85rem;
+  color: #10b981;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
 .addToCartLink {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
+  display: inline-block;
   color: #6096B4;
   font-weight: 600;
   font-size: 0.95rem;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 8px 12px;
-  border-radius: 6px;
-  position: relative;
-  margin-top: auto; /* Push to bottom of card */
-  align-self: flex-start;
-  overflow: hidden;
-}
-
-.addToCartLink::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: #6096B4;
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
-}
-
-.addToCartLink:hover {
-  color: #5086A4;
-  background: rgba(96, 150, 180, 0.1);
-  transform: translateY(-1px);
-}
-
-.addToCartLink:hover::before {
-  width: 100%;
-}
-
-.addToCartLink:active {
-  transform: translateY(0);
-  background: rgba(96, 150, 180, 0.2);
-}
-
-/* Focus state for accessibility */
-.addToCartLink:focus {
-  outline: 2px solid #6096B4;
-  outline-offset: 2px;
-  background: rgba(96, 150, 180, 0.1);
-}
-
-/* Button styles for admin functions (if needed) */
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #3b82f6;
-  color: white;
-  font-weight: 500;
-  padding: 0.625rem 1.25rem;
-  border-radius: 6px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  border: none;
-  font-size: 0.875rem;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.button:hover, .button:focus {
-  background: #2563eb;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-  outline: none;
-}
-
-.button:active {
-  transform: translateY(0);
-}
-
-/* Edit/Delete button styles */
-.button[style*="background: #1DCD9F"] {
-  background: #10b981 !important;
-}
-
-.button[style*="background: #1DCD9F"]:hover {
-  background: #059669 !important;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-}
-
-.button[style*="background: #e74c3c"] {
-  background: #ef4444 !important;
-}
-
-.button[style*="background: #e74c3c"]:hover {
-  background: #dc2626 !important;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  margin-top: auto;
 }
 
 /* Responsive Design */
@@ -199,17 +106,14 @@
   
   .content {
     padding: 1.25rem;
-    min-height: 130px;
   }
   
   .title {
     font-size: 1rem;
-    margin-bottom: 0.75rem;
   }
 
   .addToCartLink {
     font-size: 0.9rem;
-    padding: 6px 10px;
   }
 }
 
@@ -225,17 +129,14 @@
   
   .content {
     padding: 1rem;
-    min-height: 120px;
   }
   
   .title {
     font-size: 0.95rem;
-    margin-bottom: 0.5rem;
   }
 
   .addToCartLink {
     font-size: 0.85rem;
-    padding: 6px 8px;
   }
 }
 
@@ -253,51 +154,13 @@
   
   .content {
     padding: 1.25rem;
-    min-height: 130px;
   }
   
   .title {
     font-size: 1rem;
-    margin-bottom: 0.75rem;
   }
 
   .addToCartLink {
     font-size: 0.9rem;
-    padding: 8px 12px;
   }
-}
-
-/* Card grid layout helpers */
-.cardGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  padding: 2rem 0;
-}
-
-@media (max-width: 768px) {
-  .cardGrid {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.5rem;
-    padding: 1.5rem 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .cardGrid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 1rem 0;
-  }
-}
-
-/* Animation for Add to Cart button */
-@keyframes addToCartSuccess {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-.addToCartLink.success {
-  animation: addToCartSuccess 0.3s ease;
 }
