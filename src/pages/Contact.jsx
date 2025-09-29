@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import styles from './Contact.module.css';
 import NairobiImg from '../assets/Nairobi.jpg';
@@ -21,6 +21,7 @@ const heroStyle = {
   justifyContent: 'center',
   marginBottom: '2rem',
 };
+
 const overlayStyle = {
   position: 'absolute',
   top: 0,
@@ -30,6 +31,7 @@ const overlayStyle = {
   background: 'rgba(24, 28, 32, 0.45)',
   zIndex: 1,
 };
+
 const heroTextStyle = {
   position: 'relative',
   zIndex: 2,
@@ -41,8 +43,29 @@ const heroTextStyle = {
 };
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    comment: ''
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(`Contact Form Message from ${formData.name}`);
+    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.comment}`);
+    window.location.href = `mailto:info@edgesystems.co.ke?subject=${subject}&body=${body}`;
+  };
+
   return (
-    <div>
+    <div className={styles.contactPage}>
       <Breadcrumbs crumbs={[{ label: 'Home', path: '/' }, { label: 'Contact Us', path: '/contact' }]} />
       <div style={heroStyle}>
         <div style={overlayStyle}></div>
@@ -51,24 +74,97 @@ const Contact = () => {
       <section className={styles.section}>
         <div className={styles.container}>
           <div className={styles.headerText}>
-            Visit our store or talk to us on phone, email or social media.
+            Visit our store or talk to us on phone, email or social media
           </div>
-          <div className={styles.spreadGrid}>
-            {/* Left column: contact methods */}
-            <div className={styles.leftSpread}>
-              <div className={styles.contactItem}>
-                <FaPhoneAlt className={styles.icon} />
-                <span className={styles.contactText}>0117320000, 0721247356</span>
+          <div className={styles.contentGrid}>
+            {/* Left Grid: Contact Information */}
+            <div className={styles.leftGrid}>
+              <div className={styles.infoBlock}>
+                <h3 className={styles.infoHeader}>Physical Address:</h3>
+                <div className={styles.infoItem}>
+                  <FaMapMarkerAlt className={styles.icon} />
+                  <div className={styles.infoText}>
+                    Shelter house, house, Dai dai Road, South B, 4th Floor Apartment 4F31 Nairobi<br />
+                    43322-00100 Nairobi Kenya
+                  </div>
+                </div>
               </div>
-              <div className={styles.contactItem}>
-                <FaEnvelope className={styles.icon} />
-                <span className={styles.contactText}>info@edgesystems.co.ke</span>
+
+              <div className={styles.infoBlock}>
+                <h3 className={styles.infoHeader}>Email Address:</h3>
+                <div className={styles.infoItem}>
+                  <FaEnvelope className={styles.icon} />
+                  <span className={styles.infoText}>info@edgesystems.co.ke</span>
+                </div>
               </div>
-              <div className={styles.contactItem}>
-                <FaGlobe className={styles.icon} />
-                <a href="http://www.edgesystems.co.ke" target="_blank" rel="noopener noreferrer" className={styles.contactText}>www.edgesystems.co.ke</a>
+
+              <div className={styles.infoBlock}>
+                <h3 className={styles.infoHeader}>Phone Numbers:</h3>
+                <div className={styles.infoItem}>
+                  <FaPhoneAlt className={styles.icon} />
+                  <div className={styles.infoText}>
+                    +254721247356<br />
+                    +254117320000
+                  </div>
+                </div>
               </div>
-              <div className={styles.socialRowSpread}>
+
+              <div className={styles.infoBlock}>
+                <div className={styles.infoItem}>
+                  <FaGlobe className={styles.icon} />
+                  <a href="http://www.edgesystems.co.ke" target="_blank" rel="noopener noreferrer" className={styles.infoText}>
+                    www.edgesystems.co.ke
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Grid: Contact Form */}
+            <div className={styles.rightGrid}>
+              <h3 className={styles.formHeader}>Send us a message</h3>
+              <form onSubmit={handleSubmit} className={styles.contactForm}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="name" className={styles.label}>Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className={styles.input}
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="email" className={styles.label}>Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className={styles.input}
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="comment" className={styles.label}>Comment</label>
+                  <textarea
+                    id="comment"
+                    name="comment"
+                    value={formData.comment}
+                    onChange={handleInputChange}
+                    className={styles.textarea}
+                    rows="5"
+                    required
+                  ></textarea>
+                </div>
+                <button type="submit" className={styles.submitButton}>
+                  Submit
+                </button>
+              </form>
+
+              <div className={styles.socialMedia}>
                 <a href="https://www.instagram.com/edge_systems.co.ke?utm_source=qr&igsh=aHpldnhnZnRmYjM3" target="_blank" rel="noopener noreferrer" className={styles.socialIcon}>
                   <img src={InstagramIcon} alt="Instagram" className={styles.socialIconImg} />
                 </a>
@@ -86,14 +182,20 @@ const Contact = () => {
                 </a>
               </div>
             </div>
-            {/* Right column: office locations */}
-            <div className={styles.rightSpread}>
-              <div className={styles.officeHeader}>Office Locations</div>
-              <div className={styles.officeAddress}>
-                <div className={styles.officeItem}><FaMapMarkerAlt className={styles.icon} /> Shelter house, house, Dai dai Road, South B, 4th Floor Apartment 4F31 Nairobi</div>
-                <div className={styles.officeItem}><FaMapMarkerAlt className={styles.icon} /> 43322-00100 Nairobi Kenya</div>
-              </div>
-            </div>
+          </div>
+
+          {/* Map Section */}
+          <div className={styles.mapSection}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7715895126757!2d36.83312637404577!3d-1.3124660356533566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f113986bb27bd%3A0x24556136c93bceca!2sEdge%20Systems%20Limited!5e0!3m2!1sen!2ske!4v1759135166203!5m2!1sen!2ske"
+              width="100%"
+              height="450"
+              style={{ border: 0, borderRadius: '12px' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Edge Systems Location"
+            ></iframe>
           </div>
         </div>
       </section>

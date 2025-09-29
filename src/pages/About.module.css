@@ -1,125 +1,519 @@
-.aboutSection {
+/* Main Section */
+.section {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  color: #222;
-  padding: 4rem 0 4rem 0;
+  padding: 4rem 1rem;
 }
 
-.aboutContainer {
-  max-width: 900px;
+.container {
+  max-width: 1200px;
   margin: 0 auto;
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 32px rgba(96,150,180,0.10);
-  padding: 3rem 2.5rem 2.5rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+  padding: 3rem 2.5rem;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 4rem;
 }
 
-.title {
+/* Hero Section */
+.heroSection {
+  text-align: center;
+  padding: 2rem 0;
+  border-bottom: 3px solid #ef4444;
+}
+
+.mainTitle {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.highlight {
+  color: #ef4444;
+  font-style: italic;
+}
+
+.tagline {
+  font-size: 1.3rem;
+  color: #64748b;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Who We Are Section */
+.whoWeAre {
+  padding: 2rem 0;
+}
+
+.sectionTitle {
   font-size: 2.2rem;
   font-weight: 800;
-  margin-bottom: 2rem;
   color: #1e293b;
+  margin-bottom: 2rem;
   text-align: center;
+  position: relative;
+  padding-bottom: 1rem;
 }
 
-.content {
-  margin-bottom: 2.5rem;
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: #374151;
-  text-align: center;
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #ef4444, #f97316);
+  border-radius: 2px;
 }
 
-@media (min-width: 768px) {
-  .content {
-    flex-direction: row;
-    gap: 0;
-  }
-}
-
-.textContent {
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  .textContent {
-    width: 50%;
-  }
-}
-
-.imageContent {
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  .imageContent {
-    width: 50%;
-    margin-left: 2rem;
-  }
-}
-
-.aboutImage {
-  width: 100%;
-  height: auto;
-  border-radius: 0.5rem;
-}
-
-.paragraph {
-  margin-bottom: 1rem;
-  color: #EEE9DA;
-  line-height: 1.6;
-}
-
-.missionVisionGrid {
-  display: flex;
-  flex-direction: column;
+.introGrid {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 2rem;
-  margin-top: 2.5rem;
   align-items: center;
 }
 
 @media (min-width: 768px) {
-  .missionVisionGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .introGrid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-.missionCard, .visionCard {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(96,150,180,0.07);
-  padding: 2rem 1.5rem;
-  max-width: 600px;
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
+.introText {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
 }
 
-.missionTitle, .visionTitle {
-  font-size: 1.3rem;
+.paragraph {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #475569;
+  margin: 0;
+}
+
+.companyName {
   font-weight: 700;
-  color: #2563eb;
+  color: #ef4444;
+  font-style: italic;
+}
+
+.introImage {
+  width: 100%;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 3px solid #f1f5f9;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.image:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(239, 68, 68, 0.2);
+}
+
+/* Mission & Vision Section */
+.missionVisionSection {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+@media (min-width: 768px) {
+  .missionVisionSection {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.missionCard,
+.visionCard {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.1);
+  text-align: center;
+  border: 2px solid #fecaca;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.missionCard:hover,
+.visionCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(239, 68, 68, 0.2);
+}
+
+.iconWrapper {
+  font-size: 3rem;
   margin-bottom: 1rem;
 }
 
-.missionText, .visionText {
-  font-size: 1.08rem;
-  color: #374151;
+.icon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.cardTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 1rem;
+}
+
+.cardText {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #475569;
+  margin: 0;
+}
+
+/* Core Values Section */
+.valuesSection {
+  padding: 2rem 0;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .valuesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .valuesGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.valueCard {
+  background: white;
+  padding: 1.5rem 1.2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #ef4444;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.valueCard:hover {
+  transform: translateY(-3px);
+  border-left-color: #dc2626;
+}
+
+.valueTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.valueText {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Our Expertise Section */
+.expertiseSection {
+  padding: 2rem 0;
+}
+
+.expertiseIntro {
+  text-align: center;
+  font-size: 1.15rem;
+  color: #475569;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  font-style: italic;
+}
+
+.expertiseGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .expertiseGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.expertiseCardPrimary {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 25px rgba(239, 68, 68, 0.15);
+  border: 3px solid #fca5a5;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .expertiseCardPrimary {
+    flex-direction: row;
+  }
+}
+
+.expertiseCardSecondary {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid #cbd5e1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.expertiseCardSecondary:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.expertiseImageWrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .expertiseCardPrimary .expertiseImageWrapper {
+    width: 40%;
+    height: auto;
+  }
+}
+
+.expertiseImage {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+.expertiseContent {
+  padding: 2rem;
+  flex: 1;
+}
+
+.expertiseTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.badge {
+  display: inline-block;
+  background: #dc2626;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.expertiseList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.expertiseList li {
+  font-size: 1.05rem;
+  color: #475569;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.expertiseList li::before {
+  content: '🔥';
+  position: absolute;
+  left: 0;
+}
+
+.expertiseDesc {
+  font-size: 1.05rem;
+  color: #475569;
   margin: 0;
   line-height: 1.7;
 }
 
-@media (max-width: 600px) {
-  .aboutContainer {
-    padding: 1.2rem 0.5rem;
+/* What Sets Us Apart Section */
+.differentiatorSection {
+  padding: 2rem 0;
+  background: linear-gradient(135deg, #fef2f2 0%, #fef9f9 100%);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+}
+
+.differentiatorGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .differentiatorGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  .missionCard, .visionCard {
-    padding: 1.2rem 0.7rem;
+}
+
+@media (min-width: 1024px) {
+  .differentiatorGrid {
+    grid-template-columns: repeat(3, 1fr);
   }
-  .title {
+}
+
+.differentiatorCard {
+  background: white;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  border-top: 4px solid #ef4444;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.differentiatorCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.15);
+}
+
+.differentiatorIcon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.differentiatorTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.8rem;
+}
+
+.differentiatorText {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Closing Section */
+.closingSection {
+  text-align: center;
+  padding: 2rem 0;
+  border-top: 2px solid #fecaca;
+}
+
+.closingText {
+  font-size: 1.3rem;
+  color: #475569;
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+  font-weight: 500;
+}
+
+.closingText em {
+  color: #dc2626;
+  font-style: italic;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem 1.5rem;
+    gap: 3rem;
+  }
+
+  .mainTitle {
+    font-size: 2rem;
+  }
+
+  .tagline {
+    font-size: 1.1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+
+  .paragraph {
+    font-size: 1rem;
+  }
+
+  .cardTitle {
+    font-size: 1.4rem;
+  }
+
+  .expertiseTitle {
     font-size: 1.3rem;
   }
-} 
+
+  .closingText {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1.5rem 1rem;
+    gap: 2.5rem;
+  }
+
+  .mainTitle {
+    font-size: 1.6rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .missionCard,
+  .visionCard {
+    padding: 1.8rem 1.5rem;
+  }
+
+  .valuesSection,
+  .differentiatorSection {
+    padding: 2rem 1.5rem;
+  }
+}

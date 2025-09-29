@@ -49,13 +49,13 @@ const Footer = () => {
         <h3 className={styles.sectionTitle}>Contact Info</h3>
         <ul className={styles.contactInfo}>
           <li className={styles.contactItem}>
-            <span>📍 Address: Nairobi, Kenya</span>
+            <span>📍 Shelter house, Dai dai Road, South B, 4th Floor Apartment 4F31, Nairobi 43322-00100, Kenya</span>
           </li>
           <li className={styles.contactItem}>
-            <span>☎️ Phone: +254 700 000000</span>
+            <span>☎️ +254721247356 / +254117320000</span>
           </li>
           <li className={styles.contactItem}>
-            <span>📧 Email: info@edgesystems.co.ke</span>
+            <span>📧 info@edgesystems.co.ke</span>
           </li>
         </ul>
       </div>
