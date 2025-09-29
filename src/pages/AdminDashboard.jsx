@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import {
   fetchCategories, fetchSubcategories, createCategory, updateCategory, deleteCategory,
-  fetchProductsBySubcategory, createProduct, updateProduct, deleteProduct, createSubcategory
+  fetchProductsForSubcategory, createProduct, updateProduct, deleteProduct, createSubcategory
 } from '../utils/api';
 import ProductForm from '../components/ProductForm';
 import CompanyLogo from '../assets/Company_logo.webp';
@@ -12,50 +12,80 @@ import styles from './AdminDashboard.module.css';
 const AdminDashboard = () => {
   const { token, user, logout } = useAuth();
   const navigate = useNavigate();
+  
+  // State for categories by type
   const [fireCategories, setFireCategories] = useState([]);
   const [ictCategories, setIctCategories] = useState([]);
-  const [fireSubcategories, setFireSubcategories] = useState({}); // {catId: [subcat, ...]}
+  const [solarCategories, setSolarCategories] = useState([]);
+  
+  // State for subcategories by category ID
+  const [fireSubcategories, setFireSubcategories] = useState({});
   const [ictSubcategories, setIctSubcategories] = useState({});
-  const [productsBySubcategory, setProductsBySubcategory] = useState({}); // {subcategorySlug: [product, ...]}
+  const [solarSubcategories, setSolarSubcategories] = useState({});
+  
+  // State for products by subcategory slug
+  const [productsBySubcategory, setProductsBySubcategory] = useState({});
+  
+  // UI state
   const [activeSection, setActiveSection] = useState('fire');
-  const [expandedCategory, setExpandedCategory] = useState(null); // category id
-  const [expandedSubcategory, setExpandedSubcategory] = useState(null); // subcategory slug
+  const [expandedCategory, setExpandedCategory] = useState(null);
+  const [expandedSubcategory, setExpandedSubcategory] = useState(null);
   const [productModal, setProductModal] = useState({ open: false, subcategory: null });
   const [loading, setLoading] = useState(false);
-  // Add state for modals
-  const [categoryModal, setCategoryModal] = useState({ open: false, type: 'fire' });
+  const [categoryModal, setCategoryModal] = useState({ open: false, type: 'fire_safety' });
   const [subcategoryModal, setSubcategoryModal] = useState({ open: false, category: null });
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newSubcategoryName, setNewSubcategoryName] = useState('');
 
-  // Load categories and subcategories on mount
+  // Load all categories and subcategories on mount
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       try {
+        // Fetch all categories
         const cats = await fetchCategories(token);
-        const fire = cats.filter(cat => cat.type === 'fire');
+        
+        // Split by type
+        const fire = cats.filter(cat => cat.type === 'fire_safety');
         const ict = cats.filter(cat => cat.type === 'ict');
+        const solar = cats.filter(cat => cat.type === 'solar');
+        
         setFireCategories(fire);
         setIctCategories(ict);
-        // Fetch subcategories for each category
+        setSolarCategories(solar);
+        
+        // Fetch subcategories for fire categories
         const fireSubs = {};
         for (const cat of fire) {
           const subs = await fetchSubcategories(cat.slug, token);
           fireSubs[cat.id] = subs;
         }
         setFireSubcategories(fireSubs);
+        
+        // Fetch subcategories for ICT categories
         const ictSubs = {};
         for (const cat of ict) {
           const subs = await fetchSubcategories(cat.slug, token);
           ictSubs[cat.id] = subs;
         }
         setIctSubcategories(ictSubs);
+        
+        // Fetch subcategories for solar categories
+        const solarSubs = {};
+        for (const cat of solar) {
+          const subs = await fetchSubcategories(cat.slug, token);
+          solarSubs[cat.id] = subs;
+        }
+        setSolarSubcategories(solarSubs);
+        
       } catch (e) {
+        console.error('Failed to load data:', e);
         setFireCategories([]);
         setIctCategories([]);
+        setSolarCategories([]);
         setFireSubcategories({});
         setIctSubcategories({});
+        setSolarSubcategories({});
       } finally {
         setLoading(false);
       }
@@ -66,7 +96,7 @@ const AdminDashboard = () => {
   // Load products for a subcategory
   const loadProductsForSubcategory = async (subcategorySlug) => {
     try {
-      const products = await fetchProductsBySubcategory(subcategorySlug, token);
+      const products = await fetchProductsForSubcategory(subcategorySlug);
       setProductsBySubcategory(prev => ({
         ...prev,
         [subcategorySlug]: products
@@ -108,11 +138,9 @@ const AdminDashboard = () => {
   const handleAddProduct = async (form) => {
     if (!productModal.subcategory) return;
     try {
-      // Attach subcategory slug to form
       const submitForm = { ...form, subcategory: productModal.subcategory };
       const newProduct = await createProduct(submitForm, token);
       
-      // Update products in state
       setProductsBySubcategory(prev => ({
         ...prev,
         [productModal.subcategory]: [
@@ -127,18 +155,17 @@ const AdminDashboard = () => {
     }
   };
 
-  // Add placeholder handlers for edit/delete
+  // Placeholder handlers for edit/delete
   const handleEditCategory = (cat) => { alert(`Edit category: ${cat.name}`); };
   const handleDeleteCategory = (cat) => { if(window.confirm(`Delete category: ${cat.name}?`)){} };
   const handleEditSubcategory = (sub) => { alert(`Edit subcategory: ${sub.name}`); };
   const handleDeleteSubcategory = (sub) => { if(window.confirm(`Delete subcategory: ${sub.name}?`)){} };
-  // Add placeholder handlers for product edit/delete
   const handleEditProduct = (product) => { alert(`Edit product: ${product.name}`); };
+  
   const handleDeleteProduct = async (product, subcategorySlug) => { 
     if(window.confirm(`Delete product: ${product.name}?`)) {
       try {
         await deleteProduct(product.id, token);
-        // Remove product from state
         setProductsBySubcategory(prev => ({
           ...prev,
           [subcategorySlug]: prev[subcategorySlug].filter(p => p.id !== product.id)
@@ -154,15 +181,18 @@ const AdminDashboard = () => {
     setCategoryModal({ open: true, type });
     setNewCategoryName('');
   };
+  
   const handleAddCategory = async () => {
     if (!newCategoryName.trim()) return;
     await createCategory(newCategoryName, token, categoryModal.type);
-    setCategoryModal({ open: false, type: 'fire' });
+    setCategoryModal({ open: false, type: 'fire_safety' });
   };
+  
   const handleShowAddSubcategoryModal = (category) => {
     setSubcategoryModal({ open: true, category });
     setNewSubcategoryName('');
   };
+  
   const handleAddSubcategory = async () => {
     if (!newSubcategoryName.trim()) return;
     await createSubcategory(subcategoryModal.category.slug, newSubcategoryName, token);
@@ -196,11 +226,17 @@ const AdminDashboard = () => {
       );
     }
 
+    const sectionTitles = {
+      'fire_safety': 'Fire Safety Categories',
+      'ict': 'ICT/Telecommunication Categories',
+      'solar': 'Solar Categories'
+    };
+
     if (categories.length === 0) {
       return (
         <div className={styles.emptyState}>
           <h3>No categories found</h3>
-          <p>Start by adding your first category for {type === 'fire' ? 'Fire Safety' : 'ICT/Telecommunication'}</p>
+          <p>Start by adding your first category for {sectionTitles[type]}</p>
           <div style={{ marginTop: '1rem' }}>
             <button 
               type="button" 
@@ -217,9 +253,7 @@ const AdminDashboard = () => {
     return (
       <div>
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>
-            {type === 'fire' ? 'Fire Safety Categories' : 'ICT/Telecommunication Categories'}
-          </h2>
+          <h2 className={styles.sectionTitle}>{sectionTitles[type]}</h2>
           <button 
             type="button" 
             className={styles.adminButton} 
@@ -266,7 +300,9 @@ const AdminDashboard = () => {
               <div className={styles.subcategoryList}>
                 <h4>Subcategories:</h4>
                 <div className={styles.buttonRow}>
-                  <button type="button" className={`${styles.adminButton} adminButton`} onClick={() => handleShowAddSubcategoryModal(cat)}>+ Add Subcategory</button>
+                  <button type="button" className={styles.adminButton} onClick={() => handleShowAddSubcategoryModal(cat)}>
+                    + Add Subcategory
+                  </button>
                 </div>
                 <ul>
                   {(subcategories[cat.id] || []).map(sub => (
@@ -286,9 +322,15 @@ const AdminDashboard = () => {
                           </span>
                         </div>
                         <div className={styles.buttonRow}>
-                          <button type="button" className={`${styles.adminButton} adminButton`} onClick={() => handleShowAddProductModal(sub)}>+ Add Product</button>
-                          <button type="button" className={`${styles.editButton} editButton`} onClick={() => handleEditSubcategory(sub)}>Edit</button>
-                          <button type="button" className={`${styles.deleteButton} deleteButton`} onClick={() => handleDeleteSubcategory(sub)}>Delete</button>
+                          <button type="button" className={styles.adminButton} onClick={() => handleShowAddProductModal(sub)}>
+                            + Add Product
+                          </button>
+                          <button type="button" className={styles.editButton} onClick={() => handleEditSubcategory(sub)}>
+                            Edit
+                          </button>
+                          <button type="button" className={styles.deleteButton} onClick={() => handleDeleteSubcategory(sub)}>
+                            Delete
+                          </button>
                         </div>
                       </div>
                       
@@ -394,6 +436,14 @@ const AdminDashboard = () => {
               </button>
             </li>
             <li className={styles.adminListItem}>
+              <button 
+                className={`${styles.adminNavButton} ${activeSection === 'solar' ? styles.active : ''}`}
+                onClick={() => setActiveSection('solar')}
+              >
+                ☀️ Solar
+              </button>
+            </li>
+            <li className={styles.adminListItem}>
               <button className={styles.logoutButton} onClick={handleLogout}>
                 🚪 Logout
               </button>
@@ -402,10 +452,9 @@ const AdminDashboard = () => {
         </nav>
         
         <main className={styles.adminMainContent}>
-          {activeSection === 'fire'
-            ? renderSection(fireCategories, fireSubcategories, 'fire')
-            : renderSection(ictCategories, ictSubcategories, 'ict')
-          }
+          {activeSection === 'fire' && renderSection(fireCategories, fireSubcategories, 'fire_safety')}
+          {activeSection === 'ict' && renderSection(ictCategories, ictSubcategories, 'ict')}
+          {activeSection === 'solar' && renderSection(solarCategories, solarSubcategories, 'solar')}
         </main>
       </div>
       
@@ -448,7 +497,7 @@ const AdminDashboard = () => {
               <button 
                 type="button" 
                 className={styles.deleteButton} 
-                onClick={() => setCategoryModal({ open: false, type: 'fire' })}
+                onClick={() => setCategoryModal({ open: false, type: 'fire_safety' })}
               >
                 Cancel
               </button>

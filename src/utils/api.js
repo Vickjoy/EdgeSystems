@@ -98,7 +98,7 @@ export const fetchSubcategories = async (categorySlug, token) => {
   }
 };
 
-export const createCategory = async (name, token, type = 'fire') => {
+export const createCategory = async (name, token, type = 'fire_safety') => {
   try {
     const response = await fetchWithAuthRetry('http://127.0.0.1:8000/api/categories/', {
       method: 'POST',
@@ -198,15 +198,21 @@ export const deleteSubcategory = async (categorySlug, subcategoryId, token) => {
   }
 };
 
-export const fetchProductsBySubcategory = async (subcategoryId, page = 1, pageSize = 10, token) => {
+/**
+ * Fetch products for a specific subcategory using the slug-based endpoint.
+ * This endpoint is publicly accessible and matches Django's ProductsBySubcategoryView.
+ * Endpoint: /api/subcategories/<slug>/products/
+ * 
+ * @param {string} subcategorySlug - The slug of the subcategory
+ * @returns {Promise<Array>} Array of products
+ */
+export const fetchProductsForSubcategory = async (subcategorySlug) => {
   try {
-    // Only send Authorization header if token is provided (admin actions)
-    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-    const response = await fetch(`http://127.0.0.1:8000/api/products/?subcategory=${subcategoryId}&page=${page}&page_size=${pageSize}`, { headers });
-    const data = await response.json();
-    return data;
+    const response = await fetch(`http://127.0.0.1:8000/api/subcategories/${subcategorySlug}/products/`);
+    if (!response.ok) throw new Error('Failed to fetch products for subcategory');
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error('Error fetching products for subcategory:', error);
     throw error;
   }
 };
@@ -224,7 +230,7 @@ export const createProduct = async (form, token) => {
     // Only send image if it's a file (not a string)
     if (form.image && typeof form.image !== 'string') formData.append('image', form.image);
     // Use subcategory slug in the endpoint
-    const endpoint = `http://127.0.0.1:8000/api/subcategories/${form.subcategory}/products/`;
+    const endpoint = `http://127.0.0.1:8000/api/subcategories/${form.subcategory}/products/create/`;
     const response = await fetchWithAuthRetry(endpoint, {
       method: 'POST',
       headers: {
@@ -290,17 +296,6 @@ export const deleteProduct = async (id, token) => {
     return true;
   } catch (error) {
     console.error('Error deleting product:', error);
-    throw error;
-  }
-};
-
-export const fetchProductsForSubcategory = async (subcategorySlug) => {
-  try {
-    const response = await fetch(`http://127.0.0.1:8000/api/subcategories/${subcategorySlug}/products/`);
-    if (!response.ok) throw new Error('Failed to fetch products for subcategory');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching products for subcategory:', error);
     throw error;
   }
 };
