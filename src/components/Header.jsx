@@ -20,7 +20,12 @@ const Header = () => {
   const ictRef = useRef();
   const solarRef = useRef();
   const { cartItems } = useCart();
+  
+  // Cart hover state management
   const [cartOpen, setCartOpen] = useState(false);
+  const [isHoveringCartIcon, setIsHoveringCartIcon] = useState(false);
+  const [isHoveringCartModal, setIsHoveringCartModal] = useState(false);
+  const cartTimeoutRef = useRef(null);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -35,6 +40,15 @@ const Header = () => {
     const handleCategoriesUpdated = () => loadCategories();
     window.addEventListener('categoriesUpdated', handleCategoriesUpdated);
     return () => window.removeEventListener('categoriesUpdated', handleCategoriesUpdated);
+  }, []);
+
+  // Clear cart timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (cartTimeoutRef.current) {
+        clearTimeout(cartTimeoutRef.current);
+      }
+    };
   }, []);
 
   const loadSubcategories = async (categorySlug) => {
@@ -92,6 +106,49 @@ const Header = () => {
     };
   }, [mobileMenuOpen]);
 
+  // Cart hover handlers
+  const handleCartIconMouseEnter = () => {
+    if (cartTimeoutRef.current) {
+      clearTimeout(cartTimeoutRef.current);
+    }
+    setIsHoveringCartIcon(true);
+    setCartOpen(true);
+  };
+
+  const handleCartIconMouseLeave = () => {
+    setIsHoveringCartIcon(false);
+    cartTimeoutRef.current = setTimeout(() => {
+      if (!isHoveringCartModal) {
+        setCartOpen(false);
+      }
+    }, 300);
+  };
+
+  const handleCartModalMouseEnter = () => {
+    if (cartTimeoutRef.current) {
+      clearTimeout(cartTimeoutRef.current);
+    }
+    setIsHoveringCartModal(true);
+  };
+
+  const handleCartModalMouseLeave = () => {
+    setIsHoveringCartModal(false);
+    cartTimeoutRef.current = setTimeout(() => {
+      if (!isHoveringCartIcon) {
+        setCartOpen(false);
+      }
+    }, 300);
+  };
+
+  const handleCloseCart = () => {
+    setCartOpen(false);
+    setIsHoveringCartIcon(false);
+    setIsHoveringCartModal(false);
+    if (cartTimeoutRef.current) {
+      clearTimeout(cartTimeoutRef.current);
+    }
+  };
+
   const fireCategories = categories.filter(cat =>
     ['fire_safety','fire','fire-safety','firesafety'].includes(String(cat.type || '').toLowerCase())
   );
@@ -104,7 +161,6 @@ const Header = () => {
     ['solar', 'solar_solutions','solar-solutions'].includes(String(cat.type || '').toLowerCase())
   );
 
-  // Updated: Dropdown closes after selection
   const handleDropdownToggle = (dropdownName) => {
     const isCurrentlyOpen = openDropdown === dropdownName;
     setOpenDropdown(isCurrentlyOpen ? null : dropdownName);
@@ -112,7 +168,6 @@ const Header = () => {
   };
 
   const handleCategoryClick = (categorySlug) => {
-    // Close dropdown after selection
     setOpenDropdown(null);
     setHoveredCategory(null);
     setMobileMenuOpen(false);
@@ -120,14 +175,11 @@ const Header = () => {
     navigate(`/category/${categorySlug}`);
   };
 
-  // Updated: Navigate to specific subcategory instead of just category
   const handleSubcategoryClick = (categorySlug, subcategorySlug) => {
-    // Close dropdown after selection
     setOpenDropdown(null);
     setHoveredCategory(null);
     setMobileMenuOpen(false);
     setMobileExpandedCategory(null);
-    // Navigate directly to the specific subcategory
     navigate(`/category/${categorySlug}`, { state: { selectedSubcategory: subcategorySlug } });
   };
 
@@ -141,7 +193,6 @@ const Header = () => {
       setMobileExpandedCategory(null);
     } else {
       setMobileExpandedCategory(categoryType);
-      // Load subcategories for all categories of this type
       const categoryList = categoryType === 'fire' ? fireCategories : 
                           categoryType === 'ict' ? ictCategories : 
                           categoryType === 'solar' ? solarCategories : [];
@@ -276,6 +327,7 @@ const Header = () => {
           </div>
 
           <div className={styles.mobileActions}>
+            {/* Mobile cart with click (no hover on mobile) */}
             <button 
               onClick={() => setCartOpen(true)} 
               className={styles.mobileCartButton}
@@ -298,7 +350,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Desktop Header Layout (unchanged) */}
+      {/* Desktop Header Layout */}
       <div className={styles.desktopHeaderLayout}>
         {/* Top Bar */}
         <div className={styles.topBar}>
@@ -327,9 +379,12 @@ const Header = () => {
           <div className={styles.headerActions}>
             <SearchBar />
             
+            {/* Desktop cart with HOVER functionality */}
             <button 
-              onClick={() => setCartOpen(true)} 
+              onMouseEnter={handleCartIconMouseEnter}
+              onMouseLeave={handleCartIconMouseLeave}
               className={styles.cartButton}
+              style={{ position: 'relative' }}
             >
               🛒
               {cartItems.length > 0 && (
@@ -426,7 +481,15 @@ const Header = () => {
         </div>
       </div>
 
-      {cartOpen && <CartModal onClose={() => setCartOpen(false)} />}
+      {/* Cart Modal with hover support */}
+      {cartOpen && (
+        <div
+          onMouseEnter={handleCartModalMouseEnter}
+          onMouseLeave={handleCartModalMouseLeave}
+        >
+          <CartModal onClose={handleCloseCart} />
+        </div>
+      )}
     </header>
   );
 };

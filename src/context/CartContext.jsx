@@ -71,10 +71,30 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
+    // Explicitly clear from localStorage as well
+    try {
+      localStorage.removeItem('edgeSystemsCart');
+    } catch (error) {
+      console.error('Error clearing cart from localStorage:', error);
+    }
   };
 
   const isInCart = (itemId) => {
     return cartItems.some(item => item.id === itemId);
+  };
+
+  // Also provide setCart for backwards compatibility
+  const setCart = (items) => {
+    setCartItems(items);
+    try {
+      if (items.length === 0) {
+        localStorage.removeItem('edgeSystemsCart');
+      } else {
+        localStorage.setItem('edgeSystemsCart', JSON.stringify(items));
+      }
+    } catch (error) {
+      console.error('Error updating cart in localStorage:', error);
+    }
   };
 
   return (
@@ -86,7 +106,8 @@ export const CartProvider = ({ children }) => {
       getTotal, 
       getTotalItems,
       clearCart,
-      isInCart
+      isInCart,
+      setCart
     }}>
       {children}
     </CartContext.Provider>

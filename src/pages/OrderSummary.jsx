@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import styles from './OrderSummary.module.css';
 
 const OrderSummary = () => {
-  const { cartItems, removeFromCart, addToCart, setCart } = useCart();
+  const { cartItems, removeFromCart, addToCart, clearCart } = useCart();
   const navigate = useNavigate();
 
   // Quantity change handler for dropdown
@@ -30,13 +30,25 @@ const OrderSummary = () => {
     
     // Encode the message for URL
     const encodedMessage = encodeURIComponent(message);
-    
-    // Open WhatsApp with prefilled message
     const whatsappUrl = `https://wa.me/254117320000?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
     
-    // Clear the cart after sending
-    setCart([]);
+    // Clear the cart using both methods to ensure it works
+    if (clearCart) {
+      clearCart();
+    } else {
+      setCart([]);
+    }
+    
+    // Also clear from localStorage if it exists
+    try {
+      localStorage.removeItem('cart');
+      localStorage.removeItem('cartItems');
+    } catch (e) {
+      console.log('LocalStorage not available');
+    }
+    
+    // Open WhatsApp in new tab
+    window.open(whatsappUrl, '_blank');
   };
 
   return (

@@ -7,29 +7,37 @@ const CartModal = ({ onClose }) => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ 
-      position: 'fixed', 
-      top: 0, 
-      left: 0, 
-      width: '100vw', 
-      height: '100vh', 
-      background: 'rgba(0,0,0,0.3)', 
-      zIndex: 99999, 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'flex-end',
-      paddingRight: '20px'
-    }}>
-      <div style={{ 
-        background: 'white', 
-        borderRadius: 12, 
-        padding: 24, 
-        minWidth: 340, 
-        maxWidth: 400, 
-        boxShadow: '0 8px 32px rgba(0,0,0,0.18)', 
-        position: 'relative',
-        animation: 'slideInFromRight 0.3s ease-out'
-      }}>
+    <div 
+      style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        width: '100vw', 
+        height: '100vh', 
+        background: 'rgba(0,0,0,0.3)', 
+        zIndex: 99999, 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'flex-end',
+        paddingRight: '20px',
+        pointerEvents: 'none'
+      }}
+      onClick={onClose}
+    >
+      <div 
+        style={{ 
+          background: 'white', 
+          borderRadius: 12, 
+          padding: 24, 
+          minWidth: 340, 
+          maxWidth: 400, 
+          boxShadow: '0 8px 32px rgba(0,0,0,0.18)', 
+          position: 'relative',
+          animation: 'slideInFromRight 0.3s ease-out',
+          pointerEvents: 'auto'
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <style>
           {`
             @keyframes slideInFromRight {
