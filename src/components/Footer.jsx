@@ -9,6 +9,14 @@ import WhatsAppIcon from '../assets/whatsapp.png';
 import styles from './Footer.module.css';
 
 const Footer = () => {
+  // Function to scroll to top smoothly
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <footer className={styles.footer}>
       {/* Left Column */}
@@ -39,9 +47,36 @@ const Footer = () => {
       <div>
         <h3 className={styles.sectionTitle}>Quick Links</h3>
         <ul className={styles.quickLinks} role="navigation" aria-label="Quick Links">
-          <li><Link to="/" className={styles.quickLink} tabIndex={0}>Home</Link></li>
-          <li><Link to="/about" className={styles.quickLink} tabIndex={0}>About Us</Link></li>
-          <li><Link to="/contact" className={styles.quickLink} tabIndex={0}>Contact Us</Link></li>
+          <li>
+            <Link 
+              to="/" 
+              className={styles.quickLink} 
+              tabIndex={0}
+              onClick={scrollToTop}
+            >
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/about" 
+              className={styles.quickLink} 
+              tabIndex={0}
+              onClick={scrollToTop}
+            >
+              About Us
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/contact" 
+              className={styles.quickLink} 
+              tabIndex={0}
+              onClick={scrollToTop}
+            >
+              Contact Us
+            </Link>
+          </li>
         </ul>
       </div>
       {/* Right Column */}
