@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SearchBar.module.css';
-import { fetchCategories } from '../utils/api';
 
 const SearchBar = () => {
   const [query, setQuery] = useState('');
@@ -14,64 +13,89 @@ const SearchBar = () => {
     e.preventDefault();
     setError('');
     setNoResults(false);
-    if (!query.trim()) return;
+    
+    const searchTerm = query.trim();
+    if (!searchTerm) return;
+    
     setLoading(true);
+    
     try {
-      // Fetch all categories to get all products (since no search endpoint)
-      const categories = await fetchCategories();
+      // Fetch all products from the database
       let allProducts = [];
+      
+      // First, get all categories
+      const categoriesRes = await fetch('http://127.0.0.1:8000/api/categories/');
+      const categories = await categoriesRes.json();
+      
+      // For each category, get subcategories
       for (const cat of categories) {
-        const res = await fetch(`http://127.0.0.1:8000/api/categories/${cat.slug}/subcategories/`);
-        const subcategories = await res.json();
-        for (const sub of subcategories) {
-          const prodRes = await fetch(`http://127.0.0.1:8000/api/subcategories/${sub.slug}/products/`);
-          const products = await prodRes.json();
-          if (Array.isArray(products)) {
-            allProducts = allProducts.concat(products);
+        try {
+          const subcategoriesRes = await fetch(`http://127.0.0.1:8000/api/categories/${cat.slug}/subcategories/`);
+          const subcategories = await subcategoriesRes.json();
+          
+          // For each subcategory, get products
+          for (const sub of subcategories) {
+            try {
+              const productsRes = await fetch(`http://127.0.0.1:8000/api/subcategories/${sub.slug}/products/`);
+              const productsData = await productsRes.json();
+              
+              // Handle both paginated and non-paginated responses
+              const products = productsData.results || productsData;
+              
+              if (Array.isArray(products)) {
+                allProducts = allProducts.concat(products);
+              }
+            } catch (err) {
+              console.error(`Error fetching products for subcategory ${sub.slug}:`, err);
+            }
           }
+        } catch (err) {
+          console.error(`Error fetching subcategories for category ${cat.slug}:`, err);
         }
       }
-      // Remove duplicate products by name (case-insensitive)
-      const uniqueProductsNameMap = new Map();
-      allProducts.forEach(p => {
-        if (p && p.name) {
-          const nameKey = p.name.trim().toLowerCase();
-          if (!uniqueProductsNameMap.has(nameKey)) {
-            uniqueProductsNameMap.set(nameKey, p);
-          }
-        }
-      });
-      const uniqueProducts = Array.from(uniqueProductsNameMap.values());
       
-      // Enhanced case-insensitive search - check name, description, and features
-      const searchTerm = query.toLowerCase().trim();
-      const matches = uniqueProducts.filter(p => {
-        if (!p.name) return false;
+      // Remove duplicates by ID
+      const uniqueProducts = Array.from(
+        new Map(allProducts.map(p => [p.id, p])).values()
+      );
+      
+      // Perform case-insensitive search across multiple fields
+      const searchLower = searchTerm.toLowerCase();
+      const matches = uniqueProducts.filter(product => {
+        if (!product) return false;
         
         // Search in product name
-        const nameMatch = p.name.toLowerCase().includes(searchTerm);
+        const nameMatch = product.name && 
+          product.name.toLowerCase().includes(searchLower);
         
-        // Search in product description if available
-        const descriptionMatch = p.description && 
-          p.description.toLowerCase().includes(searchTerm);
+        // Search in product description
+        const descriptionMatch = product.description && 
+          product.description.toLowerCase().includes(searchLower);
         
-        // Search in product features if available
-        const featuresMatch = p.features && 
-          p.features.toLowerCase().includes(searchTerm);
+        // Search in product features
+        const featuresMatch = product.features && 
+          product.features.toLowerCase().includes(searchLower);
         
-        // Return true if any field contains the search term
-        return nameMatch || descriptionMatch || featuresMatch;
+        // Search in subcategory name if available
+        const subcategoryMatch = product.subcategory_detail?.name &&
+          product.subcategory_detail.name.toLowerCase().includes(searchLower);
+        
+        return nameMatch || descriptionMatch || featuresMatch || subcategoryMatch;
       });
       
       if (matches.length === 0) {
         setNoResults(true);
       } else if (matches.length === 1) {
+        // Navigate directly to the product if only one match
         navigate(`/product/${matches[0].slug}`);
       } else {
-        // Pass results to a search results page (via state or query param)
-        navigate(`/search?query=${encodeURIComponent(query)}`, { state: { results: matches } });
+        // Navigate to search results page with multiple matches
+        navigate(`/search?query=${encodeURIComponent(searchTerm)}`, { 
+          state: { results: matches } 
+        });
       }
     } catch (err) {
+      console.error('Search error:', err);
       setError('Error searching. Please try again.');
     } finally {
       setLoading(false);
@@ -80,23 +104,35 @@ const SearchBar = () => {
 
   return (
     <div className={styles.container}>
-      <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      <form onSubmit={handleSearch} className={styles.searchForm}>
         <input
           type="text"
-          placeholder="Search for product..."
+          placeholder="Search for products..."
           className={styles.input}
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={e => {
+            setQuery(e.target.value);
+            setNoResults(false);
+            setError('');
+          }}
+          disabled={loading}
         />
-        <button className={styles.button} type="submit" disabled={loading}>
+        <button 
+          className={styles.button} 
+          type="submit" 
+          disabled={loading}
+          aria-label="Search"
+        >
           {loading ? '...' : '🔍'}
         </button>
       </form>
       {noResults && (
-        <div style={{ color: 'red', marginTop: 4, fontSize: 14 }}>No results for '{query}'</div>
+        <div className={styles.noResults}>
+          No results found for '{query}'
+        </div>
       )}
       {error && (
-        <div style={{ color: 'red', marginTop: 4, fontSize: 14 }}>{error}</div>
+        <div className={styles.error}>{error}</div>
       )}
     </div>
   );
