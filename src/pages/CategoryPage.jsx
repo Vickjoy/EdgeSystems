@@ -140,6 +140,15 @@ const CategoryPage = () => {
     navigate(`/category/${slug}#${subcategory.slug}`, { replace: true });
   };
 
+  // Handle mobile dropdown change
+  const handleMobileSelectChange = (e) => {
+    const subcategoryId = parseInt(e.target.value);
+    const subcategory = subcategories.find(sub => sub.id === subcategoryId);
+    if (subcategory) {
+      handleSubcategorySelect(subcategory);
+    }
+  };
+
   const categoryDisplay = getCategoryDisplay(category);
 
   const crumbs = [
@@ -174,7 +183,7 @@ const CategoryPage = () => {
       {/* Main Content */}
       <section className={styles.mainSection}>
         <div className={styles.containerLayout}>
-          {/* Sidebar */}
+          {/* Desktop Sidebar */}
           <aside className={styles.sidebar}>
             <div className={styles.sidebarContent}>
               <h3 className={styles.sidebarTitle}>Product Categories</h3>
@@ -200,11 +209,27 @@ const CategoryPage = () => {
 
           {/* Products Section */}
           <main className={styles.mainContent}>
+            {/* Mobile Category Dropdown */}
+            <div className={styles.mobileCategories}>
+              <select
+                className={styles.mobileCategorySelect}
+                value={selectedSubcategory?.id || ''}
+                onChange={handleMobileSelectChange}
+              >
+                <option value="" disabled>Select a category</option>
+                {subcategories.map((sub) => (
+                  <option key={sub.id} value={sub.id}>
+                    {sub.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {!selectedSubcategory ? (
               <div className={styles.selectPrompt}>
                 <div className={styles.selectPromptIcon}>📋</div>
                 <h3>Select a Category</h3>
-                <p>Please select a subcategory from the sidebar to view available products.</p>
+                <p>Please select a subcategory to view available products.</p>
               </div>
             ) : error ? (
               <div className={styles.errorMessage}>

@@ -76,7 +76,7 @@
   align-items: flex-start;
 }
 
-/* Sidebar - Reduced size for 3-column product grid */
+/* Sidebar - Desktop */
 .sidebar {
   width: 250px;
   min-width: 250px;
@@ -173,18 +173,79 @@
   font-size: 0.95rem;
 }
 
+/* Mobile Categories Dropdown */
+.mobileCategories {
+  display: none;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.mobileCategorySelect {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236096B4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 20px;
+  padding-right: 3rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.mobileCategorySelect:focus {
+  outline: none;
+  border-color: #6096B4;
+  box-shadow: 0 0 0 3px rgba(96, 150, 180, 0.1);
+}
+
+.mobileCategorySelect option {
+  padding: 1rem;
+  font-weight: 500;
+}
+
+.mobileCategorySelect option:checked {
+  background: #6096B4;
+  color: #ffffff;
+}
+
 /* Main Content */
 .mainContent {
   flex: 1;
   min-width: 0;
 }
 
-/* Products Grid - Optimized for 3 columns */
+/* Products Grid */
 .productsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   padding: 1rem 0;
+}
+
+/* Category Header */
+.categoryHeader {
+  margin-bottom: 2rem;
+}
+
+.categoryHeader h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+}
+
+.productCount {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 /* Loading State */
@@ -211,6 +272,41 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Select Prompt */
+.selectPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px dashed #e2e8f0;
+  margin: 2rem 0;
+}
+
+.selectPromptIcon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+}
+
+.selectPrompt h3 {
+  color: #374151;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.selectPrompt p {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0;
+  max-width: 400px;
+  line-height: 1.6;
 }
 
 /* Empty State */
@@ -330,20 +426,18 @@
   
   .containerLayout {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0;
     padding: 0 1rem;
   }
   
+  /* Hide desktop sidebar on mobile */
   .sidebar {
-    width: 100%;
-    min-width: auto;
-    position: relative;
-    top: auto;
-    order: -1;
+    display: none;
   }
   
-  .subcategoryList {
-    max-height: 200px;
+  /* Show mobile dropdown */
+  .mobileCategories {
+    display: block;
   }
   
   .productsGrid {
@@ -377,14 +471,9 @@
     padding: 0 0.75rem;
   }
   
-  .sidebarTitle {
-    padding: 1.25rem;
-    font-size: 1rem;
-  }
-  
-  .subcategoryButton {
-    padding: 1rem 1.5rem;
-    font-size: 0.9rem;
+  .mobileCategorySelect {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.95rem;
   }
   
   .productsGrid {
@@ -392,7 +481,7 @@
     gap: 1rem;
   }
   
-  .emptyState, .loadingState {
+  .emptyState, .loadingState, .selectPrompt {
     padding: 2rem 1rem;
   }
 }
