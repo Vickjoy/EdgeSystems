@@ -85,7 +85,7 @@ const Header = () => {
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (mobileMenuOpen && !e.target.closest(`.${styles.mobileMenu}`) && !e.target.closest(`.${styles.hamburgerButton}`)) {
+      if (mobileMenuOpen && !e.target.closest(`.${styles.mobileMenu}`) && !e.target.closest(`.${styles.mobileHamburger}`)) {
         setMobileMenuOpen(false);
         setMobileExpandedCategory(null);
       }
@@ -319,7 +319,7 @@ const Header = () => {
             className={styles.mobileHamburger}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+            <FaBars />
           </button>
 
           <div className={styles.mobileSearchContainer}>

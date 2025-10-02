@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import styles from './OrderSummary.module.css';
 
 const OrderSummary = () => {
-  const { cartItems, removeFromCart, addToCart, clearCart } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, clearCart } = useCart();
   const navigate = useNavigate();
 
-  // Quantity change handler for dropdown
-  const handleQuantitySelect = (item, newQty) => {
-    if (newQty < 1) return;
-    removeFromCart(item.id);
-    addToCart({ ...item, quantity: newQty });
+  // Quantity change handler for number input
+  const handleQuantityChange = (item, e) => {
+    const newQty = parseInt(e.target.value);
+    if (isNaN(newQty) || newQty < 1) return;
+    updateQuantity(item.id, newQty);
   };
 
   // Handle Request Quotation
@@ -116,15 +116,13 @@ const OrderSummary = () => {
                     </td>
                     <td className={`${styles.tableCell} ${styles.quantityCell}`}>
                       <div className={styles.quantityContainer}>
-                        <select
+                        <input
+                          type="number"
                           value={item.quantity || 1}
-                          onChange={e => handleQuantitySelect(item, parseInt(e.target.value))}
-                          className={styles.quantitySelect}
-                        >
-                          {[...Array(20).keys()].map(i => (
-                            <option key={i+1} value={i+1}>{i+1}</option>
-                          ))}
-                        </select>
+                          min="1"
+                          className={styles.quantityInput}
+                          onChange={(e) => handleQuantityChange(item, e)}
+                        />
                       </div>
                     </td>
                     <td className={`${styles.tableCell} ${styles.center}`}>

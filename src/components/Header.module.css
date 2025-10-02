@@ -37,6 +37,8 @@
   padding: 8px 0;
   text-align: center;
   border-bottom: 1px solid #5086A4;
+  position: relative;
+  z-index: 5;
 }
 
 .mobileTopBarContent {
@@ -66,7 +68,7 @@
   font-size: 10px;
 }
 
-/* Mobile Search Row - UPDATED FOR BETTER SPACING */
+/* Mobile Search Row */
 .mobileSearchRow {
   display: flex;
   align-items: center;
@@ -74,34 +76,39 @@
   gap: 10px;
   background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
+  position: relative;
+  z-index: 5;
 }
 
 .mobileHamburger {
   background: none;
   border: none;
   color: #6096B4;
-  font-size: 20px;
+  font-size: 22px;
   cursor: pointer;
   padding: 8px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  transition: all 0.3s ease;
   flex-shrink: 0;
-  z-index: 10001;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mobileHamburger:hover {
-  background: #f8fafc;
+  background: #f1f5f9;
   color: #5086A4;
 }
 
-/* UPDATED: Search container takes available space */
+/* Search container takes available space */
 .mobileSearchContainer {
   flex: 1;
   min-width: 0;
   max-width: 100%;
 }
 
-/* UPDATED: Mobile actions with better spacing */
+/* Mobile actions with better spacing */
 .mobileActions {
   display: flex;
   align-items: center;
@@ -150,6 +157,8 @@
   padding: 16px;
   background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
+  position: relative;
+  z-index: 5;
 }
 
 .mobileLogo {
@@ -334,7 +343,7 @@
   }
 }
 
-/* Navigation Links and Dropdown Buttons - Clean design with sky blue theme */
+/* Navigation Links and Dropdown Buttons */
 .navLink, .dropdownButton {
   color: #475569;
   text-decoration: none;
@@ -621,34 +630,40 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 20px;
-  background: #6096B4;
+  padding: 20px 20px;
+  background: linear-gradient(135deg, #6096B4 0%, #5086A4 100%);
   color: #ffffff;
-  border-bottom: 1px solid #5086A4;
-  box-shadow: 0 2px 8px rgba(96, 150, 180, 0.2);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(96, 150, 180, 0.15);
 }
 
 .mobileMenuHeader h3 {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .mobileMenuClose {
-  background: none;
+  background: rgba(255, 255, 255, 0.15);
   border: none;
   color: #ffffff;
   font-size: 20px;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
 }
 
 .mobileMenuClose:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: rotate(90deg);
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
 }
 
 /* Mobile Menu Content */
@@ -660,36 +675,29 @@
 .mobileNavLink {
   display: flex;
   align-items: center;
-  padding: 18px 24px;
-  color: #475569;
+  padding: 16px 20px;
+  color: #1e293b;
   text-decoration: none;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 15px;
   border-bottom: 1px solid #f1f5f9;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
 }
 
 .mobileNavLink:hover {
-  background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
+  background: #f8fafc;
   color: #6096B4;
-  padding-left: 32px;
-  transform: translateX(4px);
+  padding-left: 28px;
 }
 
 .mobileNavLink:hover::before {
   content: '→';
   position: absolute;
-  left: 20px;
+  left: 16px;
   color: #6096B4;
   font-weight: 700;
-  animation: bounce 0.6s ease;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-4px); }
-  60% { transform: translateY(-2px); }
 }
 
 /* Mobile Category Section */
@@ -703,33 +711,33 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 18px 24px;
+  padding: 16px 20px;
   background: transparent;
   border: none;
-  color: #475569;
-  font-weight: 700;
-  font-size: 16px;
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 15px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
 }
 
 .mobileCategoryButton:hover {
-  background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
+  background: #f8fafc;
   color: #6096B4;
 }
 
 .mobileCategoryButton.expanded {
-  background: linear-gradient(135deg, #6096B4 0%, #5086A4 100%);
+  background: #6096B4;
   color: #ffffff;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .mobileChevron {
-  font-size: 14px;
+  font-size: 12px;
   color: #94a3b8;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s ease;
 }
 
 .mobileChevron.rotated {
@@ -739,7 +747,6 @@
 
 .mobileCategoryButton:hover .mobileChevron {
   color: #6096B4;
-  transform: translateX(4px);
 }
 
 .mobileCategoryButton.expanded:hover .mobileChevron {
@@ -748,9 +755,9 @@
 
 /* Mobile Subcategory Container */
 .mobileSubcategoryContainer {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: #f8fafc;
   border-top: 1px solid #e2e8f0;
-  animation: slideDown 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: slideDown 0.3s ease;
   overflow: hidden;
 }
 
@@ -758,119 +765,98 @@
   from {
     opacity: 0;
     max-height: 0;
-    transform: translateY(-10px);
   }
   to {
     opacity: 1;
     max-height: 1000px;
-    transform: translateY(0);
   }
 }
 
 /* Mobile Category Group */
 .mobileCategoryGroup {
-  padding: 8px 0;
+  padding: 0;
   border-bottom: 1px solid #e2e8f0;
   position: relative;
+  background: #ffffff;
 }
 
 .mobileCategoryGroup:last-child {
   border-bottom: none;
 }
 
-.mobileCategoryGroup::before {
-  content: '';
-  position: absolute;
-  left: 24px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, #6096B4, transparent);
-  opacity: 0.3;
-}
-
 .mobileCategoryName {
   display: block;
   width: 100%;
-  padding: 14px 32px 14px 40px;
+  padding: 14px 20px;
   background: transparent;
   border: none;
-  color: #374151;
-  font-weight: 700;
-  font-size: 15px;
+  color: #334155;
+  font-weight: 600;
+  font-size: 14px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid rgba(241, 245, 249, 0.8);
+  transition: all 0.25s ease;
+  border-bottom: 1px solid #f1f5f9;
   position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
 }
 
 .mobileCategoryName:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: #f8fafc;
   color: #6096B4;
-  padding-left: 48px;
-  transform: translateX(4px);
+  padding-left: 28px;
 }
 
 .mobileCategoryName:hover::before {
   content: '▸';
   position: absolute;
-  left: 32px;
+  left: 16px;
   color: #6096B4;
   font-weight: 700;
-  animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
 }
 
 /* Mobile Subcategory List */
 .mobileSubcategoryList {
-  background: rgba(255, 255, 255, 0.6);
-  margin-left: 20px;
+  background: #f8fafc;
+  padding: 4px 0;
   border-left: 3px solid #6096B4;
-  border-radius: 0 0 0 8px;
-  backdrop-filter: blur(10px);
-  overflow: hidden;
+  margin-left: 12px;
 }
 
 .mobileSubcategoryItem {
   display: block;
   width: 100%;
-  padding: 12px 24px 12px 32px;
+  padding: 12px 20px 12px 24px;
   background: transparent;
   border: none;
-  color: #64748b;
+  color: #475569;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid rgba(241, 245, 249, 0.6);
+  transition: all 0.25s ease;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
   position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+}
+
+.mobileSubcategoryItem:last-child {
+  border-bottom: none;
 }
 
 .mobileSubcategoryItem:hover {
-  background: rgba(96, 150, 180, 0.1);
+  background: #ffffff;
   color: #6096B4;
-  padding-left: 40px;
-  transform: translateX(6px);
+  padding-left: 32px;
 }
 
 .mobileSubcategoryItem:hover::before {
   content: '•';
   position: absolute;
-  left: 28px;
+  left: 20px;
   color: #6096B4;
   font-weight: 700;
-  animation: glow 1.5s ease-in-out infinite alternate;
-}
-
-@keyframes glow {
-  from { text-shadow: 0 0 5px #6096B4; }
-  to { text-shadow: 0 0 10px #6096B4, 0 0 15px #6096B4; }
+  font-size: 16px;
 }
 
 /* Clean scrollbar for mobile menu */
@@ -949,14 +935,10 @@
 }
 
 .mobileOverlay {
-  z-index: 9999;
-}
-
-.mobileMenu {
   z-index: 10000;
 }
 
-.mobileHamburger {
+.mobileMenu {
   z-index: 10001;
 }
 
@@ -985,22 +967,26 @@
   }
 
   .mobileMenuHeader {
-    padding: 20px 16px;
+    padding: 18px 16px;
+  }
+
+  .mobileMenuHeader h3 {
+    font-size: 16px;
   }
 
   .mobileNavLink,
   .mobileCategoryButton {
-    padding: 16px 20px;
-    font-size: 15px;
-  }
-
-  .mobileCategoryName {
-    padding: 12px 28px 12px 36px;
+    padding: 14px 16px;
     font-size: 14px;
   }
 
-  .mobileSubcategoryItem {
-    padding: 10px 20px 10px 28px;
+  .mobileCategoryName {
+    padding: 12px 16px;
     font-size: 13px;
+  }
+
+  .mobileSubcategoryItem {
+    padding: 10px 16px 10px 20px;
+    font-size: 12px;
   }
 }

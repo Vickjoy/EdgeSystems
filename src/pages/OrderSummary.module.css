@@ -153,25 +153,26 @@
   justify-content: center;
 }
 
-.quantitySelect {
-  padding: 0.6rem 0.8rem;
-  border-radius: 8px;
-  border: 2px solid #e8f1f5;
-  font-weight: 600;
-  cursor: pointer;
-  min-width: 70px;
+.quantityInput {
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-weight: 500;
+  width: 50px;
   background: white;
   color: #333;
   transition: all 0.2s ease;
+  text-align: center;
+  font-size: 14px;
 }
 
-.quantitySelect:focus {
+.quantityInput:focus {
   outline: none;
   border-color: #6096B4;
-  box-shadow: 0 0 0 3px rgba(96, 150, 180, 0.1);
+  box-shadow: 0 0 0 2px rgba(96, 150, 180, 0.1);
 }
 
-.quantitySelect:hover {
+.quantityInput:hover {
   border-color: #6096B4;
 }
 
@@ -272,10 +273,10 @@
     font-size: 12px;
   }
   
-  .quantitySelect {
-    padding: 0.4rem 0.6rem;
-    min-width: 50px;
-    font-size: 12px;
+  .quantityInput {
+    padding: 0.3rem 0.4rem;
+    width: 45px;
+    font-size: 13px;
   }
   
   .removeButton {
