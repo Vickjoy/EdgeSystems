@@ -16,6 +16,7 @@ import CategoryPage from './pages/CategoryPage';
 import AdminLayout from './components/AdminLayout';
 import OrderSummary from './pages/OrderSummary';
 import FloatingWhatsAppButton from './components/FloatingWhatsAppButton';
+import BlogDetail from './pages/BlogDetail';
 
 // Component to handle routes + header/footer visibility
 const App = () => {
@@ -48,6 +49,7 @@ const App = () => {
         <Route path="/user-login" element={<UserLogin />} />
         <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/product/edit/:slug" element={<ProductDetail />} />
+        <Route path="/blog/:slug" element={<BlogDetail />} />
         <Route path="/fire-safety/:categorySlug" element={<ProductList />} />
         <Route path="/ict/:categorySlug" element={<ProductList />} />
         <Route path="/category/:slug" element={<CategoryPage />} />

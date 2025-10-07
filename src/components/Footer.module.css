@@ -24,9 +24,17 @@
   background: linear-gradient(90deg, transparent 0%, #6096B4 50%, transparent 100%);
 }
 
+/* Desktop grid - 4 columns */
 @media (min-width: 768px) {
   .footer {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 3.5rem 2rem 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer {
     gap: 2.5rem;
     padding: 3.5rem 3rem 3rem;
   }
@@ -52,7 +60,7 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Social Links - UPDATED: Removed card background, kept just icons */
+/* Social Links */
 .socialLinks {
   display: flex;
   gap: 1.5rem;
@@ -93,29 +101,20 @@
   filter: brightness(1.2) saturate(1.2);
 }
 
-/* Specific hover effects for different social platforms */
+/* Specific hover effects */
 .socialLink:nth-child(1):hover .socialIcon {
-  /* LinkedIn */
   filter: brightness(1.2) saturate(1.2) drop-shadow(0 0 10px rgba(0, 119, 181, 0.6));
 }
-
 .socialLink:nth-child(2):hover .socialIcon {
-  /* Facebook */
   filter: brightness(1.2) saturate(1.2) drop-shadow(0 0 10px rgba(24, 119, 242, 0.6));
 }
-
 .socialLink:nth-child(3):hover .socialIcon {
-  /* Instagram */
   filter: brightness(1.2) saturate(1.2) drop-shadow(0 0 10px rgba(225, 48, 108, 0.6));
 }
-
 .socialLink:nth-child(4):hover .socialIcon {
-  /* TikTok */
   filter: brightness(1.2) saturate(1.2) drop-shadow(0 0 10px rgba(37, 244, 238, 0.6));
 }
-
 .socialLink:nth-child(5):hover .socialIcon {
-  /* WhatsApp */
   filter: brightness(1.2) saturate(1.2) drop-shadow(0 0 10px rgba(37, 211, 102, 0.6));
 }
 
@@ -156,7 +155,7 @@
   }
 }
 
-/* Quick Links - Clean list styling without cards */
+/* Quick Links */
 .quickLinks {
   list-style: none;
   padding: 0;
@@ -212,13 +211,12 @@
     padding-left: 0;
     transform: none;
   }
-  
   .quickLink::before {
     display: none;
   }
 }
 
-/* Contact Info - Clean styling without cards */
+/* Contact Info */
 .contactInfo {
   list-style: none;
   text-align: left;
@@ -292,6 +290,132 @@
   }
 }
 
+/* Blog Section Styles */
+.blogList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (max-width: 767px) {
+  .blogList {
+    text-align: center;
+  }
+}
+
+.blogItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.blogLink {
+  text-decoration: none;
+  display: block;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.blogLink:hover {
+  transform: translateY(-2px);
+}
+
+.blogContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.blogLink:hover .blogContent {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #6096B4;
+  box-shadow: 0 4px 12px rgba(96, 150, 180, 0.2);
+}
+
+.blogThumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  border: 2px solid rgba(96, 150, 180, 0.3);
+  transition: all 0.3s ease;
+}
+
+.blogLink:hover .blogThumbnail {
+  border-color: #6096B4;
+  transform: scale(1.05);
+}
+
+.blogTitle {
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #e2e8f0;
+  display: block;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.blogLink:hover .blogTitle {
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.blogSource {
+  display: block;
+  font-size: 0.75rem;
+  color: #a0aec0;
+  font-style: italic;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  padding-left: 0.75rem;
+}
+
+.sourceLink {
+  color: #6096B4;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.sourceLink:hover {
+  color: #35A29F;
+  text-decoration: underline;
+}
+
+.blogLoading,
+.noBlog {
+  color: #cbd5e0;
+  font-style: italic;
+  font-size: 0.9rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Adjust column padding for 4-column layout */
+@media (min-width: 768px) {
+  .footer > div:nth-child(1) {
+    padding-right: 1rem;
+  }
+
+  .footer > div:nth-child(2),
+  .footer > div:nth-child(3) {
+    padding: 0 0.75rem;
+  }
+
+  .footer > div:nth-child(4) {
+    padding-left: 1rem;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 640px) {
   .footer {
@@ -299,29 +423,38 @@
     gap: 2rem;
     background-attachment: scroll;
   }
-  
+
   .logo {
     width: 7rem;
     margin-bottom: 0.75rem;
   }
-  
+
   .socialLinks {
     gap: 1rem;
     margin-top: 0.75rem;
   }
-  
+
   .socialIcon {
     width: 1rem;
     height: 1rem;
   }
-  
+
   .sectionTitle {
     font-size: 1.3rem;
     margin-bottom: 1.2rem;
   }
-  
+
   .contactItem {
     margin-bottom: 1rem;
+  }
+
+  .blogThumbnail {
+    width: 50px;
+    height: 50px;
+  }
+
+  .blogContent {
+    padding: 0.5rem;
   }
 }
 
@@ -330,21 +463,9 @@
   .footer {
     background-attachment: fixed;
   }
-  
-  .footer > div:nth-child(1) {
-    padding-right: 1rem;
-  }
-  
-  .footer > div:nth-child(2) {
-    padding: 0 1rem;
-  }
-  
-  .footer > div:nth-child(3) {
-    padding-left: 1rem;
-  }
 }
 
-/* Smooth animations for all interactive elements */
+/* Smooth animations */
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -198,12 +198,12 @@
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
 }
 
-.requestQuotationContainer {
+.requestQuoteContainer {
   display: flex;
   justify-content: flex-end;
 }
 
-.requestQuotationButton {
+.requestQuoteButton {
   background: linear-gradient(135deg, #1DCD9F 0%, #17B892 100%);
   color: white;
   font-weight: 700;
@@ -218,14 +218,14 @@
   box-shadow: 0 4px 15px rgba(29, 205, 159, 0.2);
 }
 
-.requestQuotationButton:disabled {
+.requestQuoteButton:disabled {
   cursor: not-allowed;
   opacity: 0.5;
   background: #ccc;
   box-shadow: none;
 }
 
-.requestQuotationButton:not(:disabled):hover {
+.requestQuoteButton:not(:disabled):hover {
   background: linear-gradient(135deg, #17B892 0%, #14A682 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(29, 205, 159, 0.4);
@@ -285,13 +285,13 @@
     font-size: 16px;
   }
   
-  .requestQuotationButton {
+  .requestQuoteButton {
     padding: 0.75rem 2rem;
     font-size: 16px;
     width: 100%;
   }
   
-  .requestQuotationContainer {
+  .requestQuoteContainer {
     justify-content: stretch;
   }
 }

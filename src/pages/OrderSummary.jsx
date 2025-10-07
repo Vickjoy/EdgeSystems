@@ -16,7 +16,7 @@ const OrderSummary = () => {
   };
 
   // Handle Request Quotation
-  const handleRequestQuotation = () => {
+  const handleRequestQuote = () => {
     if (cartItems.length === 0) return;
 
     // Format the message with product names and quantities
@@ -141,13 +141,13 @@ const OrderSummary = () => {
           </table>
         </div>
 
-        <div className={styles.requestQuotationContainer}>
+        <div className={styles.requestQuoteContainer}>
           <button
-            className={styles.requestQuotationButton}
-            onClick={handleRequestQuotation}
+            className={styles.requestQuoteButton}
+            onClick={handleRequestQuote}
             disabled={cartItems.length === 0}
           >
-            Request Quotation
+            Request Quote
           </button>
         </div>
       </div>
