@@ -9,7 +9,7 @@ import UbiquitiLogo from '../assets/Ubiquiti.webp';
 import GiganetLogo from '../assets/giganet.jpeg';
 import HikvisionLogo from '../assets/hikvision.png';
 import PanelImage from '../assets/FireSafety.jpg';
-import TelephoneImage from '../assets/telephony.jpg';
+/*import TelephoneImage from '../assets/telephony.jpg';*/
 
 // Import service images
 import FireAlarmImage from '../assets/FireAlarm.jpeg';
@@ -23,7 +23,7 @@ const Home = () => {
   
   const slides = [
     { image: PanelImage, text: 'Protect Your Business with Fire Safety Systems', link: '/category/addressable-fire-alarm-detection-systems' },
-    { image: TelephoneImage, text: 'Smart VoIP & Telephony for Modern Businesses', link: '/category/communication' },
+    /* { image: TelephoneImage, text: 'Smart VoIP & Telephony for Modern Businesses', link: '/category/communication' },*/
    
   ];
 
