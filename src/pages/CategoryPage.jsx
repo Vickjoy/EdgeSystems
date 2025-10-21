@@ -140,15 +140,6 @@ const CategoryPage = () => {
     navigate(`/category/${slug}#${subcategory.slug}`, { replace: true });
   };
 
-  // Handle mobile dropdown change
-  const handleMobileSelectChange = (e) => {
-    const subcategoryId = parseInt(e.target.value);
-    const subcategory = subcategories.find(sub => sub.id === subcategoryId);
-    if (subcategory) {
-      handleSubcategorySelect(subcategory);
-    }
-  };
-
   const categoryDisplay = getCategoryDisplay(category);
 
   const crumbs = [
@@ -209,20 +200,21 @@ const CategoryPage = () => {
 
           {/* Products Section */}
           <main className={styles.mainContent}>
-            {/* Mobile Category Dropdown */}
+            {/* Mobile Category Pills - Horizontal Scrollable */}
             <div className={styles.mobileCategories}>
-              <select
-                className={styles.mobileCategorySelect}
-                value={selectedSubcategory?.id || ''}
-                onChange={handleMobileSelectChange}
-              >
-                <option value="" disabled>Select a category</option>
+              <div className={styles.mobileCategoryPills}>
                 {subcategories.map((sub) => (
-                  <option key={sub.id} value={sub.id}>
+                  <button
+                    key={sub.id}
+                    className={`${styles.categoryPill} ${
+                      selectedSubcategory?.id === sub.id ? styles.activePill : ''
+                    }`}
+                    onClick={() => handleSubcategorySelect(sub)}
+                  >
                     {sub.name}
-                  </option>
+                  </button>
                 ))}
-              </select>
+              </div>
             </div>
 
             {!selectedSubcategory ? (
@@ -244,8 +236,8 @@ const CategoryPage = () => {
               <div>
                 <div className={styles.categoryHeader}>
                   <h2>{selectedSubcategory.name}</h2>
-                  <p className={styles.productCount}>
-                    {products.length} product{products.length !== 1 ? 's' : ''} available
+                  <p className={styles.quotationMessage}>
+                    Add products to your cart and request a quotation for your selected items.
                   </p>
                 </div>
                 <div className={styles.productsGrid}>
