@@ -1,4 +1,4 @@
-/* Header - Clean minimalistic design */
+/* Header - Clean minimalistic design with blue theme */
 .header {
   background: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -36,7 +36,7 @@
   font-size: 11px;
   padding: 8px 0;
   text-align: center;
-  border-bottom: 1px solid #261FB3;
+  border-bottom: 1px solid #1a1580;
   position: relative;
   z-index: 5;
 }
@@ -176,16 +176,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px 32px;
+  padding: 10px 32px;
   background: #261FB3;
   color: #ffffff;
-  font-size: 14px;
-  border-bottom: 1px solid #261FB3;
+  font-size: 13px;
+  border-bottom: 1px solid #1a1580;
 }
 
 @media (min-width: 768px) {
   .topBar {
-    padding: 16px 40px;
+    padding: 10px 40px;
   }
 }
 
@@ -211,18 +211,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 40px;
-  background: #ffffff;
+  padding: 16px 40px;
+  background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
   position: relative;
   z-index: 11;
   overflow: visible;
-  border-bottom: 1px solid #e2e8f0;
-  min-height: 80px;
+  border-bottom: 2px solid #261FB3;
+  min-height: 70px;
 }
 
 @media (min-width: 768px) {
   .mainHeader {
-    padding: 24px 48px;
+    padding: 16px 48px;
   }
 }
 
@@ -258,39 +258,43 @@
 
 /* Login Link - Desktop */
 .loginLink {
-  color: #261FB3;
+  color: #ffffff;
   text-decoration: none;
   font-weight: 600;
-  padding: 12px 24px;
+  padding: 10px 20px;
   border-radius: 8px;
-  background: #f8fafc;
+  background: #261FB3;
   transition: all 0.2s ease;
-  border: 1px solid #e2e8f0;
+  border: 2px solid #261FB3;
   white-space: nowrap;
 }
 
 .loginLink:hover {
-  background: #261FB3;
+  background: #1a1580;
+  border-color: #1a1580;
   color: #ffffff;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(38, 31, 179, 0.3);
 }
 
 /* Cart Button - Desktop */
 .cartButton {
-  background: none;
-  border: none;
-  color: #261FB3;
-  font-size: 24px;
+  background: #261FB3;
+  border: 2px solid #261FB3;
+  color: #ffffff;
+  font-size: 20px;
   cursor: pointer;
   position: relative;
-  padding: 8px;
+  padding: 10px 12px;
   border-radius: 8px;
   transition: all 0.2s ease;
 }
 
 .cartButton:hover {
-  background: #f8fafc;
-  transform: scale(1.1);
+  background: #1a1580;
+  border-color: #1a1580;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(38, 31, 179, 0.3);
 }
 
 .cartBadge {
@@ -312,12 +316,13 @@
 
 /* Navigation - Desktop Only */
 .navigation {
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  background: #261FB3;
+  border-bottom: none;
   padding: 0;
   position: relative;
   z-index: 12;
   overflow: visible;
+  box-shadow: 0 4px 12px rgba(38, 31, 179, 0.15);
 }
 
 @media (max-width: 768px) {
@@ -334,7 +339,7 @@
   list-style: none;
   margin: 0;
   padding: 0 40px;
-  min-height: 70px;
+  min-height: 60px;
 }
 
 @media (min-width: 768px) {
@@ -345,11 +350,11 @@
 
 /* Navigation Links and Dropdown Buttons */
 .navLink, .dropdownButton {
-  color: #475569;
+  color: #ffffff;
   text-decoration: none;
   font-weight: 600;
-  font-size: 15px;
-  padding: 24px 28px;
+  font-size: 14px;
+  padding: 20px 24px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -358,14 +363,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 70px;
+  height: 60px;
   box-sizing: border-box;
   white-space: nowrap;
 }
 
 .navLink:hover, .dropdownButton:hover {
-  color: #261FB3;
-  background: #f8fafc;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .navLink:hover::after, .dropdownButton:hover::after {
@@ -375,7 +380,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: #261FB3;
+  background: #ffffff;
   animation: slideIn 0.3s ease;
 }
 
@@ -386,13 +391,13 @@
 
 /* Chevron icons */
 .navChevron {
-  font-size: 12px;
-  color: #261FB3;
+  font-size: 11px;
+  color: #ffffff;
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .dropdownButton:hover .navChevron {
-  color: #261FB3;
+  color: #ffffff;
   transform: rotate(180deg);
 }
 
@@ -537,7 +542,7 @@
   font-weight: 600;
   font-size: 14px;
   color: #ffffff;
-  border-bottom: 1px solid #5086A4;
+  border-bottom: 1px solid #1a1580;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -631,10 +636,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 20px;
-  background: linear-gradient(135deg, #261FB3 0%,#261FB3 100%);
+  background: linear-gradient(135deg, #261FB3 0%, #261FB3 100%);
   color: #ffffff;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 12px rgba(96, 150, 180, 0.15);
+  box-shadow: 0 4px 12px rgba(38, 31, 179, 0.15);
 }
 
 .mobileMenuHeader h3 {
@@ -854,7 +859,7 @@
   content: '•';
   position: absolute;
   left: 20px;
-  color:#261FB3;
+  color: #261FB3;
   font-weight: 700;
   font-size: 16px;
 }
@@ -869,12 +874,12 @@
 }
 
 .mobileMenu::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #6096B4, #5086A4);
+  background: linear-gradient(to bottom, #261FB3, #1a1580);
   border-radius: 3px;
 }
 
 .mobileMenu::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #5086A4, #4276A4);
+  background: linear-gradient(to bottom, #1a1580, #120e60);
 }
 
 /* Clean scrollbar for subcategory grid */
@@ -892,7 +897,7 @@
 }
 
 .subcategoryGrid::-webkit-scrollbar-thumb:hover {
-  background: #6096B4;
+  background: #261FB3;
 }
 
 /* Focus states for accessibility */
@@ -902,17 +907,16 @@
 .mobileCategoryButton:focus,
 .mobileCategoryName:focus,
 .mobileSubcategoryItem:focus {
-  outline: 2px solid #6096B4;
+  outline: 2px solid #261FB3;
   outline-offset: -2px;
   background: #f1f5f9;
-  color: #6096B4;
+  color: #261FB3;
 }
 
 /* Active/Open dropdown state */
 .dropdownContainer .dropdownButton[aria-expanded="true"] {
-  background: #f1f5f9;
-  color: #6096B4;
-  border-color: #6096B4;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
 }
 
 .dropdownContainer .dropdownButton[aria-expanded="true"]::after {
@@ -922,7 +926,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: #6096b4;
+  background: #ffffff;
 }
 
 /* Ensure proper z-index stacking */

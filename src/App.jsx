@@ -17,6 +17,7 @@ import AdminLayout from './components/AdminLayout';
 import OrderSummary from './pages/OrderSummary';
 import FloatingWhatsAppButton from './components/FloatingWhatsAppButton';
 import BlogDetail from './pages/BlogDetail';
+import ComingSoon from './components/ComingSoon'
 
 // Component to handle routes + header/footer visibility
 const App = () => {
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-summary" element={<OrderSummary />} />
+        <Route path="/category/solar-power-solutions" element={<ComingSoon />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/user-login" element={<UserLogin />} />

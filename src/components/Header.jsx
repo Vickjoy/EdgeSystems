@@ -357,7 +357,7 @@ const Header = () => {
           <div className={styles.topBarContent}>
             <span>
               <FaMapMarkerAlt style={{ marginRight: 6 }} />
-              Shelter house, Dai dai Road, South B, Ground Floor Apartment 4F31 Nairobi
+              Shelter house, Dai dai Road, South B, Ground Floor Apartment GF4, Nairobi
             </span>
             <span>
               <FaPhoneAlt style={{ marginRight: 6 }} />
