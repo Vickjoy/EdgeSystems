@@ -12,7 +12,7 @@ const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [categories, setCategories] = useState([]);
   const [subcategoriesMap, setSubcategoriesMap] = useState({});
-  const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [expandedCategories, setExpandedCategories] = useState(new Set());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileExpandedCategory, setMobileExpandedCategory] = useState(null);
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ const Header = () => {
         solarRef.current && !solarRef.current.contains(e.target)
       ) {
         setOpenDropdown(null);
-        setHoveredCategory(null);
+        setExpandedCategories(new Set());
       }
     };
     document.addEventListener('mousedown', handleClick);
@@ -164,12 +164,20 @@ const Header = () => {
   const handleDropdownToggle = (dropdownName) => {
     const isCurrentlyOpen = openDropdown === dropdownName;
     setOpenDropdown(isCurrentlyOpen ? null : dropdownName);
-    setHoveredCategory(null);
+    setExpandedCategories(new Set());
+    
+    // Pre-load all subcategories when dropdown opens
+    if (!isCurrentlyOpen) {
+      const categoryList = dropdownName === 'fire' ? fireCategories : 
+                          dropdownName === 'ict' ? ictCategories : 
+                          dropdownName === 'solar' ? solarCategories : [];
+      categoryList.forEach(cat => loadSubcategories(cat.slug));
+    }
   };
 
   const handleCategoryClick = (categorySlug) => {
     setOpenDropdown(null);
-    setHoveredCategory(null);
+    setExpandedCategories(new Set());
     setMobileMenuOpen(false);
     setMobileExpandedCategory(null);
     navigate(`/category/${categorySlug}`);
@@ -177,15 +185,23 @@ const Header = () => {
 
   const handleSubcategoryClick = (categorySlug, subcategorySlug) => {
     setOpenDropdown(null);
-    setHoveredCategory(null);
+    setExpandedCategories(new Set());
     setMobileMenuOpen(false);
     setMobileExpandedCategory(null);
     navigate(`/category/${categorySlug}`, { state: { selectedSubcategory: subcategorySlug } });
   };
 
-  const handleCategoryHover = (categorySlug) => {
-    setHoveredCategory(categorySlug);
-    loadSubcategories(categorySlug);
+  const toggleCategoryExpansion = (categorySlug) => {
+    setExpandedCategories(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(categorySlug)) {
+        newSet.delete(categorySlug);
+      } else {
+        newSet.add(categorySlug);
+        loadSubcategories(categorySlug);
+      }
+      return newSet;
+    });
   };
 
   const handleMobileCategoryClick = (categoryType) => {
@@ -200,7 +216,7 @@ const Header = () => {
     }
   };
 
-  const renderDesktopMegaDropdown = (dropdownCategories, isOpen) => {
+  const renderDesktopStackedDropdown = (dropdownCategories, isOpen) => {
     if (!isOpen) return null;
     
     return (
@@ -209,13 +225,17 @@ const Header = () => {
           {dropdownCategories.map(cat => (
             <div
               key={cat.id}
-              className={`${styles.categoryItem} ${hoveredCategory === cat.slug ? styles.categoryItemHovered : ''}`}
-              onMouseEnter={() => handleCategoryHover(cat.slug)}
-              onMouseLeave={() => setHoveredCategory(null)}
+              className={`${styles.categoryItem} ${expandedCategories.has(cat.slug) ? styles.categoryItemHovered : ''}`}
             >
               <button
                 className={styles.dropdownItem}
-                onClick={() => handleCategoryClick(cat.slug)}
+                onClick={() => {
+                  if (subcategoriesMap[cat.slug] && subcategoriesMap[cat.slug].length > 0) {
+                    toggleCategoryExpansion(cat.slug);
+                  } else {
+                    handleCategoryClick(cat.slug);
+                  }
+                }}
               >
                 <span>{cat.name}</span>
                 {subcategoriesMap[cat.slug] && subcategoriesMap[cat.slug].length > 0 && (
@@ -223,11 +243,8 @@ const Header = () => {
                 )}
               </button>
               
-              {hoveredCategory === cat.slug && subcategoriesMap[cat.slug] && subcategoriesMap[cat.slug].length > 0 && (
+              {expandedCategories.has(cat.slug) && subcategoriesMap[cat.slug] && subcategoriesMap[cat.slug].length > 0 && (
                 <div className={styles.subcategoryDropdown}>
-                  <div className={styles.subcategoryHeader}>
-                    {cat.name} Categories
-                  </div>
                   <div className={styles.subcategoryGrid}>
                     {subcategoriesMap[cat.slug].map(sub => (
                       <button
@@ -327,7 +344,6 @@ const Header = () => {
           </div>
 
           <div className={styles.mobileActions}>
-            {/* Mobile cart with click (no hover on mobile) */}
             <button 
               onClick={() => setCartOpen(true)} 
               className={styles.mobileCartButton}
@@ -413,7 +429,7 @@ const Header = () => {
                 Fire Safety Products & Services
                 <FaChevronDown className={styles.navChevron} />
               </button>
-              {renderDesktopMegaDropdown(fireCategories, openDropdown === 'fire')}
+              {renderDesktopStackedDropdown(fireCategories, openDropdown === 'fire')}
             </li>
             
             <li ref={ictRef} className={styles.dropdownContainer}>
@@ -424,7 +440,7 @@ const Header = () => {
                 ICT/Telecommunication Products & Services
                 <FaChevronDown className={styles.navChevron} />
               </button>
-              {renderDesktopMegaDropdown(ictCategories, openDropdown === 'ict')}
+              {renderDesktopStackedDropdown(ictCategories, openDropdown === 'ict')}
             </li>
 
             <li ref={solarRef} className={styles.dropdownContainer}>
@@ -435,7 +451,7 @@ const Header = () => {
                 Solar Power Solutions
                 <FaChevronDown className={styles.navChevron} />
               </button>
-              {renderDesktopMegaDropdown(solarCategories, openDropdown === 'solar')}
+              {renderDesktopStackedDropdown(solarCategories, openDropdown === 'solar')}
             </li>
             
             <li><Link to="/contact" className={styles.navLink}>Contact Us</Link></li>

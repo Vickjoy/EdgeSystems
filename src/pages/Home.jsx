@@ -208,10 +208,9 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Partner Brands - Auto Scrolling */}
+      {/* Partner Brands - Auto Scrolling WITHOUT Header */}
       <section className={styles.partnersSection}>
         <div className={styles.partnersContainer}>
-          <h2 className={styles.partnersTitle}>Partner Brands</h2>
           <div className={styles.sliderWrapper}>
             <div className={styles.sliderTrack}>
               {[

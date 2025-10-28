@@ -3,7 +3,7 @@
   background: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
-  z-index: 10;
+  z-index: 1000;
   overflow: visible;
 }
 
@@ -320,7 +320,7 @@
   border-bottom: none;
   padding: 0;
   position: relative;
-  z-index: 12;
+  z-index: 1200;
   overflow: visible;
   box-shadow: 0 4px 12px rgba(38, 31, 179, 0.15);
 }
@@ -404,57 +404,61 @@
 /* Dropdown Containers */
 .dropdownContainer {
   position: relative;
-  z-index: 13;
+  z-index: 1300;
   display: flex;
   align-items: center;
 }
 
 /* ========================================
-   DESKTOP DROPDOWN STYLES
+   DESKTOP DROPDOWN STYLES - SIMPLE STACKED
    ======================================== */
 
-/* Mega Dropdown Container */
+/* Mega Dropdown Container - Now Simple Vertical Stack */
 .megaDropdown {
   position: absolute;
   top: 100%;
   left: 0;
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   border: 1px solid #e2e8f0;
-  overflow: visible;
+  overflow-y: auto;
   animation: dropdownSlide 0.25s ease-out;
-  min-width: 320px;
-  max-width: 900px;
-  z-index: 99999;
+  min-width: 280px;
+  max-width: 380px;
+  max-height: 600px;
+  z-index: 10000;
   margin-top: 4px;
 }
 
 @keyframes dropdownSlide {
   from {
     opacity: 0;
-    transform: translateY(-8px) scale(0.98);
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
-/* Multilevel Container */
+/* Multilevel Container - Simple Vertical Stack */
 .multilevelContainer {
   display: flex;
   flex-direction: column;
-  padding: 20px 0;
+  padding: 8px 0;
   position: relative;
-  max-height: 70vh;
-  overflow-y: auto;
 }
 
-/* Category Item with potential subcategories */
+/* Category Item - Now Expands Vertically */
 .categoryItem {
   position: relative;
   transition: all 0.2s ease;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.categoryItem:last-child {
+  border-bottom: none;
 }
 
 .categoryItem:hover {
@@ -462,7 +466,7 @@
 }
 
 .categoryItemHovered {
-  background: #f1f5f9;
+  background: #f8fafc;
 }
 
 /* Main category buttons in dropdown */
@@ -470,11 +474,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
+  padding: 14px 20px;
   color: #261FB3;
   text-decoration: none;
-  font-weight: 500;
-  font-size: 15px;
+  font-weight: 600;
+  font-size: 14px;
   transition: all 0.2s ease;
   background: transparent;
   border: none;
@@ -488,7 +492,7 @@
 .categoryItem .dropdownItem:hover {
   background: #f1f5f9;
   color: #261FB3;
-  padding-left: 28px;
+  padding-left: 24px;
 }
 
 .categoryItem .dropdownItem span {
@@ -497,73 +501,59 @@
 
 /* Chevron icon for categories with subcategories */
 .chevronIcon {
-  font-size: 12px;
+  font-size: 11px;
   color: #261FB3;
   margin-left: 8px;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .categoryItemHovered .chevronIcon {
-  transform: rotate(90deg);
-  color: #261FB3;
+  transform: rotate(180deg);
 }
 
-/* Subcategory Dropdown - Appears to the RIGHT */
+/* Subcategory Dropdown - Now Stacked Below Parent */
 .subcategoryDropdown {
-  position: absolute;
-  left: 100%;
+  position: relative;
+  left: 0;
   top: 0;
-  min-width: 320px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  border: 1px solid #e2e8f0;
-  margin-left: 8px;
-  z-index: 100000;
-  animation: subcategorySlide 0.2s ease-out;
+  width: 100%;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  animation: expandDown 0.2s ease-out;
   overflow: hidden;
 }
 
-@keyframes subcategorySlide {
+@keyframes expandDown {
   from {
     opacity: 0;
-    transform: translateX(-8px) scale(0.98);
+    max-height: 0;
   }
   to {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    max-height: 500px;
   }
 }
 
-/* Subcategory Header */
+/* Remove Subcategory Header */
 .subcategoryHeader {
-  background: #261FB3;
-  padding: 18px 24px;
-  font-weight: 600;
-  font-size: 14px;
-  color: #ffffff;
-  border-bottom: 1px solid #1a1580;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  display: none;
 }
 
-/* Subcategory Grid */
+/* Subcategory Grid - Simple Vertical List */
 .subcategoryGrid {
-  padding: 16px 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  max-height: 400px;
-  overflow-y: auto;
 }
 
-/* Subcategory Items */
+/* Subcategory Items - Indented */
 .subcategoryItem {
   display: block;
-  padding: 14px 24px;
-  color: #261FB3;
+  padding: 12px 20px 12px 36px;
+  color: #475569;
   text-decoration: none;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px;
   transition: all 0.2s ease;
   background: transparent;
   border: none;
@@ -573,20 +563,30 @@
   position: relative;
   border-radius: 0;
   margin: 0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.subcategoryItem:last-child {
+  border-bottom: none;
 }
 
 .subcategoryItem:hover {
-  background: #f1f5f9;
+  background: #ffffff;
   color: #261FB3;
-  padding-left: 32px;
+  padding-left: 40px;
+}
+
+.subcategoryItem::before {
+  content: '•';
+  position: absolute;
+  left: 24px;
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .subcategoryItem:hover::before {
-  content: '→';
-  position: absolute;
-  left: 20px;
   color: #261FB3;
-  font-weight: 600;
 }
 
 /* ========================================
@@ -601,7 +601,7 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
+  z-index: 9998;
   animation: fadeIn 0.3s ease;
 }
 
@@ -619,7 +619,7 @@
   max-width: 340px;
   height: 100%;
   background: #ffffff;
-  z-index: 10000;
+  z-index: 9999;
   transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   box-shadow: 2px 0 15px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
@@ -882,21 +882,21 @@
   background: linear-gradient(to bottom, #1a1580, #120e60);
 }
 
-/* Clean scrollbar for subcategory grid */
-.subcategoryGrid::-webkit-scrollbar {
+/* Clean scrollbar for desktop dropdown */
+.megaDropdown::-webkit-scrollbar {
   width: 6px;
 }
 
-.subcategoryGrid::-webkit-scrollbar-track {
+.megaDropdown::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
 
-.subcategoryGrid::-webkit-scrollbar-thumb {
+.megaDropdown::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 3px;
 }
 
-.subcategoryGrid::-webkit-scrollbar-thumb:hover {
+.megaDropdown::-webkit-scrollbar-thumb:hover {
   background: #261FB3;
 }
 
@@ -931,19 +931,15 @@
 
 /* Ensure proper z-index stacking */
 .megaDropdown {
-  z-index: 99999;
-}
-
-.subcategoryDropdown {
-  z-index: 100000;
-}
-
-.mobileOverlay {
   z-index: 10000;
 }
 
+.mobileOverlay {
+  z-index: 9998;
+}
+
 .mobileMenu {
-  z-index: 10001;
+  z-index: 9999;
 }
 
 /* Mobile specific adjustments */

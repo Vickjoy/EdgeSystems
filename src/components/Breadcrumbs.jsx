@@ -14,7 +14,7 @@ const Breadcrumbs = ({ crumbs }) => {
                 {crumb.label}
               </Link>
             ) : (
-              <span>{crumb.label}</span>
+              <span style={{ color: '#000000' }}>{crumb.label}</span>
             )}
           </li>
         ))}

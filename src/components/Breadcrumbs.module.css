@@ -2,7 +2,7 @@
   list-style: none;
   display: flex;
   align-items: center;
-  color: #6b7280;
+  color: #000000;
   background: transparent;
   padding: 0;
   margin: 0;
@@ -11,17 +11,17 @@
 }
 
 .link {
-  color: #6b7280;
+  color: #000000;
   text-decoration: none;
-  transition: color 0.15s ease;
+  transition: all 0.2s ease;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   position: relative;
 }
 
 .link:hover {
-  color: #111827;
-  background-color: rgba(0, 0, 0, 0.04);
+  color: #374151;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .link:focus {
@@ -32,15 +32,15 @@
 
 .separator {
   margin: 0 0.5rem;
-  color: #d1d5db;
+  color: #9ca3af;
   font-size: 0.75rem;
   user-select: none;
 }
 
 /* Current page styling */
 .container li:last-child span {
-  color: #111827;
-  font-weight: 500;
+  color: #000000;
+  font-weight: 600;
 }
 
 /* Responsive */
