@@ -42,11 +42,19 @@ const heroTextStyle = {
   letterSpacing: '0.04em',
 };
 
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     comment: ''
+  });
+  
+  const [submitStatus, setSubmitStatus] = useState({
+    loading: false,
+    success: false,
+    error: null
   });
 
   const handleInputChange = (e) => {
@@ -57,11 +65,53 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Contact Form Message from ${formData.name}`);
-    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.comment}`);
-    window.location.href = `mailto:info@edgesystems.co.ke?subject=${subject}&body=${body}`;
+    
+    setSubmitStatus({ loading: true, success: false, error: null });
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/contact/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+      
+      // Success!
+      setSubmitStatus({ 
+        loading: false, 
+        success: true, 
+        error: null 
+      });
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        comment: ''
+      });
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus(prev => ({ ...prev, success: false }));
+      }, 5000);
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus({ 
+        loading: false, 
+        success: false, 
+        error: error.message 
+      });
+    }
   };
 
   return (
@@ -122,6 +172,21 @@ const Contact = () => {
             {/* Right Grid: Contact Form */}
             <div className={styles.rightGrid}>
               <h3 className={styles.formHeader}>Send us a message</h3>
+              
+              {/* Success Message */}
+              {submitStatus.success && (
+                <div className={styles.successMessage}>
+                  ✓ Your message has been sent successfully! We'll get back to you soon.
+                </div>
+              )}
+              
+              {/* Error Message */}
+              {submitStatus.error && (
+                <div className={styles.errorMessage}>
+                  ✗ {submitStatus.error}
+                </div>
+              )}
+              
               <form onSubmit={handleSubmit} className={styles.contactForm}>
                 <div className={styles.formGroup}>
                   <label htmlFor="name" className={styles.label}>Name</label>
@@ -133,6 +198,7 @@ const Contact = () => {
                     onChange={handleInputChange}
                     className={styles.input}
                     required
+                    disabled={submitStatus.loading}
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -145,6 +211,7 @@ const Contact = () => {
                     onChange={handleInputChange}
                     className={styles.input}
                     required
+                    disabled={submitStatus.loading}
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -157,10 +224,15 @@ const Contact = () => {
                     className={styles.textarea}
                     rows="5"
                     required
+                    disabled={submitStatus.loading}
                   ></textarea>
                 </div>
-                <button type="submit" className={styles.submitButton}>
-                  Submit
+                <button 
+                  type="submit" 
+                  className={styles.submitButton}
+                  disabled={submitStatus.loading}
+                >
+                  {submitStatus.loading ? 'Sending...' : 'Submit'}
                 </button>
               </form>
 

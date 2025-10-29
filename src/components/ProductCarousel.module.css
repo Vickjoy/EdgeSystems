@@ -27,8 +27,8 @@
 ========================= */
 .carouselWrapper {
   position: relative;
-  overflow: hidden;
-  padding: 0 3rem;
+  overflow: visible; /* Changed from hidden to visible */
+  padding: 0 3.5rem; /* Increased padding to accommodate buttons */
 }
 
 .carouselTrack {
@@ -116,14 +116,14 @@
 }
 
 /* =========================
-   Navigation Buttons
+   Navigation Buttons - FIXED
 ========================= */
 .navButton {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: #ffffff;
-  border: 2px solid #e5e7eb;
+  background: #16a34a;
+  border: 2px solid #16a34a;
   border-radius: 50%;
   width: 48px;
   height: 48px;
@@ -133,34 +133,37 @@
   cursor: pointer;
   z-index: 10;
   font-size: 2rem;
-  color: #374151;
+  color: white;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
 }
 
 .navButton:hover:not(:disabled) {
-  background: #16a34a;
-  color: white;
-  border-color: #16a34a;
+  background: #15803d;
+  border-color: #15803d;
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.3);
+  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.4);
 }
 
 .navButton:active:not(:disabled) {
   transform: translateY(-50%) scale(0.95);
+  background: #166534;
 }
 
 .navButton:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
+  background: #9ca3af;
+  border-color: #9ca3af;
 }
 
+/* FIXED: Buttons now positioned inside the wrapper */
 .navButtonPrev {
-  left: -24px;
+  left: 0;
 }
 
 .navButtonNext {
-  right: -24px;
+  right: 0;
 }
 
 /* =========================
@@ -204,15 +207,15 @@
 ========================= */
 @media (max-width: 1200px) {
   .carouselWrapper {
-    padding: 0 2.5rem;
+    padding: 0 3rem;
   }
 
   .navButtonPrev {
-    left: -20px;
+    left: 0;
   }
   
   .navButtonNext {
-    right: -20px;
+    right: 0;
   }
 }
 
@@ -223,7 +226,7 @@
   }
 
   .carouselWrapper {
-    padding: 0 2rem;
+    padding: 0 2.5rem;
   }
 
   .title {
@@ -238,11 +241,11 @@
   }
 
   .navButtonPrev {
-    left: -16px;
+    left: 0;
   }
 
   .navButtonNext {
-    right: -16px;
+    right: 0;
   }
 
   .imageWrapper {
@@ -264,7 +267,7 @@
   }
 
   .carouselWrapper {
-    padding: 0 1.5rem;
+    padding: 0 2rem;
   }
 
   .title {
@@ -278,11 +281,11 @@
   }
 
   .navButtonPrev {
-    left: -12px;
+    left: 0;
   }
 
   .navButtonNext {
-    right: -12px;
+    right: 0;
   }
 
   .imageWrapper {
