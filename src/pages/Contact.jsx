@@ -84,8 +84,8 @@ const Contact = () => {
                 <div className={styles.infoItem}>
                   <FaMapMarkerAlt className={styles.icon} />
                   <div className={styles.infoText}>
-                    Shelter house, house, Dai dai Road, South B, 4th Floor Apartment 4F31 Nairobi<br />
-                    43322-00100 Nairobi Kenya
+                    Shelter house, Dai dai Road, South B, Ground Floor Apartment GF4, Nairobi<br />
+                    43322-00100 Nairobi, Kenya
                   </div>
                 </div>
               </div>

@@ -2,6 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import CompanyLogo from '../assets/Company_logo.webp';
+import InstagramIcon from '../assets/Instagram.png';
+import LinkedInIcon from '../assets/LinkedIn.png';
+import TiktokIcon from '../assets/Tiktok.png';
+import FacebookIcon from '../assets/Facebook.png';
+import WhatsAppIcon from '../assets/whatsapp.png';
 import styles from './Header.module.css';
 import { fetchCategories, fetchSubcategories } from '../utils/api';
 import { useCart } from '../context/CartContext';
@@ -15,7 +20,9 @@ const Header = () => {
   const [expandedCategories, setExpandedCategories] = useState(new Set());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileExpandedCategory, setMobileExpandedCategory] = useState(null);
+  const [hoveredCategory, setHoveredCategory] = useState(null);
   const navigate = useNavigate();
+  const allCategoriesRef = useRef();
   const fireRef = useRef();
   const ictRef = useRef();
   const solarRef = useRef();
@@ -70,12 +77,14 @@ const Header = () => {
   useEffect(() => {
     const handleClick = (e) => {
       if (
+        allCategoriesRef.current && !allCategoriesRef.current.contains(e.target) &&
         fireRef.current && !fireRef.current.contains(e.target) &&
         ictRef.current && !ictRef.current.contains(e.target) &&
         solarRef.current && !solarRef.current.contains(e.target)
       ) {
         setOpenDropdown(null);
         setExpandedCategories(new Set());
+        setHoveredCategory(null);
       }
     };
     document.addEventListener('mousedown', handleClick);
@@ -161,14 +170,18 @@ const Header = () => {
     ['solar', 'solar_solutions','solar-solutions'].includes(String(cat.type || '').toLowerCase())
   );
 
+  const allCategoriesCombined = [...fireCategories, ...ictCategories, ...solarCategories];
+
   const handleDropdownToggle = (dropdownName) => {
     const isCurrentlyOpen = openDropdown === dropdownName;
     setOpenDropdown(isCurrentlyOpen ? null : dropdownName);
     setExpandedCategories(new Set());
+    setHoveredCategory(null);
     
     // Pre-load all subcategories when dropdown opens
     if (!isCurrentlyOpen) {
-      const categoryList = dropdownName === 'fire' ? fireCategories : 
+      const categoryList = dropdownName === 'all' ? allCategoriesCombined :
+                          dropdownName === 'fire' ? fireCategories : 
                           dropdownName === 'ict' ? ictCategories : 
                           dropdownName === 'solar' ? solarCategories : [];
       categoryList.forEach(cat => loadSubcategories(cat.slug));
@@ -178,6 +191,7 @@ const Header = () => {
   const handleCategoryClick = (categorySlug) => {
     setOpenDropdown(null);
     setExpandedCategories(new Set());
+    setHoveredCategory(null);
     setMobileMenuOpen(false);
     setMobileExpandedCategory(null);
     navigate(`/category/${categorySlug}`);
@@ -186,22 +200,22 @@ const Header = () => {
   const handleSubcategoryClick = (categorySlug, subcategorySlug) => {
     setOpenDropdown(null);
     setExpandedCategories(new Set());
+    setHoveredCategory(null);
     setMobileMenuOpen(false);
     setMobileExpandedCategory(null);
     navigate(`/category/${categorySlug}`, { state: { selectedSubcategory: subcategorySlug } });
   };
 
-  const toggleCategoryExpansion = (categorySlug) => {
-    setExpandedCategories(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(categorySlug)) {
-        newSet.delete(categorySlug);
-      } else {
-        newSet.add(categorySlug);
-        loadSubcategories(categorySlug);
-      }
-      return newSet;
-    });
+  const handleCategoryHover = (categorySlug) => {
+    setHoveredCategory(categorySlug);
+    loadSubcategories(categorySlug);
+  };
+
+  const handleCategoryLeave = () => {
+    // Small delay before closing to allow smooth transition
+    setTimeout(() => {
+      setHoveredCategory(null);
+    }, 100);
   };
 
   const handleMobileCategoryClick = (categoryType) => {
@@ -216,49 +230,25 @@ const Header = () => {
     }
   };
 
-  const renderDesktopStackedDropdown = (dropdownCategories, isOpen) => {
+  const handleDropdownMouseLeave = () => {
+    setOpenDropdown(null);
+    setHoveredCategory(null);
+  };
+
+  const renderDesktopSimpleDropdown = (dropdownCategories, isOpen) => {
     if (!isOpen) return null;
     
     return (
-      <div className={styles.megaDropdown}>
-        <div className={styles.multilevelContainer}>
+      <div className={styles.megaDropdown} onMouseLeave={handleDropdownMouseLeave}>
+        <div className={styles.simpleContainer}>
           {dropdownCategories.map(cat => (
-            <div
+            <button
               key={cat.id}
-              className={`${styles.categoryItem} ${expandedCategories.has(cat.slug) ? styles.categoryItemHovered : ''}`}
+              className={styles.simpleDropdownItem}
+              onClick={() => handleCategoryClick(cat.slug)}
             >
-              <button
-                className={styles.dropdownItem}
-                onClick={() => {
-                  if (subcategoriesMap[cat.slug] && subcategoriesMap[cat.slug].length > 0) {
-                    toggleCategoryExpansion(cat.slug);
-                  } else {
-                    handleCategoryClick(cat.slug);
-                  }
-                }}
-              >
-                <span>{cat.name}</span>
-                {subcategoriesMap[cat.slug] && subcategoriesMap[cat.slug].length > 0 && (
-                  <FaChevronDown className={styles.chevronIcon} />
-                )}
-              </button>
-              
-              {expandedCategories.has(cat.slug) && subcategoriesMap[cat.slug] && subcategoriesMap[cat.slug].length > 0 && (
-                <div className={styles.subcategoryDropdown}>
-                  <div className={styles.subcategoryGrid}>
-                    {subcategoriesMap[cat.slug].map(sub => (
-                      <button
-                        key={sub.id}
-                        className={styles.subcategoryItem}
-                        onClick={() => handleSubcategoryClick(cat.slug, sub.slug)}
-                      >
-                        {sub.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+              {cat.name}
+            </button>
           ))}
         </div>
       </div>
@@ -278,28 +268,13 @@ const Header = () => {
       {mobileExpandedCategory === categoryType && (
         <div className={styles.mobileSubcategoryContainer}>
           {categoryList.map(cat => (
-            <div key={cat.id} className={styles.mobileCategoryGroup}>
-              <button
-                className={styles.mobileCategoryName}
-                onClick={() => handleCategoryClick(cat.slug)}
-              >
-                {cat.name}
-              </button>
-              
-              {subcategoriesMap[cat.slug] && subcategoriesMap[cat.slug].length > 0 && (
-                <div className={styles.mobileSubcategoryList}>
-                  {subcategoriesMap[cat.slug].map(sub => (
-                    <button
-                      key={sub.id}
-                      className={styles.mobileSubcategoryItem}
-                      onClick={() => handleSubcategoryClick(cat.slug, sub.slug)}
-                    >
-                      {sub.name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <button
+              key={cat.id}
+              className={styles.mobileCategoryName}
+              onClick={() => handleCategoryClick(cat.slug)}
+            >
+              {cat.name}
+            </button>
           ))}
         </div>
       )}
@@ -393,6 +368,18 @@ const Header = () => {
           </div>
           
           <div className={styles.headerActions}>
+            {/* All Categories Dropdown */}
+            <div ref={allCategoriesRef} className={styles.allCategoriesWrapper}>
+              <button
+                className={styles.allCategoriesButton}
+                onClick={() => handleDropdownToggle('all')}
+              >
+                All Categories
+                <FaChevronDown className={styles.allCategoriesChevron} />
+              </button>
+              {renderDesktopSimpleDropdown(allCategoriesCombined, openDropdown === 'all')}
+            </div>
+
             <SearchBar />
             
             {/* Desktop cart with HOVER functionality */}
@@ -407,6 +394,25 @@ const Header = () => {
                 <span className={styles.cartBadge}>{cartItems.length}</span>
               )}
             </button>
+
+            {/* Social Media Icons */}
+            <div className={styles.socialMediaIcons}>
+              <a href="https://www.linkedin.com/in/edge-systems-903b32222" target="_blank" rel="noopener noreferrer">
+                <img src={LinkedInIcon} alt="LinkedIn" />
+              </a>
+              <a href="https://www.facebook.com/edgesystemslimited" target="_blank" rel="noopener noreferrer">
+                <img src={FacebookIcon} alt="Facebook" />
+              </a>
+              <a href="https://www.instagram.com/edge_systems.co.ke" target="_blank" rel="noopener noreferrer">
+                <img src={InstagramIcon} alt="Instagram" />
+              </a>
+              <a href="https://www.tiktok.com/@edgesystems6" target="_blank" rel="noopener noreferrer">
+                <img src={TiktokIcon} alt="TikTok" />
+              </a>
+              <a href="https://wa.me/254117320000" target="_blank" rel="noopener noreferrer">
+                <img src={WhatsAppIcon} alt="WhatsApp" />
+              </a>
+            </div>
           </div>
 
           <div className={styles.headerRight}>
@@ -429,7 +435,7 @@ const Header = () => {
                 Fire Safety Products & Services
                 <FaChevronDown className={styles.navChevron} />
               </button>
-              {renderDesktopStackedDropdown(fireCategories, openDropdown === 'fire')}
+              {renderDesktopSimpleDropdown(fireCategories, openDropdown === 'fire')}
             </li>
             
             <li ref={ictRef} className={styles.dropdownContainer}>
@@ -440,18 +446,13 @@ const Header = () => {
                 ICT/Telecommunication Products & Services
                 <FaChevronDown className={styles.navChevron} />
               </button>
-              {renderDesktopStackedDropdown(ictCategories, openDropdown === 'ict')}
+              {renderDesktopSimpleDropdown(ictCategories, openDropdown === 'ict')}
             </li>
 
             <li ref={solarRef} className={styles.dropdownContainer}>
-              <button
-                className={styles.dropdownButton}
-                onClick={() => handleDropdownToggle('solar')}
-              >
+              <Link to="/category/solar-power-solutions" className={styles.navLink}>
                 Solar Power Solutions
-                <FaChevronDown className={styles.navChevron} />
-              </button>
-              {renderDesktopStackedDropdown(solarCategories, openDropdown === 'solar')}
+              </Link>
             </li>
             
             <li><Link to="/contact" className={styles.navLink}>Contact Us</Link></li>
@@ -485,7 +486,14 @@ const Header = () => {
           
           {renderMobileCategorySection(fireCategories, 'fire', 'Fire Safety Products & Services')}
           {renderMobileCategorySection(ictCategories, 'ict', 'ICT/Telecommunication Products & Services')}
-          {renderMobileCategorySection(solarCategories, 'solar', 'Solar Power Solutions')}
+          
+          <Link 
+            to="/category/solar-power-solutions" 
+            className={styles.mobileNavLink}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Solar Power Solutions
+          </Link>
           
           <Link 
             to="/contact" 

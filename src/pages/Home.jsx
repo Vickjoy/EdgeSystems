@@ -9,11 +9,15 @@ import UbiquitiLogo from '../assets/Ubiquiti.webp';
 import GiganetLogo from '../assets/giganet.jpeg';
 import HikvisionLogo from '../assets/hikvision.png';
 
-// Import new hero images (PNG with transparent backgrounds)
+// Import hero images
 import FireImage from '../assets/Fire.png';
+import EImage from '../assets/E.png';
+import FImage from '../assets/F.png';
 import UbiquitiProductImage from '../assets/ubiquiti.png';
 import CiscoProductImage from '../assets/Cisco.png';
-import CablingImage from '../assets/structuredcabling.jpg';
+import GImage from '../assets/G.png';
+import AImage from '../assets/A.png';
+import BImage from '../assets/B.png';
 
 // Import service images
 import FireAlarmImage from '../assets/FireAlarm.jpeg';
@@ -32,7 +36,7 @@ const Home = () => {
       subtitle: 'Protect What Matters Most',
       title: 'Advanced Fire Alarm & Detection Systems',
       description: 'Reliable fire panels, detectors, and alarms designed for fast detection, instant alerts, and full safety control ensuring complete fire protection and compliance.',
-      image: FireImage,
+      images: [FireImage, EImage, FImage],
       link: '/category/addressable-fire-alarm-detection-systems',
       bgClass: 'heroSlide1'
     },
@@ -41,8 +45,8 @@ const Home = () => {
       subtitle: 'Power Your Digital Infrastructure',
       title: 'Enterprise Networking Solutions',
       description: 'High-performance access points, routers, and switches built for secure, scalable, and reliable connectivity. Designed to support seamless communication and business continuity.',
-      images: [UbiquitiProductImage, CiscoProductImage],
-      link: '/category/networking-solutions',
+      images: [UbiquitiProductImage, CiscoProductImage, GImage],
+      link: '/category/ubiquiti-products',
       bgClass: 'heroSlide2'
     },
     {
@@ -50,8 +54,8 @@ const Home = () => {
       subtitle: 'Built for Performance & Reliability',
       title: 'Structured Cabling Infrastructure',
       description: 'Certified Cat6, Cat6a, and fiber optic cabling systems engineered for maximum speed, stability, and scalability ensuring your network is future-ready and dependable.',
-      image: CablingImage,
-      link: '/category/structured-cabling',
+      images: [AImage, BImage],
+      link: '/category/giganet-products',
       bgClass: 'heroSlide3'
     }
   ];
@@ -103,11 +107,11 @@ const Home = () => {
     'Industry Experience - Over a decade of expertise in telecommunications and security'
   ];
 
-  // Auto slide transition with smooth animation
+  // Auto slide transition with smooth animation - faster duration (4.5 seconds)
   useEffect(() => {
     const interval = setInterval(() => {
       handleSlideChange((currentSlide + 1) % slides.length);
-    }, 6000);
+    }, 4500);
     return () => clearInterval(interval);
   }, [currentSlide, slides.length]);
 
@@ -176,29 +180,23 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Right Image Side */}
+          {/* Right Image Side - LARGE FULL-SIZED IMAGES */}
           <div className={styles.heroImageContainer}>
             <div className={`${styles.heroImageWrapper} ${isTransitioning ? styles.fadeOut : styles.fadeIn}`}>
-              {currentSlideData.images ? (
-                // Multiple images for network solutions slide
-                <div className={styles.heroImagesGrid}>
-                  {currentSlideData.images.map((img, idx) => (
-                    <img
-                      key={idx}
-                      src={img}
-                      alt={`${currentSlideData.title} - ${idx + 1}`}
-                      className={styles.heroImage}
-                    />
-                  ))}
-                </div>
-              ) : (
-                // Single image
-                <img
-                  src={currentSlideData.image}
-                  alt={currentSlideData.title}
-                  className={styles.heroImage}
-                />
-              )}
+              {/* Multiple large images layout */}
+              <div className={`${styles.heroImagesGrid} ${
+                currentSlideData.images.length === 3 ? styles.threeImages : 
+                currentSlideData.images.length === 2 ? styles.twoImages : ''
+              }`}>
+                {currentSlideData.images.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt={`${currentSlideData.title} - ${idx + 1}`}
+                    className={styles.heroImage}
+                  />
+                ))}
+              </div>
             </div>
             
             {/* Floating decorative shapes */}
