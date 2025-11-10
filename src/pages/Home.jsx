@@ -159,10 +159,6 @@ const Home = () => {
                   />
                 </svg>
               </button>
-              
-              <button className={styles.heroButtonSecondary}>
-                Learn More
-              </button>
             </div>
 
             {/* Navigation Dots */}

@@ -20,6 +20,7 @@ const Header = () => {
   const [expandedCategories, setExpandedCategories] = useState(new Set());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileExpandedCategory, setMobileExpandedCategory] = useState(null);
+  const [mobileExpandedSubcategory, setMobileExpandedSubcategory] = useState(null);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const navigate = useNavigate();
   const allCategoriesRef = useRef();
@@ -97,6 +98,7 @@ const Header = () => {
       if (mobileMenuOpen && !e.target.closest(`.${styles.mobileMenu}`) && !e.target.closest(`.${styles.mobileHamburger}`)) {
         setMobileMenuOpen(false);
         setMobileExpandedCategory(null);
+        setMobileExpandedSubcategory(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -194,6 +196,7 @@ const Header = () => {
     setHoveredCategory(null);
     setMobileMenuOpen(false);
     setMobileExpandedCategory(null);
+    setMobileExpandedSubcategory(null);
     navigate(`/category/${categorySlug}`);
   };
 
@@ -203,6 +206,7 @@ const Header = () => {
     setHoveredCategory(null);
     setMobileMenuOpen(false);
     setMobileExpandedCategory(null);
+    setMobileExpandedSubcategory(null);
     navigate(`/category/${categorySlug}`, { state: { selectedSubcategory: subcategorySlug } });
   };
 
@@ -221,12 +225,23 @@ const Header = () => {
   const handleMobileCategoryClick = (categoryType) => {
     if (mobileExpandedCategory === categoryType) {
       setMobileExpandedCategory(null);
+      setMobileExpandedSubcategory(null);
     } else {
       setMobileExpandedCategory(categoryType);
+      setMobileExpandedSubcategory(null);
       const categoryList = categoryType === 'fire' ? fireCategories : 
                           categoryType === 'ict' ? ictCategories : 
                           categoryType === 'solar' ? solarCategories : [];
       categoryList.forEach(cat => loadSubcategories(cat.slug));
+    }
+  };
+
+  const handleMobileSubcategoryToggle = (categorySlug) => {
+    if (mobileExpandedSubcategory === categorySlug) {
+      setMobileExpandedSubcategory(null);
+    } else {
+      setMobileExpandedSubcategory(categorySlug);
+      loadSubcategories(categorySlug);
     }
   };
 
@@ -267,15 +282,48 @@ const Header = () => {
       
       {mobileExpandedCategory === categoryType && (
         <div className={styles.mobileSubcategoryContainer}>
-          {categoryList.map(cat => (
-            <button
-              key={cat.id}
-              className={styles.mobileCategoryName}
-              onClick={() => handleCategoryClick(cat.slug)}
-            >
-              {cat.name}
-            </button>
-          ))}
+          {categoryList.map(cat => {
+            const categorySubcategories = subcategoriesMap[cat.slug] || [];
+            const hasSubcategories = categorySubcategories.length > 0;
+            
+            return (
+              <div key={cat.id} className={styles.mobileCategoryWrapper}>
+                <div className={styles.mobileCategoryRow}>
+                  <button
+                    className={styles.mobileCategoryName}
+                    onClick={() => handleCategoryClick(cat.slug)}
+                  >
+                    {cat.name}
+                  </button>
+                  
+                  {hasSubcategories && (
+                    <button
+                      className={styles.mobileSubcategoryToggle}
+                      onClick={() => handleMobileSubcategoryToggle(cat.slug)}
+                    >
+                      <FaChevronRight 
+                        className={`${styles.mobileSubChevron} ${mobileExpandedSubcategory === cat.slug ? styles.rotated : ''}`} 
+                      />
+                    </button>
+                  )}
+                </div>
+                
+                {hasSubcategories && mobileExpandedSubcategory === cat.slug && (
+                  <div className={styles.mobileSubcategoryList}>
+                    {categorySubcategories.map(sub => (
+                      <button
+                        key={sub.id}
+                        className={styles.mobileSubcategoryItem}
+                        onClick={() => handleSubcategoryClick(cat.slug, sub.slug)}
+                      >
+                        {sub.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
