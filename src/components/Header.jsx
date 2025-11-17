@@ -28,8 +28,7 @@ const Header = () => {
   const ictRef = useRef();
   const solarRef = useRef();
   const { cartItems } = useCart();
-  
-  // Cart hover state management
+
   const [cartOpen, setCartOpen] = useState(false);
   const [isHoveringCartIcon, setIsHoveringCartIcon] = useState(false);
   const [isHoveringCartModal, setIsHoveringCartModal] = useState(false);
@@ -50,12 +49,9 @@ const Header = () => {
     return () => window.removeEventListener('categoriesUpdated', handleCategoriesUpdated);
   }, []);
 
-  // Clear cart timeout on unmount
   useEffect(() => {
     return () => {
-      if (cartTimeoutRef.current) {
-        clearTimeout(cartTimeoutRef.current);
-      }
+      if (cartTimeoutRef.current) clearTimeout(cartTimeoutRef.current);
     };
   }, []);
 
@@ -92,7 +88,6 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
-  // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (mobileMenuOpen && !e.target.closest(`.${styles.mobileMenu}`) && !e.target.closest(`.${styles.mobileHamburger}`)) {
@@ -105,23 +100,13 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [mobileMenuOpen]);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'unset';
+    return () => { document.body.style.overflow = 'unset'; };
   }, [mobileMenuOpen]);
 
-  // Cart hover handlers
   const handleCartIconMouseEnter = () => {
-    if (cartTimeoutRef.current) {
-      clearTimeout(cartTimeoutRef.current);
-    }
+    if (cartTimeoutRef.current) clearTimeout(cartTimeoutRef.current);
     setIsHoveringCartIcon(true);
     setCartOpen(true);
   };
@@ -129,25 +114,19 @@ const Header = () => {
   const handleCartIconMouseLeave = () => {
     setIsHoveringCartIcon(false);
     cartTimeoutRef.current = setTimeout(() => {
-      if (!isHoveringCartModal) {
-        setCartOpen(false);
-      }
+      if (!isHoveringCartModal) setCartOpen(false);
     }, 300);
   };
 
   const handleCartModalMouseEnter = () => {
-    if (cartTimeoutRef.current) {
-      clearTimeout(cartTimeoutRef.current);
-    }
+    if (cartTimeoutRef.current) clearTimeout(cartTimeoutRef.current);
     setIsHoveringCartModal(true);
   };
 
   const handleCartModalMouseLeave = () => {
     setIsHoveringCartModal(false);
     cartTimeoutRef.current = setTimeout(() => {
-      if (!isHoveringCartIcon) {
-        setCartOpen(false);
-      }
+      if (!isHoveringCartIcon) setCartOpen(false);
     }, 300);
   };
 
@@ -155,9 +134,7 @@ const Header = () => {
     setCartOpen(false);
     setIsHoveringCartIcon(false);
     setIsHoveringCartModal(false);
-    if (cartTimeoutRef.current) {
-      clearTimeout(cartTimeoutRef.current);
-    }
+    if (cartTimeoutRef.current) clearTimeout(cartTimeoutRef.current);
   };
 
   const fireCategories = categories.filter(cat =>
@@ -175,17 +152,18 @@ const Header = () => {
   const allCategoriesCombined = [...fireCategories, ...ictCategories, ...solarCategories];
 
   const handleDropdownToggle = (dropdownName) => {
-    const isCurrentlyOpen = openDropdown === dropdownName;
-    setOpenDropdown(isCurrentlyOpen ? null : dropdownName);
+    const isOpen = openDropdown === dropdownName;
+    setOpenDropdown(isOpen ? null : dropdownName);
     setExpandedCategories(new Set());
     setHoveredCategory(null);
-    
-    // Pre-load all subcategories when dropdown opens
-    if (!isCurrentlyOpen) {
-      const categoryList = dropdownName === 'all' ? allCategoriesCombined :
-                          dropdownName === 'fire' ? fireCategories : 
-                          dropdownName === 'ict' ? ictCategories : 
-                          dropdownName === 'solar' ? solarCategories : [];
+
+    if (!isOpen) {
+      const categoryList =
+        dropdownName === 'all' ? allCategoriesCombined :
+        dropdownName === 'fire' ? fireCategories :
+        dropdownName === 'ict' ? ictCategories :
+        dropdownName === 'solar' ? solarCategories : [];
+
       categoryList.forEach(cat => loadSubcategories(cat.slug));
     }
   };
@@ -216,10 +194,7 @@ const Header = () => {
   };
 
   const handleCategoryLeave = () => {
-    // Small delay before closing to allow smooth transition
-    setTimeout(() => {
-      setHoveredCategory(null);
-    }, 100);
+    setTimeout(() => setHoveredCategory(null), 100);
   };
 
   const handleMobileCategoryClick = (categoryType) => {
@@ -229,9 +204,10 @@ const Header = () => {
     } else {
       setMobileExpandedCategory(categoryType);
       setMobileExpandedSubcategory(null);
-      const categoryList = categoryType === 'fire' ? fireCategories : 
-                          categoryType === 'ict' ? ictCategories : 
-                          categoryType === 'solar' ? solarCategories : [];
+      const categoryList =
+        categoryType === 'fire' ? fireCategories :
+        categoryType === 'ict' ? ictCategories :
+        categoryType === 'solar' ? solarCategories : [];
       categoryList.forEach(cat => loadSubcategories(cat.slug));
     }
   };
@@ -252,7 +228,7 @@ const Header = () => {
 
   const renderDesktopSimpleDropdown = (dropdownCategories, isOpen) => {
     if (!isOpen) return null;
-    
+
     return (
       <div className={styles.megaDropdown} onMouseLeave={handleDropdownMouseLeave}>
         <div className={styles.simpleContainer}>
@@ -270,6 +246,7 @@ const Header = () => {
     );
   };
 
+  // ✅ UPDATED MOBILE CATEGORY SECTION (Your new version fully integrated)
   const renderMobileCategorySection = (categoryList, categoryType, title) => (
     <div key={categoryType} className={styles.mobileCategorySection}>
       <button
@@ -279,13 +256,13 @@ const Header = () => {
         <span>{title}</span>
         <FaChevronRight className={`${styles.mobileChevron} ${mobileExpandedCategory === categoryType ? styles.rotated : ''}`} />
       </button>
-      
+
       {mobileExpandedCategory === categoryType && (
         <div className={styles.mobileSubcategoryContainer}>
           {categoryList.map(cat => {
             const categorySubcategories = subcategoriesMap[cat.slug] || [];
             const hasSubcategories = categorySubcategories.length > 0;
-            
+
             return (
               <div key={cat.id} className={styles.mobileCategoryWrapper}>
                 <div className={styles.mobileCategoryRow}>
@@ -295,19 +272,22 @@ const Header = () => {
                   >
                     {cat.name}
                   </button>
-                  
+
                   {hasSubcategories && (
                     <button
                       className={styles.mobileSubcategoryToggle}
-                      onClick={() => handleMobileSubcategoryToggle(cat.slug)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMobileSubcategoryToggle(cat.slug);
+                      }}
                     >
-                      <FaChevronRight 
-                        className={`${styles.mobileSubChevron} ${mobileExpandedSubcategory === cat.slug ? styles.rotated : ''}`} 
+                      <FaChevronRight
+                        className={`${styles.mobileSubChevron} ${mobileExpandedSubcategory === cat.slug ? styles.rotated : ''}`}
                       />
                     </button>
                   )}
                 </div>
-                
+
                 {hasSubcategories && mobileExpandedSubcategory === cat.slug && (
                   <div className={styles.mobileSubcategoryList}>
                     {categorySubcategories.map(sub => (
@@ -333,7 +313,6 @@ const Header = () => {
     <header className={styles.header}>
       {/* Mobile Header Layout */}
       <div className={styles.mobileHeaderLayout}>
-        {/* Top Bar - Mobile */}
         <div className={styles.mobileTopBar}>
           <div className={styles.mobileTopBarContent}>
             <div className={styles.contactInfo}>
@@ -353,7 +332,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Search and Actions Row - Mobile */}
         <div className={styles.mobileSearchRow}>
           <button 
             className={styles.mobileHamburger}
@@ -367,10 +345,7 @@ const Header = () => {
           </div>
 
           <div className={styles.mobileActions}>
-            <button 
-              onClick={() => setCartOpen(true)} 
-              className={styles.mobileCartButton}
-            >
+            <button onClick={() => setCartOpen(true)} className={styles.mobileCartButton}>
               🛒
               {cartItems.length > 0 && (
                 <span className={styles.cartBadge}>{cartItems.length}</span>
@@ -383,15 +358,13 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Logo Row - Mobile */}
         <div className={styles.mobileLogoRow}>
           <img src={CompanyLogo} alt="Edge Systems Logo" className={styles.mobileLogo} />
         </div>
       </div>
 
-      {/* Desktop Header Layout */}
+      {/* Desktop Header */}
       <div className={styles.desktopHeaderLayout}>
-        {/* Top Bar */}
         <div className={styles.topBar}>
           <div className={styles.topBarContent}>
             <span>
@@ -409,14 +382,13 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Main Header */}
         <div className={styles.mainHeader}>
           <div className={styles.logoContainer}>
             <img src={CompanyLogo} alt="Edge Systems Logo" className={styles.logo} />
           </div>
-          
+
           <div className={styles.headerActions}>
-            {/* All Categories Dropdown */}
+
             <div ref={allCategoriesRef} className={styles.allCategoriesWrapper}>
               <button
                 className={styles.allCategoriesButton}
@@ -429,9 +401,8 @@ const Header = () => {
             </div>
 
             <SearchBar />
-            
-            {/* Desktop cart with HOVER functionality */}
-            <button 
+
+            <button
               onMouseEnter={handleCartIconMouseEnter}
               onMouseLeave={handleCartIconMouseLeave}
               className={styles.cartButton}
@@ -443,7 +414,6 @@ const Header = () => {
               )}
             </button>
 
-            {/* Social Media Icons */}
             <div className={styles.socialMediaIcons}>
               <a href="https://www.linkedin.com/in/edge-systems-903b32222" target="_blank" rel="noopener noreferrer">
                 <img src={LinkedInIcon} alt="LinkedIn" />
@@ -470,11 +440,10 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Desktop Navigation Bar */}
         <nav className={styles.navigation}>
           <ul className={styles.navList}>
             <li><Link to="/" className={styles.navLink}>Home</Link></li>
-            
+
             <li ref={fireRef} className={styles.dropdownContainer}>
               <button
                 className={styles.dropdownButton}
@@ -485,7 +454,7 @@ const Header = () => {
               </button>
               {renderDesktopSimpleDropdown(fireCategories, openDropdown === 'fire')}
             </li>
-            
+
             <li ref={ictRef} className={styles.dropdownContainer}>
               <button
                 className={styles.dropdownButton}
@@ -502,16 +471,14 @@ const Header = () => {
                 Solar Power Solutions
               </Link>
             </li>
-            
+
             <li><Link to="/contact" className={styles.navLink}>Contact Us</Link></li>
           </ul>
         </nav>
       </div>
 
-      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && <div className={styles.mobileOverlay} />}
 
-      {/* Mobile Menu Sidebar */}
       <div className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
         <div className={styles.mobileMenuHeader}>
           <h3>Menu</h3>
@@ -522,7 +489,7 @@ const Header = () => {
             <FaTimes />
           </button>
         </div>
-        
+
         <div className={styles.mobileMenuContent}>
           <Link 
             to="/" 
@@ -531,10 +498,10 @@ const Header = () => {
           >
             Home
           </Link>
-          
+
           {renderMobileCategorySection(fireCategories, 'fire', 'Fire Safety Products & Services')}
           {renderMobileCategorySection(ictCategories, 'ict', 'ICT/Telecommunication Products & Services')}
-          
+
           <Link 
             to="/category/solar-power-solutions" 
             className={styles.mobileNavLink}
@@ -542,7 +509,7 @@ const Header = () => {
           >
             Solar Power Solutions
           </Link>
-          
+
           <Link 
             to="/contact" 
             className={styles.mobileNavLink}
@@ -553,7 +520,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Cart Modal with hover support */}
       {cartOpen && (
         <div
           onMouseEnter={handleCartModalMouseEnter}

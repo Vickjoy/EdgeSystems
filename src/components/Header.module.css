@@ -825,7 +825,7 @@
   }
 }
 
-/* Mobile Category Wrapper - NEW STRUCTURE */
+/* Mobile Category Wrapper - Contains category + subcategories */
 .mobileCategoryWrapper {
   border-bottom: 1px solid #e2e8f0;
   overflow: hidden;
@@ -839,17 +839,18 @@
 /* Mobile Category Row - Category name + toggle button */
 .mobileCategoryRow {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   background: #ffffff;
   transition: background 0.3s ease;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .mobileCategoryRow:hover {
   background: #f8fafc;
 }
 
-/* Mobile Category Name - Main category button */
+/* Mobile Category Name - Main category button (clickable to navigate) */
 .mobileCategoryName {
   flex: 1;
   display: flex;
@@ -864,6 +865,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
+  border-right: 1px solid #f1f5f9;
 }
 
 .mobileCategoryName::before {
@@ -876,10 +878,14 @@
 
 .mobileCategoryName:hover {
   color: #261FB3;
-  padding-left: 24px;
+  background: rgba(38, 31, 179, 0.03);
 }
 
-/* Mobile Subcategory Toggle - Arrow button */
+.mobileCategoryName:active {
+  background: rgba(38, 31, 179, 0.08);
+}
+
+/* Mobile Subcategory Toggle - Arrow button (shows/hides subcategories) */
 .mobileSubcategoryToggle {
   flex-shrink: 0;
   background: transparent;
@@ -890,10 +896,15 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  min-width: 56px;
 }
 
 .mobileSubcategoryToggle:hover {
-  background: rgba(38, 31, 179, 0.05);
+  background: rgba(38, 31, 179, 0.08);
+}
+
+.mobileSubcategoryToggle:active {
+  background: rgba(38, 31, 179, 0.12);
 }
 
 .mobileSubChevron {
@@ -1092,162 +1103,327 @@
   z-index: 9999;
 }
 
-/* Mobile Category Wrapper - NEW STRUCTURE */
-.mobileCategoryWrapper {
-  border-bottom: 1px solid #e2e8f0;
-  overflow: hidden;
-  background: #ffffff;
+/* Responsive adjustments for very small screens */
+@media (max-width: 360px) {
+  .mobileMenu {
+    width: 90%;
+    max-width: 90%;
+  }
+
+  .mobileMenuHeader {
+    padding: 20px 16px;
+  }
+
+  .mobileMenuHeader h3 {
+    font-size: 18px;
+  }
+
+  .mobileCategoryButton,
+  .mobileNavLink {
+    padding: 16px 16px;
+    font-size: 14px;
+  }
+
+  .mobileCategoryName {
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+
+  .mobileSubcategoryToggle {
+    padding: 14px 16px;
+    min-width: 48px;
+  }
+
+  .mobileSubcategoryItem {
+    padding: 12px 16px 12px 40px;
+    font-size: 13px;
+  }
+
+  .mobileSubcategoryItem::before {
+    left: 26px;
+  }
+
+  .mobileSubcategoryItem:hover {
+    padding-left: 44px;
+  }
+
+  .mobileSubcategoryItem:hover::before {
+    left: 30px;
+  }
 }
 
-.mobileCategoryWrapper:last-child {
-  border-bottom: none;
+/* Tablet adjustments */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .mainHeader {
+    padding: 16px 32px;
+  }
+
+  .navList {
+    padding: 0 32px;
+    gap: 0;
+  }
+
+  .navLink, .dropdownButton {
+    padding: 20px 16px;
+    font-size: 13px;
+  }
+
+  .headerActions {
+    gap: 10px;
+  }
+
+  .allCategoriesButton {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .socialMediaIcons {
+    gap: 8px;
+  }
+
+  .socialMediaIcons a {
+    width: 28px;
+    height: 28px;
+  }
+
+  .socialMediaIcons img {
+    width: 18px;
+    height: 18px;
+  }
 }
 
-/* Mobile Category Row - Category name + toggle button */
-.mobileCategoryRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #ffffff;
-  transition: background 0.3s ease;
+/* Large desktop adjustments */
+@media (min-width: 1400px) {
+  .mainHeader {
+    padding: 16px 60px;
+  }
+
+  .navList {
+    padding: 0 60px;
+  }
+
+  .topBarContent {
+    gap: 60px;
+  }
+
+  .headerActions {
+    max-width: 900px;
+  }
 }
 
-.mobileCategoryRow:hover {
-  background: #f8fafc;
+/* Print styles */
+@media print {
+  .header {
+    box-shadow: none;
+  }
+
+  .topBar,
+  .navigation,
+  .mobileMenu,
+  .mobileOverlay,
+  .cartButton,
+  .mobileCartButton,
+  .socialMediaIcons,
+  .mobileHamburger {
+    display: none !important;
+  }
+
+  .mainHeader {
+    border-bottom: 2px solid #000;
+  }
 }
 
-/* Mobile Category Name - Main category button */
-.mobileCategoryName {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding: 16px 20px;
-  background: transparent;
-  border: none;
-  color: #334155;
-  font-weight: 600;
-  font-size: 14px;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
+/* Smooth transitions for all interactive elements */
+.mobileCategoryButton,
+.mobileNavLink,
+.mobileCategoryName,
+.mobileSubcategoryToggle,
+.mobileSubcategoryItem,
+.simpleDropdownItem {
+  -webkit-tap-highlight-color: rgba(38, 31, 179, 0.1);
 }
 
-.mobileCategoryName::before {
-  content: '▸';
-  margin-right: 10px;
-  color: #261FB3;
-  font-size: 12px;
-  transition: all 0.3s ease;
+/* Ensure proper touch targets on mobile */
+@media (max-width: 768px) {
+  .mobileCategoryButton,
+  .mobileNavLink,
+  .mobileCategoryName,
+  .mobileSubcategoryToggle,
+  .mobileSubcategoryItem {
+    min-height: 44px;
+  }
 }
 
-.mobileCategoryName:hover {
-  color: #261FB3;
-  padding-left: 24px;
+/* Animation for mobile menu content */
+.mobileMenuContent > * {
+  animation: fadeInUp 0.4s ease backwards;
 }
 
-/* Mobile Subcategory Toggle - Arrow button */
-.mobileSubcategoryToggle {
-  flex-shrink: 0;
-  background: transparent;
-  border: none;
-  padding: 16px 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
+.mobileMenuContent > *:nth-child(1) { animation-delay: 0.05s; }
+.mobileMenuContent > *:nth-child(2) { animation-delay: 0.1s; }
+.mobileMenuContent > *:nth-child(3) { animation-delay: 0.15s; }
+.mobileMenuContent > *:nth-child(4) { animation-delay: 0.2s; }
+.mobileMenuContent > *:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.mobileSubcategoryToggle:hover {
-  background: rgba(38, 31, 179, 0.05);
+/* Prevent text selection on buttons */
+.mobileCategoryButton,
+.mobileSubcategoryToggle,
+.mobileCategoryName,
+.dropdownButton,
+.allCategoriesButton {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
-.mobileSubChevron {
-  font-size: 12px;
-  color: #94a3b8;
-  transition: all 0.3s ease;
+/* Loading state for categories (optional - if you want to add loading indicators) */
+.mobileCategoryWrapper.loading {
+  opacity: 0.6;
+  pointer-events: none;
 }
 
-.mobileSubChevron.rotated {
-  transform: rotate(90deg);
-  color: #261FB3;
+/* Ensure mobile menu is above everything */
+.mobileMenu,
+.mobileOverlay {
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Mobile Subcategory List */
-.mobileSubcategoryList {
-  background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
-  border-top: 1px solid #e0e7ff;
-  animation: slideDownSub 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 8px 0;
+/* Better contrast for accessibility */
+@media (prefers-contrast: high) {
+  .mobileCategoryButton.expanded {
+    background: #1a1580;
+  }
+
+  .mobileSubcategoryItem:hover {
+    background: #e0e7ff;
+  }
+
+  .simpleDropdownItem:hover {
+    background: #e0e7ff;
+  }
 }
 
-/* Mobile Subcategory Item */
-.mobileSubcategoryItem {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 14px 20px 14px 48px;
-  background: transparent;
-  border: none;
-  color: #475569;
-  font-weight: 500;
-  font-size: 13.5px;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  border-bottom: 1px solid #f1f5f9;
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .mobileChevron,
+  .mobileSubChevron,
+  .navChevron,
+  .allCategoriesChevron {
+    transition: none;
+  }
 }
 
-.mobileSubcategoryItem:last-child {
-  border-bottom: none;
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  /* Uncomment if you want to add dark mode support
+  .header {
+    background: #1a1a1a;
+  }
+
+  .mobileMenu {
+    background: #2a2a2a;
+    color: #ffffff;
+  }
+
+  .mobileCategoryWrapper {
+    background: #2a2a2a;
+    border-bottom-color: #3a3a3a;
+  }
+  */
 }
 
-.mobileSubcategoryItem::before {
-  content: '•';
-  position: absolute;
-  left: 32px;
-  color: #cbd5e1;
-  font-weight: 700;
-  font-size: 14px;
-  transition: all 0.3s ease;
+/* Fix for iOS Safari bounce effect */
+.mobileMenu {
+  overscroll-behavior: contain;
 }
 
-.mobileSubcategoryItem::after {
-  content: '→';
-  position: absolute;
-  right: 20px;
-  color: transparent;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  opacity: 0;
-  transform: translateX(-10px);
+/* Ensure proper layering of dropdowns */
+.megaDropdown {
+  isolation: isolate;
 }
 
-.mobileSubcategoryItem:hover {
-  background: linear-gradient(to right, #f1f5f9 0%, #ffffff 100%);
-  color: #261FB3;
-  padding-left: 52px;
-  padding-right: 48px;
-  box-shadow: inset 4px 0 0 #261FB3;
+/* Smooth scroll for mobile menu */
+.mobileMenuContent {
+  scroll-behavior: smooth;
 }
 
-.mobileSubcategoryItem:hover::before {
-  color: #261FB3;
-  left: 36px;
-}
-
-.mobileSubcategoryItem:hover::after {
-  color: #261FB3;
-  opacity: 1;
-  transform: translateX(0);
+/* Visual feedback for active states on mobile */
+.mobileCategoryName:active {
+  transform: scale(0.98);
 }
 
 .mobileSubcategoryItem:active {
-  background: #e0e7ff;
+  transform: scale(0.98);
 }
 
-/* Mobile specific adjustments */
-@media (max-width:
+/* Better focus visibility for keyboard navigation */
+.mobileCategoryButton:focus-visible,
+.mobileCategoryName:focus-visible,
+.mobileSubcategoryToggle:focus-visible,
+.mobileSubcategoryItem:focus-visible,
+.mobileNavLink:focus-visible {
+  outline: 3px solid #261FB3;
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* Ensure subcategory list doesn't overflow */
+.mobileSubcategoryList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Custom scrollbar for subcategory list */
+.mobileSubcategoryList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.mobileSubcategoryList::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.mobileSubcategoryList::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+.mobileSubcategoryList::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Prevent layout shift when scrollbar appears */
+.mobileMenuContent {
+  scrollbar-gutter: stable;
+}
+
+/* Better visual separation between sections */
+.mobileCategorySection + .mobileNavLink {
+  margin-top: 1px;
+}
+
+/* Ensure proper stacking context */
+.header {
+  isolation: isolate;
+}
+
+/* End of Header.module.css */
