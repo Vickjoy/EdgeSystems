@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Title, Meta, Link } from 'react-head';
 import Breadcrumbs from '../components/Breadcrumbs';
 import styles from './ProductDetail.module.css';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ProductForm from '../components/ProductForm';
 import { useCart } from '../context/CartContext';
-
-// ✅ NEW IMPORT
 import ProductCarousel from '../components/ProductCarousel';
 
 const API_BASE_URL = 'http://127.0.0.1:8000/api';
@@ -30,6 +29,43 @@ const ProductDetail = () => {
   const [subcategorySlug, setSubcategorySlug] = useState('');
 
   const productSlug = params.slug;
+
+  // ✅ SEO Helper: Generate automatic meta description
+  const generateMetaDescription = (product) => {
+    if (!product) return '';
+    
+    if (product.meta_description) {
+      return product.meta_description.slice(0, 155);
+    }
+
+    const name = product.name || '';
+    const description = product.description || '';
+    let autoDescription = '';
+
+    if (description && description.length > 0) {
+      const firstSentence = description.split('.')[0];
+      autoDescription = firstSentence.length > 100 
+        ? firstSentence.slice(0, 100) + '...' 
+        : firstSentence;
+    } else {
+      autoDescription = `${name} for fire safety and security systems`;
+    }
+
+    const fullDescription = `${name} — ${autoDescription}. Available in Kenya at EDGE SYSTEMS LTD.`;
+    return fullDescription.slice(0, 155);
+  };
+
+  // ✅ SEO Helper: Generate page title
+  const generatePageTitle = (product) => {
+    if (!product) return 'EDGE SYSTEMS LTD';
+    return product.meta_title || `${product.name} | EDGE SYSTEMS LTD`;
+  };
+
+  // ✅ SEO Helper: Get canonical URL
+  const getCanonicalUrl = (product) => {
+    if (!product) return '';
+    return `https://edgesystems.co.ke/product/${product.slug}`;
+  };
 
   // Scroll to top when component mounts or when productSlug changes
   useEffect(() => {
@@ -102,7 +138,6 @@ const ProductDetail = () => {
     });
   };
 
-  // Updated WhatsApp integration function with simplified message
   const handleWhatsAppClick = () => {
     if (!product) return;
     const message = `Hi, I'm interested in ${product.name} and would like to ask for prices`;
@@ -134,13 +169,35 @@ const ProductDetail = () => {
       .map((item, idx) => <li key={idx}>{item}</li>);
   };
 
+  // Prepare SEO data
+  const pageTitle = loading 
+    ? 'Loading... | EDGE SYSTEMS LTD'
+    : error 
+    ? 'Error | EDGE SYSTEMS LTD'
+    : !product 
+    ? 'Product Not Found | EDGE SYSTEMS LTD'
+    : editMode 
+    ? `Edit ${product.name} | EDGE SYSTEMS LTD`
+    : generatePageTitle(product);
+
+  const metaDescription = product ? generateMetaDescription(product) : '';
+  const canonicalUrl = product ? getCanonicalUrl(product) : '';
+  const imageUrl = product?.image || '/placeholder.png';
+
   if (loading) {
-    return <div className={styles.loadingContainer}><p>Loading product details...</p></div>;
+    return (
+      <div className={styles.loadingContainer}>
+        <Title>{pageTitle}</Title>
+        <p>Loading product details...</p>
+      </div>
+    );
   }
 
   if (error) {
     return (
       <div className={styles.errorContainer}>
+        <Title>{pageTitle}</Title>
+        <Meta name="robots" content="noindex" />
         <h2>Error Loading Product</h2>
         <p>{error}</p>
         <button onClick={() => navigate('/')} className={styles.ctaButton}>Return to Home</button>
@@ -151,6 +208,8 @@ const ProductDetail = () => {
   if (!product) {
     return (
       <div className={styles.errorContainer}>
+        <Title>{pageTitle}</Title>
+        <Meta name="robots" content="noindex" />
         <h2>Product Not Found</h2>
         <p>The product you're looking for doesn't exist or may have been removed.</p>
         <button onClick={() => navigate('/')} className={styles.ctaButton}>Browse Products</button>
@@ -161,6 +220,8 @@ const ProductDetail = () => {
   if (editMode) {
     return (
       <div style={{ padding: '2rem 0' }}>
+        <Title>{pageTitle}</Title>
+        <Meta name="robots" content="noindex" />
         <ProductForm
           initialValues={product}
           onSubmit={handleEditSubmit}
@@ -172,6 +233,27 @@ const ProductDetail = () => {
 
   return (
     <div className={styles.container}>
+      {/* ✅ DYNAMIC SEO META TAGS using react-head */}
+      <Title>{pageTitle}</Title>
+      
+      <Meta name="description" content={metaDescription} />
+      
+      <Link rel="canonical" href={canonicalUrl} />
+      
+      {/* Open Graph tags */}
+      <Meta property="og:title" content={pageTitle} />
+      <Meta property="og:description" content={metaDescription} />
+      <Meta property="og:image" content={imageUrl} />
+      <Meta property="og:url" content={canonicalUrl} />
+      <Meta property="og:type" content="product" />
+      <Meta property="og:site_name" content="EDGE SYSTEMS LTD" />
+      
+      {/* Twitter Card tags */}
+      <Meta name="twitter:card" content="summary_large_image" />
+      <Meta name="twitter:title" content={pageTitle} />
+      <Meta name="twitter:description" content={metaDescription} />
+      <Meta name="twitter:image" content={imageUrl} />
+
       <Breadcrumbs crumbs={[
         { label: 'Home', path: '/' },
         ...(categoryName && categorySlug ? [{ label: categoryName, path: `/category/${categorySlug}` }] : []),
@@ -290,10 +372,36 @@ const ProductDetail = () => {
           </div>
         )}
 
-        {/* ✅ NEW Related Products Carousel Section */}
+        {/* Related Products Carousel Section */}
         <ProductCarousel productSlug={productSlug} />
 
       </section>
+
+      {/* ✅ Schema.org structured data for rich snippets */}
+      {product.price && (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": product.name,
+            "image": imageUrl,
+            "description": metaDescription,
+            "brand": {
+              "@type": "Brand",
+              "name": "EDGE SYSTEMS LTD"
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": canonicalUrl,
+              "priceCurrency": "KES",
+              "price": product.price,
+              "availability": product.status === 'in_stock' 
+                ? "https://schema.org/InStock" 
+                : "https://schema.org/OutOfStock"
+            }
+          })}
+        </script>
+      )}
     </div>
   );
 };
