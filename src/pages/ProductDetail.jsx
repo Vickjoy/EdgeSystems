@@ -39,6 +39,7 @@ const ProductDetail = () => {
     }
 
     const name = product.name || '';
+    const brand = product.brand ? `${product.brand} ` : '';
     const description = product.description || '';
     let autoDescription = '';
 
@@ -48,17 +49,20 @@ const ProductDetail = () => {
         ? firstSentence.slice(0, 100) + '...' 
         : firstSentence;
     } else {
-      autoDescription = `${name} for fire safety and security systems`;
+      autoDescription = `${brand}${name} for fire safety and security systems`;
     }
 
-    const fullDescription = `${name} — ${autoDescription}. Available in Kenya at EDGE SYSTEMS LTD.`;
+    const fullDescription = `${brand}${name} — ${autoDescription}. Available in Kenya at EDGE SYSTEMS LTD.`;
     return fullDescription.slice(0, 155);
   };
 
   // ✅ SEO Helper: Generate page title
   const generatePageTitle = (product) => {
     if (!product) return 'EDGE SYSTEMS LTD';
-    return product.meta_title || `${product.name} | EDGE SYSTEMS LTD`;
+    if (product.meta_title) return product.meta_title;
+    
+    const brand = product.brand ? `${product.brand} ` : '';
+    return `${brand}${product.name} | EDGE SYSTEMS LTD`;
   };
 
   // ✅ SEO Helper: Get canonical URL
@@ -377,7 +381,7 @@ const ProductDetail = () => {
 
       </section>
 
-      {/* ✅ Schema.org structured data for rich snippets */}
+      {/* ✅ ENHANCED Schema.org structured data with Brand, SKU, and Seller */}
       {product.price && (
         <script type="application/ld+json">
           {JSON.stringify({
@@ -386,9 +390,11 @@ const ProductDetail = () => {
             "name": product.name,
             "image": imageUrl,
             "description": metaDescription,
+            "sku": product.sku || product.slug,
+            "mpn": product.sku || product.slug,
             "brand": {
               "@type": "Brand",
-              "name": "EDGE SYSTEMS LTD"
+              "name": product.brand || "Generic"
             },
             "offers": {
               "@type": "Offer",
@@ -397,7 +403,11 @@ const ProductDetail = () => {
               "price": product.price,
               "availability": product.status === 'in_stock' 
                 ? "https://schema.org/InStock" 
-                : "https://schema.org/OutOfStock"
+                : "https://schema.org/OutOfStock",
+              "seller": {
+                "@type": "Organization",
+                "name": "EDGE SYSTEMS LTD"
+              }
             }
           })}
         </script>
