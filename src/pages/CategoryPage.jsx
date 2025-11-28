@@ -20,6 +20,7 @@ const CategoryPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   // Get category-specific image and display name
   const getCategoryDisplay = (category) => {
@@ -62,6 +63,7 @@ const CategoryPage = () => {
         setCategory(found || null);
         setSubcategories([]);
         setSelectedSubcategory(null);
+        setImageLoaded(false); // Reset image loaded state
       } catch {
         setCategory(null);
         setSubcategories([]);
@@ -140,6 +142,18 @@ const CategoryPage = () => {
     navigate(`/category/${slug}#${subcategory.slug}`, { replace: true });
   };
 
+  // Preload image for better quality
+  useEffect(() => {
+    const categoryDisplay = getCategoryDisplay(category);
+    if (categoryDisplay.image) {
+      const img = new Image();
+      img.src = categoryDisplay.image;
+      img.onload = () => setImageLoaded(true);
+    } else {
+      setImageLoaded(true);
+    }
+  }, [category]);
+
   const categoryDisplay = getCategoryDisplay(category);
 
   const crumbs = [
@@ -157,6 +171,8 @@ const CategoryPage = () => {
           style={{
             backgroundImage: categoryDisplay.image ? `url(${categoryDisplay.image})` : 'none',
             backgroundColor: categoryDisplay.image ? 'transparent' : '#6096B4',
+            opacity: imageLoaded ? 1 : 0.8,
+            transition: 'opacity 0.3s ease-in-out',
           }}
         >
           <div className={styles.heroOverlay}></div>

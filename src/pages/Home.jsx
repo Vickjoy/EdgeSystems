@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Home.module.css';
+import PopularProductsCarousel from '../components/PopularProductsCarousel';
 import EatonLogo from '../assets/Eatonn.webp';
 import AlcatelLogo from '../assets/Alcatel.webp';
 import AvayaLogo from '../assets/Avaya.webp';
@@ -107,7 +108,7 @@ const Home = () => {
     'Industry Experience - Over a decade of expertise in telecommunications and security'
   ];
 
-  // Auto slide transition with smooth animation - faster duration (4.5 seconds)
+  // Auto slide transition
   useEffect(() => {
     const interval = setInterval(() => {
       handleSlideChange((currentSlide + 1) % slides.length);
@@ -129,10 +130,9 @@ const Home = () => {
 
   return (
     <div className="bg-white text-gray-900">
-      {/* Hero Banner - New Modern Design */}
+      {/* Hero Banner */}
       <section className={styles.heroSection}>
         <div className={styles.heroContainer}>
-          {/* Left Content */}
           <div className={styles.heroContent}>
             <p className={styles.heroSubtitle}>{currentSlideData.subtitle}</p>
             <h1 className={styles.heroTitle}>{currentSlideData.title}</h1>
@@ -161,7 +161,6 @@ const Home = () => {
               </button>
             </div>
 
-            {/* Navigation Dots */}
             <div className={styles.heroNavigation}>
               {slides.map((_, index) => (
                 <button
@@ -176,10 +175,8 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Right Image Side - LARGE FULL-SIZED IMAGES */}
           <div className={styles.heroImageContainer}>
             <div className={`${styles.heroImageWrapper} ${isTransitioning ? styles.fadeOut : styles.fadeIn}`}>
-              {/* Multiple large images layout */}
               <div className={`${styles.heroImagesGrid} ${
                 currentSlideData.images.length === 3 ? styles.threeImages : 
                 currentSlideData.images.length === 2 ? styles.twoImages : ''
@@ -195,14 +192,13 @@ const Home = () => {
               </div>
             </div>
             
-            {/* Floating decorative shapes */}
             <div className={styles.floatingShape}></div>
             <div className={styles.floatingShape}></div>
           </div>
         </div>
       </section>
 
-      {/* Partner Brands - Auto Scrolling WITHOUT Header */}
+      {/* Partner Brands */}
       <section className={styles.partnersSection}>
         <div className={styles.partnersContainer}>
           <div className={styles.sliderWrapper}>
@@ -268,6 +264,10 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Popular Products Carousel */}
+      <PopularProductsCarousel />
+
 
       {/* Why Choose Us */}
       <section className={styles.whyChooseSection}>
