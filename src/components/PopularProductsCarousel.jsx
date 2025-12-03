@@ -156,7 +156,6 @@ const PopularProductsCarousel = () => {
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>Popular Products</h2>
-          <p className={styles.subtitle}>Discover our most sought-after products</p>
         </div>
 
         <div className={styles.carouselWrapper} ref={carouselRef}>
