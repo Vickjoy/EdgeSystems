@@ -30,34 +30,43 @@ import StructuredCablingImage from '../assets/StructuredCabling.jpeg';
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [slides, setSlides] = useState([]);
+  const [loading, setLoading] = useState(true);
   
-  const slides = [
+  // ✅ PERMANENT HARDCODED SLIDES (always show these)
+  const permanentSlides = [
     {
       id: 1,
+      displayMode: 'standard',
       subtitle: 'Protect What Matters Most',
       title: 'Advanced Fire Alarm & Detection Systems',
       description: 'Reliable fire panels, detectors, and alarms designed for fast detection, instant alerts, and full safety control ensuring complete fire protection and compliance.',
       images: [FireImage, EImage, FImage],
       link: '/category/addressable-fire-alarm-detection-systems',
-      bgClass: 'heroSlide1'
+      bgClass: 'heroSlide1',
+      buttonText: 'Explore Products'
     },
     {
       id: 2,
+      displayMode: 'standard',
       subtitle: 'Power Your Digital Infrastructure',
       title: 'Enterprise Networking Solutions',
       description: 'High-performance access points, routers, and switches built for secure, scalable, and reliable connectivity. Designed to support seamless communication and business continuity.',
       images: [UbiquitiProductImage, CiscoProductImage, GImage],
       link: '/category/ubiquiti-products',
-      bgClass: 'heroSlide2'
+      bgClass: 'heroSlide2',
+      buttonText: 'Explore Products'
     },
     {
       id: 3,
+      displayMode: 'standard',
       subtitle: 'Built for Performance & Reliability',
       title: 'Structured Cabling Infrastructure',
       description: 'Certified Cat6, Cat6a, and fiber optic cabling systems engineered for maximum speed, stability, and scalability ensuring your network is future-ready and dependable.',
       images: [AImage, BImage],
       link: '/category/giganet-products',
-      bgClass: 'heroSlide3'
+      bgClass: 'heroSlide3',
+      buttonText: 'Explore Products'
     }
   ];
 
@@ -108,8 +117,49 @@ const Home = () => {
     'Industry Experience - Over a decade of expertise in telecommunications and security'
   ];
 
+  // ✅ Fetch promotional banners from API
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/hero-banners/');
+        const data = await response.json();
+        
+        // Transform API data to match slide structure
+        const promotionalSlides = data.map(banner => ({
+          id: `promo-${banner.id}`,
+          displayMode: banner.display_mode,
+          // Poster mode fields
+          posterImage: banner.poster_image,
+          posterLink: banner.poster_link,
+          // Standard mode fields
+          subtitle: banner.subtitle,
+          title: banner.title,
+          description: banner.description,
+          images: banner.images,
+          link: banner.button_link,
+          bgClass: banner.background_class || 'heroSlide1',
+          buttonText: banner.button_text || 'Explore Products'
+        }));
+        
+        // ✅ CRITICAL: Promotional slides FIRST, then permanent slides
+        const allSlides = [...promotionalSlides, ...permanentSlides];
+        setSlides(allSlides);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching hero banners:', error);
+        // ✅ Fallback to permanent slides if API fails
+        setSlides(permanentSlides);
+        setLoading(false);
+      }
+    };
+
+    fetchBanners();
+  }, []);
+
   // Auto slide transition
   useEffect(() => {
+    if (slides.length === 0) return;
+    
     const interval = setInterval(() => {
       handleSlideChange((currentSlide + 1) % slides.length);
     }, 4500);
@@ -126,42 +176,46 @@ const Home = () => {
     }
   };
 
+  // ✅ Loading state
+  if (loading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   const currentSlideData = slides[currentSlide];
 
   return (
     <div className="bg-white text-gray-900">
       {/* Hero Banner */}
       <section className={styles.heroSection}>
-        <div className={styles.heroContainer}>
-          <div className={styles.heroContent}>
-            <p className={styles.heroSubtitle}>{currentSlideData.subtitle}</p>
-            <h1 className={styles.heroTitle}>{currentSlideData.title}</h1>
-            <p className={styles.heroDescription}>{currentSlideData.description}</p>
-            
-            <div className={styles.heroButtons}>
-              <button
-                className={styles.heroButton}
-                onClick={() => (window.location.href = currentSlideData.link)}
+        {currentSlideData.displayMode === 'poster' ? (
+          // ✅ POSTER MODE LAYOUT
+          <div className={styles.heroPosterContainer}>
+            {currentSlideData.posterLink ? (
+              <a 
+                href={currentSlideData.posterLink} 
+                className={styles.heroPosterLink}
               >
-                Explore Products
-                <svg 
-                  className="w-5 h-5" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                  style={{ width: '20px', height: '20px' }}
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M17 8l4 4m0 0l-4 4m4-4H3" 
-                  />
-                </svg>
-              </button>
-            </div>
-
-            <div className={styles.heroNavigation}>
+                <img
+                  src={currentSlideData.posterImage}
+                  alt="Promotional Poster"
+                  className={styles.heroPosterImage}
+                />
+              </a>
+            ) : (
+              <img
+                src={currentSlideData.posterImage}
+                alt="Promotional Poster"
+                className={styles.heroPosterImage}
+              />
+            )}
+            
+            {/* Navigation dots at bottom for poster mode */}
+            <div className={styles.heroPosterNavigation}>
               {slides.map((_, index) => (
                 <button
                   key={index}
@@ -174,28 +228,73 @@ const Home = () => {
               ))}
             </div>
           </div>
+        ) : (
+          // ✅ STANDARD MODE LAYOUT (unchanged)
+          <div className={styles.heroContainer}>
+            <div className={styles.heroContent}>
+              <p className={styles.heroSubtitle}>{currentSlideData.subtitle}</p>
+              <h1 className={styles.heroTitle}>{currentSlideData.title}</h1>
+              <p className={styles.heroDescription}>{currentSlideData.description}</p>
+              
+              <div className={styles.heroButtons}>
+                <button
+                  className={styles.heroButton}
+                  onClick={() => (window.location.href = currentSlideData.link)}
+                >
+                  {currentSlideData.buttonText}
+                  <svg 
+                    className="w-5 h-5" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                    style={{ width: '20px', height: '20px' }}
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth={2} 
+                      d="M17 8l4 4m0 0l-4 4m4-4H3" 
+                    />
+                  </svg>
+                </button>
+              </div>
 
-          <div className={styles.heroImageContainer}>
-            <div className={`${styles.heroImageWrapper} ${isTransitioning ? styles.fadeOut : styles.fadeIn}`}>
-              <div className={`${styles.heroImagesGrid} ${
-                currentSlideData.images.length === 3 ? styles.threeImages : 
-                currentSlideData.images.length === 2 ? styles.twoImages : ''
-              }`}>
-                {currentSlideData.images.map((img, idx) => (
-                  <img
-                    key={idx}
-                    src={img}
-                    alt={`${currentSlideData.title} - ${idx + 1}`}
-                    className={styles.heroImage}
+              <div className={styles.heroNavigation}>
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSlideChange(index)}
+                    className={`${styles.heroDot} ${
+                      index === currentSlide ? styles.heroDotActive : ''
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
                   />
                 ))}
               </div>
             </div>
-            
-            <div className={styles.floatingShape}></div>
-            <div className={styles.floatingShape}></div>
+
+            <div className={styles.heroImageContainer}>
+              <div className={`${styles.heroImageWrapper} ${isTransitioning ? styles.fadeOut : styles.fadeIn}`}>
+                <div className={`${styles.heroImagesGrid} ${
+                  currentSlideData.images.length === 3 ? styles.threeImages : 
+                  currentSlideData.images.length === 2 ? styles.twoImages : ''
+                }`}>
+                  {currentSlideData.images.map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      alt={`${currentSlideData.title} - ${idx + 1}`}
+                      className={styles.heroImage}
+                    />
+                  ))}
+                </div>
+              </div>
+              
+              <div className={styles.floatingShape}></div>
+              <div className={styles.floatingShape}></div>
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* Partner Brands */}
@@ -267,7 +366,6 @@ const Home = () => {
 
       {/* Popular Products Carousel */}
       <PopularProductsCarousel />
-
 
       {/* Why Choose Us */}
       <section className={styles.whyChooseSection}>
