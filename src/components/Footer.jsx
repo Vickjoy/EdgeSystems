@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import CompanyLogo from '../assets/Company_logo.webp';
 import InstagramIcon from '../assets/Instagram.png';
 import LinkedInIcon from '../assets/LinkedIn.png';
 import TiktokIcon from '../assets/Tiktok.png';
@@ -54,7 +53,7 @@ const Footer = () => {
       <div className={styles.footer}>
         {/* First Column - Company Info */}
         <div className={styles.footerColumn}>
-          <img src={CompanyLogo} alt="Edge Systems Logo" className={styles.logo} />
+          <h3 className={styles.sectionTitle}>Edge Systems Limited</h3>
           <p className={styles.companyDescription}>
             Your trusted partner for fire safety, networking & ICT solutions, and solar energy systems in Kenya. 
             Protecting lives, connecting businesses, and powering the future.

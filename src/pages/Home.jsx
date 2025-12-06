@@ -33,7 +33,6 @@ const Home = () => {
   const [slides, setSlides] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // ✅ PERMANENT HARDCODED SLIDES (always show these)
   const permanentSlides = [
     {
       id: 1,
@@ -117,21 +116,17 @@ const Home = () => {
     'Industry Experience - Over a decade of expertise in telecommunications and security'
   ];
 
-  // ✅ Fetch promotional banners from API
   useEffect(() => {
     const fetchBanners = async () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/api/hero-banners/');
         const data = await response.json();
         
-        // Transform API data to match slide structure
         const promotionalSlides = data.map(banner => ({
           id: `promo-${banner.id}`,
           displayMode: banner.display_mode,
-          // Poster mode fields
           posterImage: banner.poster_image,
           posterLink: banner.poster_link,
-          // Standard mode fields
           subtitle: banner.subtitle,
           title: banner.title,
           description: banner.description,
@@ -141,13 +136,11 @@ const Home = () => {
           buttonText: banner.button_text || 'Explore Products'
         }));
         
-        // ✅ CRITICAL: Promotional slides FIRST, then permanent slides
         const allSlides = [...promotionalSlides, ...permanentSlides];
         setSlides(allSlides);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching hero banners:', error);
-        // ✅ Fallback to permanent slides if API fails
         setSlides(permanentSlides);
         setLoading(false);
       }
@@ -156,27 +149,27 @@ const Home = () => {
     fetchBanners();
   }, []);
 
-  // Auto slide transition
   useEffect(() => {
     if (slides.length === 0) return;
     
     const interval = setInterval(() => {
-      handleSlideChange((currentSlide + 1) % slides.length);
-    }, 4500);
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    
     return () => clearInterval(interval);
-  }, [currentSlide, slides.length]);
+  }, [slides.length]);
 
+  // Replace your handleSlideChange function with this:
   const handleSlideChange = (index) => {
-    if (index !== currentSlide && !isTransitioning) {
+    if (index !== currentSlide) {
       setIsTransitioning(true);
       setTimeout(() => {
         setCurrentSlide(index);
-        setTimeout(() => setIsTransitioning(false), 50);
-      }, 400);
+        setIsTransitioning(false);
+      }, 300);
     }
   };
 
-  // ✅ Loading state
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -193,7 +186,6 @@ const Home = () => {
       {/* Hero Banner */}
       <section className={styles.heroSection}>
         {currentSlideData.displayMode === 'poster' ? (
-          // ✅ POSTER MODE LAYOUT
           <div className={styles.heroPosterContainer}>
             {currentSlideData.posterLink ? (
               <a 
@@ -214,7 +206,6 @@ const Home = () => {
               />
             )}
             
-            {/* Navigation dots at bottom for poster mode */}
             <div className={styles.heroPosterNavigation}>
               {slides.map((_, index) => (
                 <button
@@ -229,8 +220,8 @@ const Home = () => {
             </div>
           </div>
         ) : (
-          // ✅ STANDARD MODE LAYOUT (unchanged)
           <div className={styles.heroContainer}>
+            {/* Desktop Layout */}
             <div className={styles.heroContent}>
               <p className={styles.heroSubtitle}>{currentSlideData.subtitle}</p>
               <h1 className={styles.heroTitle}>{currentSlideData.title}</h1>
@@ -292,6 +283,53 @@ const Home = () => {
               
               <div className={styles.floatingShape}></div>
               <div className={styles.floatingShape}></div>
+            </div>
+
+            {/* Mobile Layout - Images First */}
+            <div className={styles.heroMobileLayout}>
+              <div className={styles.heroMobileImages}>
+                <div className={`${styles.heroImageWrapper} ${isTransitioning ? styles.fadeOut : styles.fadeIn}`}>
+                  <div className={`${styles.heroImagesGrid} ${
+                    currentSlideData.images.length === 3 ? styles.threeImages : 
+                    currentSlideData.images.length === 2 ? styles.twoImages : ''
+                  }`}>
+                    {currentSlideData.images.map((img, idx) => (
+                      <img
+                        key={idx}
+                        src={img}
+                        alt={`${currentSlideData.title} - ${idx + 1}`}
+                        className={styles.heroImage}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                className={styles.heroMobileButton}
+                onClick={() => (window.location.href = currentSlideData.link)}
+              >
+                {currentSlideData.buttonText}
+              </button>
+
+              <div className={styles.heroMobileContent}>
+                <p className={styles.heroSubtitle}>{currentSlideData.subtitle}</p>
+                <h1 className={styles.heroTitle}>{currentSlideData.title}</h1>
+                <p className={styles.heroDescription}>{currentSlideData.description}</p>
+              </div>
+
+              <div className={styles.heroMobileNavigation}>
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSlideChange(index)}
+                    className={`${styles.heroDot} ${
+                      index === currentSlide ? styles.heroDotActive : ''
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         )}

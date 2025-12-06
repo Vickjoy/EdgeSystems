@@ -246,7 +246,6 @@ const Header = () => {
     );
   };
 
-  // ✅ UPDATED MOBILE CATEGORY SECTION (Your new version fully integrated)
   const renderMobileCategorySection = (categoryList, categoryType, title) => (
     <div key={categoryType} className={styles.mobileCategorySection}>
       <button
@@ -332,6 +331,10 @@ const Header = () => {
           </div>
         </div>
 
+        <div className={styles.mobileLogoRow}>
+          <img src={CompanyLogo} alt="Edge Systems Logo" className={styles.mobileLogo} />
+        </div>
+
         <div className={styles.mobileSearchRow}>
           <button 
             className={styles.mobileHamburger}
@@ -344,22 +347,12 @@ const Header = () => {
             <SearchBar />
           </div>
 
-          <div className={styles.mobileActions}>
-            <button onClick={() => setCartOpen(true)} className={styles.mobileCartButton}>
-              🛒
-              {cartItems.length > 0 && (
-                <span className={styles.cartBadge}>{cartItems.length}</span>
-              )}
-            </button>
-
-            <Link to="/login" className={styles.mobileLoginLink}>
-              👤
-            </Link>
-          </div>
-        </div>
-
-        <div className={styles.mobileLogoRow}>
-          <img src={CompanyLogo} alt="Edge Systems Logo" className={styles.mobileLogo} />
+          <button onClick={() => setCartOpen(true)} className={styles.mobileCartButton}>
+            🛒
+            {cartItems.length > 0 && (
+              <span className={styles.cartBadge}>{cartItems.length}</span>
+            )}
+          </button>
         </div>
       </div>
 
@@ -388,7 +381,6 @@ const Header = () => {
           </div>
 
           <div className={styles.headerActions}>
-
             <div ref={allCategoriesRef} className={styles.allCategoriesWrapper}>
               <button
                 className={styles.allCategoriesButton}
@@ -431,12 +423,6 @@ const Header = () => {
                 <img src={WhatsAppIcon} alt="WhatsApp" />
               </a>
             </div>
-          </div>
-
-          <div className={styles.headerRight}>
-            <Link to="/login" className={styles.loginLink}>
-              👤 Login
-            </Link>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-/* ✅ Loading State */
+/* Loading State */
 .loadingContainer {
   display: flex;
   flex-direction: column;
@@ -22,7 +22,7 @@
   100% { transform: rotate(360deg); }
 }
 
-/* ✅ POSTER MODE STYLES */
+/* POSTER MODE STYLES */
 .heroPosterContainer {
   position: relative;
   width: 100%;
@@ -67,45 +67,6 @@
   z-index: 10;
 }
 
-/* Responsive Poster Styles */
-@media (max-width: 1024px) {
-  .heroPosterContainer {
-    min-height: 350px;
-    padding: 1.5rem;
-  }
-  
-  .heroPosterImage {
-    max-height: 500px;
-  }
-}
-
-@media (max-width: 768px) {
-  .heroPosterContainer {
-    min-height: 300px;
-    padding: 1rem;
-  }
-  
-  .heroPosterImage {
-    max-height: 400px;
-  }
-  
-  .heroPosterNavigation {
-    bottom: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .heroPosterContainer {
-    min-height: 250px;
-  }
-  
-  .heroPosterImage {
-    max-height: 300px;
-  }
-}
-
-/* ✅ ALL EXISTING STYLES BELOW - UNCHANGED */
-
 /* Hero Section - Modern Split Layout */
 .heroSection {
   position: relative;
@@ -120,7 +81,6 @@
   border-bottom: 1px solid #9aa8b9;
 }
 
-/* Animated background elements */
 .heroSection::before {
   content: '';
   position: absolute;
@@ -169,7 +129,7 @@
   z-index: 2;
 }
 
-/* Left Content Side */
+/* Desktop Content - Hidden on Mobile */
 .heroContent {
   display: flex;
   flex-direction: column;
@@ -260,24 +220,6 @@
   box-shadow: 0 12px 25px rgba(38, 31, 179, 0.4);
 }
 
-.heroButtonSecondary {
-  background: transparent;
-  color: #261FB3;
-  font-weight: 600;
-  font-size: 1.05rem;
-  padding: 1.2rem 2.5rem;
-  border-radius: 12px;
-  border: 2px solid #261FB3;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.heroButtonSecondary:hover {
-  background: #261FB3;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
 /* Navigation Dots */
 .heroNavigation {
   display: flex;
@@ -306,7 +248,7 @@
   background: linear-gradient(135deg, #261FB3 0%, #4a47d4 100%);
 }
 
-/* Right Image Side - MAXIMIZED FOR LARGE IMAGES */
+/* Desktop Image Container - Hidden on Mobile */
 .heroImageContainer {
   position: relative;
   height: 650px;
@@ -346,7 +288,6 @@
   transform: translateY(0) scale(1);
 }
 
-/* Glow effect behind images */
 .heroImageWrapper::before {
   content: '';
   position: absolute;
@@ -370,7 +311,7 @@
   filter: drop-shadow(0 35px 70px rgba(38, 31, 179, 0.35));
 }
 
-/* Multi-image layouts - LARGE & FULL-SIZED */
+/* Multi-image layouts */
 .heroImagesGrid {
   display: flex;
   gap: 2rem;
@@ -381,7 +322,6 @@
   padding: 1rem;
 }
 
-/* Three images layout (Fire & Networking) - 1 TOP + 2 BOTTOM LARGE */
 .heroImagesGrid.threeImages {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -414,7 +354,6 @@
   grid-row: 2;
 }
 
-/* Two images layout (Structured Cabling) - 2 STACKED VERTICALLY - MAXIMIZED */
 .heroImagesGrid.twoImages {
   display: flex;
   flex-direction: column;
@@ -440,7 +379,6 @@
   z-index: 10;
 }
 
-/* Floating decorative elements */
 .floatingShape {
   position: absolute;
   border-radius: 12px;
@@ -474,131 +412,212 @@
   }
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .heroSection {
-    min-height: auto;
-    padding: 2rem 1.5rem;
+/* MOBILE LAYOUT - Images First, Button, Then Text */
+.heroMobileLayout {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Hide desktop layout on mobile */
+  .heroContent,
+  .heroImageContainer {
+    display: none !important;
+  }
+
+  /* Show mobile layout */
+  .heroMobileLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    align-items: center;
+    text-align: center;
   }
 
   .heroContainer {
     grid-template-columns: 1fr;
-    gap: 3rem;
-    text-align: center;
+    padding: 1rem;
   }
 
-  .heroContent {
+  .heroSection {
+    min-height: auto;
+    padding: 2rem 1rem;
+  }
+
+  /* Mobile Images - Appear First */
+  .heroMobileImages {
+    width: 100%;
+    max-height: 350px;
+    margin-bottom: 0.5rem;
+  }
+
+  .heroMobileImages .heroImageWrapper {
+    height: 100%;
+  }
+
+  .heroMobileImages .heroImagesGrid {
+    padding: 0;
+    gap: 1rem;
+  }
+
+  .heroMobileImages .heroImagesGrid.threeImages {
+    max-height: 350px;
+    gap: 0.8rem;
+  }
+
+  .heroMobileImages .heroImagesGrid.threeImages .heroImage {
+    max-height: 160px;
+  }
+
+  .heroMobileImages .heroImagesGrid.twoImages {
+    gap: 1rem;
+  }
+
+  .heroMobileImages .heroImagesGrid.twoImages .heroImage {
+    max-height: 160px;
+  }
+
+  /* Mobile Button - Appears Second, Smaller & Customized */
+  .heroMobileButton {
+    background: linear-gradient(135deg, #261FB3 0%, #4a47d4 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.85rem 1.8rem;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 6px 16px rgba(38, 31, 179, 0.25);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    width: auto;
+    max-width: 200px;
   }
 
-  .heroTitle {
-    font-size: 2.8rem;
+  .heroMobileButton:active {
+    background: linear-gradient(135deg, #1a1580 0%, #261FB3 100%);
+    transform: scale(0.98);
   }
 
-  .heroDescription {
+  /* Mobile Content - Appears Last */
+  .heroMobileContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .heroMobileContent .heroSubtitle {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+  }
+
+  .heroMobileContent .heroTitle {
+    font-size: 1.8rem;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+
+  .heroMobileContent .heroDescription {
+    font-size: 0.95rem;
+    line-height: 1.6;
     max-width: 100%;
   }
 
-  .heroImageContainer {
-    height: 550px;
+  /* Mobile Navigation - At the Bottom */
+  .heroMobileNavigation {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
   }
 
-  .heroImagesGrid.threeImages {
-    max-height: 500px;
+  .heroMobileNavigation .heroDot {
+    width: 10px;
+    height: 10px;
   }
 
-  .heroImagesGrid.threeImages .heroImage {
-    max-height: 230px;
-  }
-
-  .heroImagesGrid.twoImages {
-    max-height: none;
-    gap: 1.2rem;
-  }
-
-  .heroImagesGrid.twoImages .heroImage {
-    max-height: 240px;
-  }
-}
-
-@media (max-width: 768px) {
-  .heroSection {
-    padding: 1.5rem 1rem;
-  }
-
-  .heroTitle {
-    font-size: 2.2rem;
-  }
-
-  .heroDescription {
-    font-size: 1rem;
-  }
-
-  .heroButtons {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .heroButton,
-  .heroButtonSecondary {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .heroImageContainer {
-    height: 450px;
-  }
-
-  .heroImagesGrid {
-    gap: 1rem;
-  }
-
-  .heroImagesGrid.threeImages {
-    gap: 1rem;
-    max-height: 400px;
-  }
-
-  .heroImagesGrid.threeImages .heroImage {
-    max-height: 180px;
-  }
-
-  .heroImagesGrid.twoImages {
-    gap: 1rem;
-  }
-
-  .heroImagesGrid.twoImages .heroImage {
-    max-height: 190px;
+  .heroMobileNavigation .heroDotActive {
+    width: 32px;
   }
 }
 
 @media (max-width: 480px) {
-  .heroImageContainer {
-    height: 350px;
+  .heroMobileImages {
+    max-height: 280px;
   }
 
-  .heroImagesGrid.threeImages {
-    max-height: 320px;
+  .heroMobileImages .heroImagesGrid.threeImages {
+    max-height: 280px;
   }
 
-  .heroImagesGrid.threeImages .heroImage {
-    max-height: 140px;
+  .heroMobileImages .heroImagesGrid.threeImages .heroImage {
+    max-height: 130px;
   }
 
-  .heroImagesGrid.twoImages {
-    max-height: none;
+  .heroMobileImages .heroImagesGrid.twoImages .heroImage {
+    max-height: 130px;
   }
 
-  .heroImagesGrid.twoImages .heroImage {
-    max-height: 150px;
+  .heroMobileContent .heroTitle {
+    font-size: 1.5rem;
+  }
+
+  .heroMobileContent .heroDescription {
+    font-size: 0.9rem;
+  }
+
+  .heroMobileButton {
+    font-size: 0.85rem;
+    padding: 0.75rem 1.5rem;
+    max-width: 180px;
   }
 }
 
-/* Partner Brands - Auto Scrolling WITHOUT Header and Card Backgrounds */
+/* Poster Mode - Mobile Responsive */
+@media (max-width: 1024px) {
+  .heroPosterContainer {
+    min-height: 350px;
+    padding: 1.5rem;
+  }
+  
+  .heroPosterImage {
+    max-height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroPosterContainer {
+    min-height: 300px;
+    padding: 1rem;
+  }
+  
+  .heroPosterImage {
+    max-height: 400px;
+  }
+  
+  .heroPosterNavigation {
+    bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroPosterContainer {
+    min-height: 250px;
+  }
+  
+  .heroPosterImage {
+    max-height: 300px;
+  }
+}
+
+/* Partner Brands */
 .partnersSection {
   background: #f8fafc;
   padding: 2rem 0;
   overflow: hidden;
-  border-bottom: 1px solid #9aa8b9 ;
+  border-bottom: 1px solid #9aa8b9;
   margin: 0;
 }
 
