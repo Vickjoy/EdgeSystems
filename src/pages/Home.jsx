@@ -159,7 +159,6 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  // Replace your handleSlideChange function with this:
   const handleSlideChange = (index) => {
     if (index !== currentSlide) {
       setIsTransitioning(true);
